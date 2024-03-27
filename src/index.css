@@ -1,0 +1,19 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .rounded-tl-30 {
+      border-top-left-radius: 30px; /* Set your desired radius */
+    }
+    .rounded-tr-30 {
+      border-top-right-radius: 30px; /* Set your desired radius */
+    }
+    .rounded-bl-30 {
+      border-bottom-left-radius: 30px; /* Set your desired radius */
+    }
+    .rounded-br-30 {
+      border-bottom-right-radius: 30px; /* Set your desired radius */
+    }
+  }

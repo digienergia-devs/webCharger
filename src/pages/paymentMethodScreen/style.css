@@ -1,0 +1,110 @@
+
+
+/* @media(max-width: 720px){ */
+    .main-container-paymentmethod-screen{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .company-branding-paymentmethod-screen{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: #0097b2;
+        font-size: xx-large;
+        font-weight: bold;
+        height: 20vh;
+    }
+
+    .company-branding-paymentmethod-screen img{
+        display: flex;
+        width: 60px;
+        height: 60px;
+    }
+
+    .body-container-paymentmethod-screen{
+        display: flex;
+        flex-direction: column;
+        height: 70vh;
+
+    }
+    .charger-information-paymentmethod-screen{
+        display: flex;
+        width: 100vw;
+        height: 10vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .electricity-price-information-paymentmethod-screen{
+        display: flex;
+        width: 100vw;
+        height: 10vh;
+        justify-content: center;
+        align-items: flex-start;
+        color: #53788d;
+        font-weight: bold;
+        font-size: larger;
+    }
+
+    .paymentmethod-header-paymentmethod-screen{
+        display: flex;
+        width: 100vw;
+        height: 10vh;
+        justify-content: center;
+        align-items: flex-end;
+        color: #0097b2;
+        align-items: center;
+    }
+
+    .paymentmethod-selections-paymentmethod-screen{
+        display: flex;
+        width: 100vw;
+        justify-content: center;
+        align-items: center;    
+        height: 10vh;
+        margin-top: 10px;
+    }
+
+    .paymentmethod-selections-paymentmethod-screen button{
+        background-color: #0097b2;
+        color: #ffffff;
+        width: 100%;
+        height: 4vh;
+        font-weight: bold;
+        font-size: medium;
+        margin-top: 10px;
+    }
+
+    .footer-main-container-paymentmedthod-screen{
+        display: flex;
+        height: 15vh;
+        align-items: end;
+    }
+
+    .footer-paymentmethod-screen{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 10vh;
+        width: 100vw;
+        background-color: #0097b2;
+    }
+
+    .footer-paymentmethod-screen img{
+        display: flex;
+        width: 50px;
+        height: 50px;
+    }
+
+    .loading-container{
+        display: flex;
+        height: 100vh;
+        width: 100vw;
+        justify-content: center;
+        align-items: center;
+    }
+/* } */
