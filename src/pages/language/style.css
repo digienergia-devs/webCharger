@@ -1,0 +1,19 @@
+.language {
+    display: flex;
+    justify-content: end;
+    text-align: end;
+    width: 80vw;
+}
+
+.selec{
+    display: flex;
+    border: none;
+    height: 30px;
+    /* width: 30px; */
+    font-size: larger;
+}
+
+.selec option{
+    display: flex;
+    font-size: 13px;
+}

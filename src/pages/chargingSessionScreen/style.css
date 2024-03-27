@@ -1,0 +1,234 @@
+/* @media(max-width: 720px){ */
+    .main-container-chargingsession-screen{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        
+    }
+
+    .company-branding-chargingsession-screen{
+        display: flex;
+        flex-direction: row;
+        height: 10vh;
+        width: 100vw;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff;
+        color: #0097b2;
+        font-weight: bold;
+        font-size: x-large;
+    }
+
+    .company-branding-chargingsession-screen img{
+        display: flex;
+        width: 60px;
+        height: 60px;
+    }
+
+    .body-container-chargingsession-screen{
+        display: flex;
+        height: 80vh;
+        width: 100vw;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .body-header-chargingsession-screen{
+        display: flex;
+        flex-direction: column;
+        height: 8vh;
+        width: 100vw;
+        background-color: #0097b2;
+        color: #ffffff;
+        font-weight: bolder;
+        font-size: x-large;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .charger-meter-chargingsession-screen{
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        height: 10vh;
+        align-items: center;
+        justify-content: flex-start;
+
+    }
+
+    .charger-meter-chargingsession-screen img{
+        display: flex;
+        height: 100px;
+        width: 100px;
+    }
+
+    .charging-power-container-chargingsession-screen{
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        height: 60vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .charging-power-header-chargingsession-screen{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 3vh;
+        color: #0097b2;
+        font-weight: bolder;
+        font-size: larger;
+    }
+
+    .charging-power-header-chargingsession-screen img{
+        display: flex;
+        height: 50px;
+        width: 50px;
+    }
+
+    .charging-power-value-chargingsessio-screen{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 6vh;
+        color: #53788d;
+        font-size: larger;
+        font-weight: bolder;
+        padding-bottom: 20px;
+    }
+
+    .chargingtime-price-container-chargingsession-screen{
+        display: flex;
+        flex-direction: row;
+        width: 100vw;
+        height: 6vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .chargingtime-main-container-chargingsession-screen{
+        display: flex;
+        flex-direction: column;
+        width: 50vw;
+        height: 10vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .chargingtime-header-chargingsession-screen{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 50vw;
+        height: 6vh;
+        color: #0097b2;
+        font-weight: bolder;
+        font-size: larger;
+    }
+
+    .chargingtime-header-chargingsession-screen img{
+        display: flex;
+        width: 50px;
+        height: 50px;
+    }
+
+    .chargingtime-value-chargingsession-screen{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 50vw;
+        height: 6vh;
+        color: #53788d;
+        font-size: larger;
+        font-weight: bolder;
+    }
+
+    .chargingprice-main-container-chargingsesion-screen{
+        display: flex;
+        flex-direction: column;
+        width: 50vw;
+        height: 10vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .chargingprice-header-chargingsession-screen{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 50vw;
+        height: 6vh;
+        color: #0097b2;
+        font-weight: bolder;
+        font-size: larger; 
+    }
+
+    .chargingprice-header-chargingsession-screen img{
+        display: flex;
+        width: 50px;
+        height: 50px;
+    }
+
+    .chargingprice-value-chargingsession-screen{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 50vw;
+        height: 6vh;
+        color: #53788d;
+        font-size: larger;
+        font-weight: bolder;
+    }
+
+    .stopbutton-container-chargingsession-screen{
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        height: 20vh;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .stopbutton-container-chargingsession-screen button{
+        display: flex;
+        background-color: #0097b2;
+        color: #ffffff;
+        width: 70vw;
+        height: 5vh;
+        justify-content: center;
+        align-items: center;
+        font-size: medium;
+        font-weight: bolder;
+    }
+
+
+
+    .footer-chargingsession-screen{
+        display: flex;
+        height: 10vh;
+        width: 100vw;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        background-color: #0097b2;
+    }
+
+    .footer-chargingsession-screen img{
+        display: flex;
+        width: 50px;
+        height: 50px;
+    }
+
+/* } */

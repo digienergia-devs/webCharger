@@ -1,0 +1,72 @@
+/* @media(max-width: 720px){ */
+    .main-container-connecting-screen{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .company-branding-connecting-screen{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: #0097b2;
+        font-size: xx-large;
+        font-weight: bold;
+        height: 20vh;
+    }
+
+    .company-branding-connecting-screen img{
+        display: flex;
+        width: 60px;
+        height: 60px
+    }
+    .body-container-connecting-screen{
+        display: flex;
+        flex-direction: column;
+        height: 70vh;
+    }
+
+    .information-header-connecting-screen{
+        display: flex;
+        height: 20vh;
+        font-weight: bolder;
+        font-size: xx-large;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .information-body-connecting-screen{
+        display: flex;
+        height: 5vh;
+        font-weight: bold;
+        font-size: larger;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .general-information-connecting-screen{
+        display: flex;
+        color: #0097b2;
+        justify-content: center;
+        align-items: center;
+        height: 40vh;
+        text-align: center;
+        font-size: larger;
+    }
+
+    .footer-connecting-screen{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 10vh;
+        width: 100vw;
+        background-color: #0097b2;
+    }
+
+    .footer-connecting-screen img{
+        display: flex;
+        width: 50px;
+        height: 50px;
+    }
+/* } */
