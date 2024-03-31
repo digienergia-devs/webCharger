@@ -63,7 +63,7 @@ export default function ChargingSessionScreen(props: any) {
         await chargingSessionStatus(sessionId).then(
             (res: any) => {
                 response = res;
-                setChargingPower(res.powerUsage);
+                setChargingPower(Number((res.powerUsage.toFixed(2))));
                 calculateChargingPrice(res.amountToCapture);
                 formatTime(res.elapsedTime);
                 if (res.isChargerConnected == true && res.isChargingCompleted == false) {
@@ -154,7 +154,7 @@ export default function ChargingSessionScreen(props: any) {
                             <img src={require('../../assets/icons/Group10.png')} alt="" />
                         </div>
                         <div className='flex w-2/3'>
-                            <span>{chargingPower / 100000} kWh</span>
+                            <span>{chargingPower} kWh</span>
                         </div>
                     </div>
                     <div className='flex justify-center items-center w-full'>

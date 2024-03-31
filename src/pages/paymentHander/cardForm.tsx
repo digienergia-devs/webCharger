@@ -90,10 +90,12 @@ export default function CardForm(props: any) {
           paymentMethodId,
           sessionId,
         }).then((res: any) => {
-          if (res.sessionId == sessionId) {
+          // if (res.sessionId == sessionId) {
+            if(res.paymentId){
             /**
              * Handle the error if above authorized payment is failed
              */
+            console.log("payment authorization success");
             props.setLoading(false);
             navigate('/ChargingSessionScreen')
           }
