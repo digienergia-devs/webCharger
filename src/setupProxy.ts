@@ -6,7 +6,7 @@ module.exports = function (app: any) {
     app.use(
         '/api/start-charger-connection',  
         createProxyMiddleware({
-            target: 'https://iparkchargingwebappbackend.onrender.com:8080',  
+            target: 'https://iparkchargingwebappbackend.onrender.com',  
             // target: 'http://185.96.163.154:8080',  
             changeOrigin: true,
             secure: false  
