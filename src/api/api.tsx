@@ -1,7 +1,7 @@
 import axios from "axios";
 
- const API_BASE_URL = "http://185.96.163.154:8080";
-// const API_BASE_URL = "https://iparkchargingwebappbackend.onrender.com";
+//  const API_BASE_URL = "http://185.96.163.154:8080";
+const API_BASE_URL = "https://iparkchargingwebappbackend.onrender.com";
 // https://iparkchargingwebappbackend.onrender.com
 
 const api = axios.create({
