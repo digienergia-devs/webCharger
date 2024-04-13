@@ -112,7 +112,7 @@ export default function CardForm(props: any) {
   };
 
   return (
-    <div className="payment-form">
+    <div className="flex flex-row">
       {paymentRequest ? (
         <PaymentRequestButtonElement options={{ paymentRequest }} />
       ) : (
