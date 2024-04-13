@@ -19,6 +19,10 @@ export default function CardForm(props: any) {
   const [payButtonClicked, setPayButtonClicked] = useState<boolean>(false);
   const [language, setLanguage] = useState<string | undefined>(props.language)
 
+useEffect(() => {
+  console.log("Payment request --- ", paymentRequest);
+}, [paymentRequest]);
+
   useEffect(() => {
     if (stripe) {
       const pr = stripe.paymentRequest({
@@ -117,6 +121,7 @@ export default function CardForm(props: any) {
         <PaymentRequestButtonElement options={{ paymentRequest }} />
       ) : (
         <div>
+          Test Three
           {/* <div className={payButtonClicked ? 'loading-container' : 'hide'}>
             <FadeLoader
               color="#cacfd9"
@@ -127,7 +132,7 @@ export default function CardForm(props: any) {
           </div> */}
           {/* <div className={!payButtonClicked ? '' : 'hide'}> */}
           <div className="flex">
-
+Test Four
             <div className="flex justify-center items-center">
               <img src={require('../../assets/icons/card.png')} alt="" />
             </div>
