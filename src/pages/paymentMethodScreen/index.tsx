@@ -83,7 +83,7 @@ export default function PaymentMethodScreen(props: any) {
                     </div>
                     <div>
                         <span className='flex text-green-500 font-bold text-xl'>
-                            Payment Authorization.
+                            Payment Authorization
                         </span>
                     </div>
                 </div>

@@ -117,25 +117,16 @@ useEffect(() => {
 
   return (
     <div className="flex flex-row">
-      {paymentRequest ? (
+      <button className="flex flex-row w-full bg-blue-500">Dimansha</button>
+      {/* {paymentRequest ? (
         <PaymentRequestButtonElement options={{ paymentRequest }} />
       ) : (
         <div>
-          {/* <div className={payButtonClicked ? 'loading-container' : 'hide'}>
-            <FadeLoader
-              color="#cacfd9"
-              loading={payButtonClicked}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          </div> */}
-          {/* <div className={!payButtonClicked ? '' : 'hide'}> */}
           <div className="flex">
             <div className="flex justify-center items-center">
               <img src={require('../../assets/icons/card.png')} alt="" />
             </div>
-            <input type="text" className="flex flex-row w-full" />
-            {/* <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} /> */}
+            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
           </div>
           {payButtonClicked ?
             <div className="flex justify-center items-center w-full">
@@ -152,8 +143,7 @@ useEffect(() => {
             </button>
           }
         </div>
-        // </div>
-      )}
+      )} */}
     </div>
   );
 }
