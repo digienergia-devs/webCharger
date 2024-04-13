@@ -92,9 +92,7 @@ export default function PaymentMethodScreen(props: any) {
                         <img src={require('../../assets/icons/card.png')} alt="" />
                     </div> */}
                     <div>
-                        Test One
                         <Elements stripe={stripePromise}>
-                            Test Two
                             <CardForm
                                 stripePromise={stripePromise}
                                 setIsPaymentMethodMethodAuthorized={props.setIsPaymentMethodMethodAuthorized}

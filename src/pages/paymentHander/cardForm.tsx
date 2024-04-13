@@ -121,7 +121,6 @@ useEffect(() => {
         <PaymentRequestButtonElement options={{ paymentRequest }} />
       ) : (
         <div>
-          Test Three
           {/* <div className={payButtonClicked ? 'loading-container' : 'hide'}>
             <FadeLoader
               color="#cacfd9"
@@ -132,7 +131,6 @@ useEffect(() => {
           </div> */}
           {/* <div className={!payButtonClicked ? '' : 'hide'}> */}
           <div className="flex">
-Test Four
             <div className="flex justify-center items-center">
               <img src={require('../../assets/icons/card.png')} alt="" />
             </div>
