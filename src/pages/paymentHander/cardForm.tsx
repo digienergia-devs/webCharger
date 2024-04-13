@@ -118,9 +118,10 @@ useEffect(() => {
   return (
     <div className="flex flex-row">
       {paymentRequest ? (
-        <PaymentRequestButtonElement options={{ paymentRequest }} />
+        <button className="flex flex-row w-full bg-blue-500">Dimansha 1</button>
+        // <PaymentRequestButtonElement options={{ paymentRequest }} />
       ) : (
-        <button className="flex flex-row w-full bg-blue-500">Dimansha</button>
+        <button className="flex flex-row w-full bg-blue-500">Dimansha 2</button>
         // <div>
         //   <div className="flex">
         //     <div className="flex justify-center items-center">
