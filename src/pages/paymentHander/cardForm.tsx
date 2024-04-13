@@ -134,7 +134,8 @@ useEffect(() => {
             <div className="flex justify-center items-center">
               <img src={require('../../assets/icons/card.png')} alt="" />
             </div>
-            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
+            <input type="text" className="flex flex-row w-full" />
+            {/* <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} /> */}
           </div>
           {payButtonClicked ?
             <div className="flex justify-center items-center w-full">
