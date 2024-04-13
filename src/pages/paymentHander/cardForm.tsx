@@ -117,33 +117,33 @@ useEffect(() => {
 
   return (
     <div className="flex flex-row">
-      <button className="flex flex-row w-full bg-blue-500">Dimansha</button>
-      {/* {paymentRequest ? (
+      {paymentRequest ? (
         <PaymentRequestButtonElement options={{ paymentRequest }} />
       ) : (
-        <div>
-          <div className="flex">
-            <div className="flex justify-center items-center">
-              <img src={require('../../assets/icons/card.png')} alt="" />
-            </div>
-            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
-          </div>
-          {payButtonClicked ?
-            <div className="flex justify-center items-center w-full">
-              <FadeLoader
-                color="#38A169"
-                loading={payButtonClicked}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
-            </div>
-            :
-            <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
-              Pay
-            </button>
-          }
-        </div>
-      )} */}
+        <button className="flex flex-row w-full bg-blue-500">Dimansha</button>
+        // <div>
+        //   <div className="flex">
+        //     <div className="flex justify-center items-center">
+        //       <img src={require('../../assets/icons/card.png')} alt="" />
+        //     </div>
+        //     <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
+        //   </div>
+        //   {payButtonClicked ?
+        //     <div className="flex justify-center items-center w-full">
+        //       <FadeLoader
+        //         color="#38A169"
+        //         loading={payButtonClicked}
+        //         aria-label="Loading Spinner"
+        //         data-testid="loader"
+        //       />
+        //     </div>
+        //     :
+        //     <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
+        //       Pay
+        //     </button>
+        //   }
+        // </div>
+      )}
     </div>
   );
 }
