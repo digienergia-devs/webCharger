@@ -37,6 +37,8 @@ useEffect(() => {
 
       });
 
+      console.log("payment request --- ", pr)
+
       pr.canMakePayment().then((result) => {
         if (result) {
           setPaymentRequest(pr);
