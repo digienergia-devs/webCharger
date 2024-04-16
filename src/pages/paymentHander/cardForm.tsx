@@ -12,58 +12,62 @@ import { useNavigate } from 'react-router-dom';
 import FadeLoader from "react-spinners/FadeLoader";
 
 const stripePromise = loadStripe("pk_test_01QZ55AeQfGutsrsRjjkToqz");
-export default function CardForm(props: any) {
+export default function  CardForm(props: any) {
   let navigate = useNavigate();
   const stripe = useStripe();
+  const elements = useElements();
   const [paymentRequest, setPaymentRequest] = useState<any>();
   const [payButtonClicked, setPayButtonClicked] = useState<boolean>(false);
   const [language, setLanguage] = useState<string | undefined>(props.language)
+  const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
+  
 
 useEffect(() => {
   console.log("Payment request --- ", paymentRequest);
 }, [paymentRequest]);
 
-  useEffect(() => {
-    if (stripe) {
-      const pr = stripe.paymentRequest({
-        country: "US",
-        currency: "usd",
-        total: {
-          label: "Total",
-          amount: 1000, // The amount in cents
-        },
-        requestPayerName: true,
-        requestPayerEmail: true,
+  // useEffect(() => {
+  //   if (stripe) {
+  //     const pr = stripe.paymentRequest({
+  //       country: "US",
+  //       currency: "usd",
+  //       total: {
+  //         label: "Total",
+  //         amount: 1000, // The amount in cents
+  //       },
+  //       requestPayerName: true,
+  //       requestPayerEmail: true,
 
-      });
+  //     });
 
-      console.log("payment request --- ", pr)
+  //     console.log("payment request can make request --- ", pr.canMakePayment());
 
-      pr.canMakePayment().then((result) => {
-        if (result) {
-          setPaymentRequest(pr);
-        }
-      });
+  //     pr.canMakePayment().then((result) => {
+  //       console.log("result --- ", result);
+  //       if (result) {
+  //         setPaymentRequest(pr);
+  //       }
+  //     });
 
-      pr.on("paymentmethod", async (ev) => {
-        try {
-          const sessionId = sessionStorage.getItem("sessionId");
-          const paymentMethodId = ev.paymentMethod.id;
+  //     pr.on("paymentmethod", async (ev) => {
+  //       try {
+  //         const sessionId = sessionStorage.getItem("sessionId");
+  //         const paymentMethodId = ev.paymentMethod.id;
 
-          const responseData = await authorizePayment({
-            paymentMethodId,
-            sessionId,
-          }).then((res) => {
-          });
-          ev.complete("success");
-        } catch (error) {
-          console.error("Payment authorization failed:", error);
-        }
-      });
-    }
-  }, [stripe]);
+  //         const responseData = await authorizePayment({
+  //           paymentMethodId,
+  //           sessionId,
+  //         }).then((res) => {
+  //         });
+  //         ev.complete("success");
+  //       } catch (error) {
+  //         console.error("Payment authorization failed:", error);
+  //       }
+  //     });
+  //   }
+  // }, [stripe]);
 
-  const elements = useElements();
+
 
   const handleSubmit = async (event: any) => {
     props.setLoading(true);
@@ -91,24 +95,20 @@ useEffect(() => {
     } else {
       try {
         const sessionId = sessionStorage.getItem("sessionId");
+        console.log("session ID stripe payment page --- ", sessionId);
         let paymentMethodId = paymentMethod.id;
+        console.log("payment method id stripe payment page --- ", paymentMethodId);
         const responseData = await authorizePayment({
           paymentMethodId,
           sessionId,
         }).then((res: any) => {
-          // if (res.sessionId == sessionId) {
             if(res.paymentId){
-            /**
-             * Handle the error if above authorized payment is failed
-             */
             console.log("payment authorization success");
             props.setLoading(false);
             navigate('/ChargingSessionScreen')
           }
 
         })
-
-
       } catch (error) {
         console.error("Payment authorization failed:", error);
 
@@ -119,9 +119,7 @@ useEffect(() => {
 
   return (
     <div className="flex flex-row">
-      {paymentRequest ? (
-        <PaymentRequestButtonElement options={{ paymentRequest }} />
-      ) : (
+      
         <div>
           <div className="flex">
             <div className="flex justify-center items-center">
@@ -144,7 +142,7 @@ useEffect(() => {
             </button>
           }
         </div>
-      )}
+      
     </div>
   );
 }
