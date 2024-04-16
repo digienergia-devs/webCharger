@@ -20,11 +20,7 @@ export default function  CardForm(props: any) {
   const [payButtonClicked, setPayButtonClicked] = useState<boolean>(false);
   const [language, setLanguage] = useState<string | undefined>(props.language)
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
-  
 
-useEffect(() => {
-  console.log("Payment request --- ", paymentRequest);
-}, [paymentRequest]);
 
   // useEffect(() => {
   //   if (stripe) {
@@ -95,15 +91,12 @@ useEffect(() => {
     } else {
       try {
         const sessionId = sessionStorage.getItem("sessionId");
-        console.log("session ID stripe payment page --- ", sessionId);
         let paymentMethodId = paymentMethod.id;
-        console.log("payment method id stripe payment page --- ", paymentMethodId);
         const responseData = await authorizePayment({
           paymentMethodId,
           sessionId,
         }).then((res: any) => {
             if(res.paymentId){
-            console.log("payment authorization success");
             props.setLoading(false);
             navigate('/ChargingSessionScreen')
           }
