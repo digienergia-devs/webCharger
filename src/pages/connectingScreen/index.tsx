@@ -23,7 +23,6 @@ export default function ConnectingScreen(props: any) {
 
   useEffect(() => {
     if (chargerID?.length > 2) {
-      console.log("here");
       startChargingConnection();
     }
   }, [chargerID]);
@@ -34,7 +33,6 @@ export default function ConnectingScreen(props: any) {
     }
 
     const initiateChargerConnection = async () => {
-      console.log("here ...");
 
       const requestBody = {
         chargerID: "f9f16925-28b8-4ba5-99f2-d8080f0860f3-2",
@@ -42,7 +40,6 @@ export default function ConnectingScreen(props: any) {
       };
       try {
         const response = await startChargerConnection(requestBody);
-        console.log("charger connection start response --- ", response);
         if (response.sessionID && !sessionID) {
           setSessionID(response.sessionID);
           sessionStorage.setItem("sessionId", response.sessionID);

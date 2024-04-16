@@ -6,15 +6,14 @@ export default function SplashScreen() {
     let navigate = useNavigate();
 
     const getCookie = () => {
-        console.log("search for cookies")
         const cookies = document.cookie.split('; ');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].split('=');
-            if (cookie[0] === 'myCookie') {
-                console.log("cookie --- ", cookie[0])
-            } else {
-                console.log("cookie not found")
-            }
+            // if (cookie[0] === 'myCookie') {
+            //     console.log("cookie --- ", cookie[0])
+            // } else {
+            //     console.log("cookie not found")
+            // }
         }
     }
 

@@ -18,10 +18,8 @@ export async function startChargerConnection(requestBody: any) {
     } */
 
     try {
-        console.log("start charger connection request ---")
         const response = await api.post(endpoint, requestBody);
         if (response.status == 200) {
-            console.log("start charger connection response ---", response.data);
             return (response.data)
         } else {
             return ('error')
