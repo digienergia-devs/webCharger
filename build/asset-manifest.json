@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.5e197aeb.css",
-    "main.js": "/static/js/main.50f574b2.js",
+    "main.css": "/static/css/main.d7b70471.css",
+    "main.js": "/static/js/main.c4370a9e.js",
     "static/js/787.9e9f4ffd.chunk.js": "/static/js/787.9e9f4ffd.chunk.js",
     "static/media/carAtChargingPole.png": "/static/media/carAtChargingPole.a050a12d8685b673e07b.png",
     "static/media/cardDetails.png": "/static/media/cardDetails.f3801c6a6f4f631cb3a2.png",
     "index.html": "/index.html",
-    "main.5e197aeb.css.map": "/static/css/main.5e197aeb.css.map",
-    "main.50f574b2.js.map": "/static/js/main.50f574b2.js.map",
+    "main.d7b70471.css.map": "/static/css/main.d7b70471.css.map",
+    "main.c4370a9e.js.map": "/static/js/main.c4370a9e.js.map",
     "787.9e9f4ffd.chunk.js.map": "/static/js/787.9e9f4ffd.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.5e197aeb.css",
-    "static/js/main.50f574b2.js"
+    "static/css/main.d7b70471.css",
+    "static/js/main.c4370a9e.js"
   ]
 }
