@@ -22,46 +22,50 @@ export default function  CardForm(props: any) {
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
 
 
-  // useEffect(() => {
-  //   if (stripe) {
-  //     const pr = stripe.paymentRequest({
-  //       country: "US",
-  //       currency: "usd",
-  //       total: {
-  //         label: "Total",
-  //         amount: 1000, // The amount in cents
-  //       },
-  //       requestPayerName: true,
-  //       requestPayerEmail: true,
+  useEffect(() => {
+    if (stripe) {
+      const pr = stripe.paymentRequest({
+        country: "US",
+        currency: "usd",
+        total: {
+          label: "Total",
+          amount: 1000, 
+        },
+        requestPayerName: true,
+        requestPayerEmail: true,
 
-  //     });
+      });
 
-  //     console.log("payment request can make request --- ", pr.canMakePayment());
+      console.log("payment request can make request --- ", pr.canMakePayment());
 
-  //     pr.canMakePayment().then((result) => {
-  //       console.log("result --- ", result);
-  //       if (result) {
-  //         setPaymentRequest(pr);
-  //       }
-  //     });
+      pr.canMakePayment().then((result) => {
+        console.log("result --- ", result);
+        if (result) {
+          setPaymentRequest(pr);
+        }
+      });
 
-  //     pr.on("paymentmethod", async (ev) => {
-  //       try {
-  //         const sessionId = sessionStorage.getItem("sessionId");
-  //         const paymentMethodId = ev.paymentMethod.id;
+      pr.on("paymentmethod", async (ev) => {
+        try {
+          const sessionId = sessionStorage.getItem("sessionId");
+          const paymentMethodId = ev.paymentMethod.id;
 
-  //         const responseData = await authorizePayment({
-  //           paymentMethodId,
-  //           sessionId,
-  //         }).then((res) => {
-  //         });
-  //         ev.complete("success");
-  //       } catch (error) {
-  //         console.error("Payment authorization failed:", error);
-  //       }
-  //     });
-  //   }
-  // }, [stripe]);
+          const responseData = await authorizePayment({
+            paymentMethodId,
+            sessionId,
+          }).then((res) => {
+            // Handle response
+          }).catch((error) => {
+            // Handle error
+          });
+        } catch (error) {
+          // Handle error
+        }
+      });
+
+
+    }
+  }, [stripe]);
 
 
 
@@ -85,6 +89,14 @@ export default function  CardForm(props: any) {
       type: "card",
       card: cardElement,
     });
+
+    if (paymentMethod && paymentMethod.type === "card") {
+      // Handle card payment
+    } else if (paymentMethod && paymentMethod.type === "apple_pay") {
+      // Handle Apple Pay payment
+    } else {
+      console.error("Unsupported payment method");
+    }
 
     if (error) {
       console.error(error);
@@ -118,7 +130,8 @@ export default function  CardForm(props: any) {
             <div className="flex justify-center items-center">
               <img src={require('../../assets/icons/card.png')} alt="" />
             </div>
-            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
+            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} /> 
+            {paymentRequest && <PaymentRequestButtonElement options={{paymentRequest}}/>}
           </div>
           {payButtonClicked ?
             <div className="flex justify-center items-center w-full">
