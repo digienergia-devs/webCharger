@@ -149,9 +149,10 @@ export default function  CardForm(props: any) {
               />
             </div>
             :
-            <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
-              Pay
-            </button>
+            <></>
+            // <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
+            //   Pay
+            // </button>
           }
         </div>
       
