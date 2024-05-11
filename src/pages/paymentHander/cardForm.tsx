@@ -131,7 +131,9 @@ export default function  CardForm(props: any) {
               <img src={require('../../assets/icons/card.png')} alt="" />
             </div>
             {/* <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />  */}
+            <div className="card-element">
             {paymentRequest && <PaymentRequestButtonElement options={{paymentRequest}}/>}
+            </div>
           </div>
           {payButtonClicked ?
             <div className="flex justify-center items-center w-full">
