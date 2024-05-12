@@ -29,8 +29,10 @@ export default function  CardForm(props: any) {
         currency: "usd",
         total: {
           label: "Total",
-          amount: 1000, 
+          amount: 1000,
+           
         },
+        
         requestPayerName: true,
         requestPayerEmail: true,
 
@@ -90,12 +92,17 @@ export default function  CardForm(props: any) {
       card: cardElement,
     });
 
+    console.log("payment method --- ", paymentMethod)
+
     if (paymentMethod && paymentMethod.type === "card") {
       // Handle card payment
+      console.log("payment method card --- ", paymentMethod)
     } else if (paymentMethod && paymentMethod.type === "apple_pay") {
       // Handle Apple Pay payment
+      console.log("payment method apple pay --- ", paymentMethod)
     } else {
       console.error("Unsupported payment method");
+      console.log("Unsupported payment method")
     }
 
     if (error) {
@@ -127,9 +134,9 @@ export default function  CardForm(props: any) {
       
         <div>
           <div className="flex">
-            <div className="flex justify-center items-center">
+            {/* <div className="flex justify-center items-center">
               <img src={require('../../assets/icons/card.png')} alt="" />
-            </div>
+            </div> */}
             <div className="applePay">
             {paymentRequest ? <>
               <PaymentRequestButtonElement options={{paymentRequest}}/> </>
@@ -149,10 +156,9 @@ export default function  CardForm(props: any) {
               />
             </div>
             :
-            <></>
-            // <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
-            //   Pay
-            // </button>
+            <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
+              Pay
+            </button>
           }
         </div>
       
