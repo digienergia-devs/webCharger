@@ -78,6 +78,7 @@ export default function ConnectingScreen(props: any) {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen w-screen bg-green-600">
+      
       <div className="flex justify-center items-center h-2/´6">
         <img src={require("../../assets/icons/Final3.png")} alt="" />
       </div>
@@ -88,6 +89,12 @@ export default function ConnectingScreen(props: any) {
         </div>
       </div>
       <div className="flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white">
+      <FadeLoader
+                color="#38A169"
+                loading={true}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
         <div
           className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl"
           style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
@@ -108,6 +115,7 @@ export default function ConnectingScreen(props: any) {
           className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl"
           style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
         >
+          
           <span>
             We will process automatically once charger cable is connected
           </span>
