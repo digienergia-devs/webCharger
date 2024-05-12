@@ -145,6 +145,9 @@ export default function  CardForm(props: any) {
             }
             </div>
           </div>
+
+          <br />
+          
             <>
             <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} /> 
             </>
