@@ -141,9 +141,11 @@ export default function  CardForm(props: any) {
             {paymentRequest ? <>
               <PaymentRequestButtonElement options={{paymentRequest}}/> </>
             : <>
-            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} /> 
             </>
             }
+            </div>
+            <div className="applePay">
+            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} /> 
             </div>
           </div>
           {payButtonClicked ?
