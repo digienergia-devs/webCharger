@@ -144,10 +144,10 @@ export default function  CardForm(props: any) {
             </>
             }
             </div>
-            <div className="applePay">
-            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} /> 
-            </div>
           </div>
+            <>
+            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} /> 
+            </>
           {payButtonClicked ?
             <div className="flex justify-center items-center w-full">
               <FadeLoader
