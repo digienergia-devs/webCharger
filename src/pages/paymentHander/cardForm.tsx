@@ -21,7 +21,7 @@ export default function  CardForm(props: any) {
   const [language, setLanguage] = useState<string | undefined>(props.language)
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
 
-  const [selectedAmount, setSelectedAmount] = useState<number>(0);
+  const [selectedAmount, setSelectedAmount] = useState<number>(3000);
 
   const selectAmountHandler = (amount: number) => {
     setSelectedAmount(amount);
@@ -138,7 +138,7 @@ export default function  CardForm(props: any) {
     <div className="flex flex-row">
       
         <div>
-        <div className="flex flex-row justify-around w-full">
+        <div className="flex flex-row justify-around w-full pb-4">
               <div className={selectedAmount == 1000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(1000)}>€10</div>
               <div className={selectedAmount == 2000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(2000)}>€20</div>
               <div className={selectedAmount == 4000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(4000)}>€40</div>
