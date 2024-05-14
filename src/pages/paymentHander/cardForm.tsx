@@ -21,6 +21,11 @@ export default function  CardForm(props: any) {
   const [language, setLanguage] = useState<string | undefined>(props.language)
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
 
+  const [selectedAmount, setSelectedAmount] = useState<number>(0);
+
+  const selectAmountHandler = (amount: number) => {
+    setSelectedAmount(amount);
+  }
 
   useEffect(() => {
     if (stripe) {
@@ -29,7 +34,7 @@ export default function  CardForm(props: any) {
         currency: "usd",
         total: {
           label: "Total",
-          amount: 1000,
+          amount: selectedAmount,
            
         },
         
@@ -133,10 +138,18 @@ export default function  CardForm(props: any) {
     <div className="flex flex-row">
       
         <div>
+        <div className="flex flex-row justify-around w-full">
+              <div className={selectedAmount == 10 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(10)}>10</div>
+              <div className={selectedAmount == 20 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(20)}>20</div>
+              <div className={selectedAmount == 40 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(40)}>40</div>
+              <div className={selectedAmount == 60 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(60)}>60</div>
+            </div>
           <div className="flex">
             {/* <div className="flex justify-center items-center">
               <img src={require('../../assets/icons/card.png')} alt="" />
             </div> */}
+
+            
             <div className="applePay">
             {paymentRequest ? <>
               <PaymentRequestButtonElement options={{paymentRequest}}/> </>
@@ -147,7 +160,7 @@ export default function  CardForm(props: any) {
           </div>
 
           <br />
-          
+
             <>
             <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} /> 
             </>
