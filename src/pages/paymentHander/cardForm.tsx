@@ -20,11 +20,15 @@ export default function  CardForm(props: any) {
   const [payButtonClicked, setPayButtonClicked] = useState<boolean>(false);
   const [language, setLanguage] = useState<string | undefined>(props.language)
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedAmount, setSelectedAmount] = useState<number>(3000);
 
   const selectAmountHandler = (amount: number) => {
+    setIsLoading(true);
     setSelectedAmount(amount);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000)
   }
 
   useEffect(() => {
@@ -79,6 +83,7 @@ export default function  CardForm(props: any) {
   const handleSubmit = async (event: any) => {
     props.setLoading(true);
     setPayButtonClicked(true)
+    setIsLoading(true);
     setTimeout(() => { }, 2000);
     event.preventDefault();
 
@@ -168,7 +173,7 @@ export default function  CardForm(props: any) {
             <div className="flex justify-center items-center w-full">
               <FadeLoader
                 color="#38A169"
-                loading={payButtonClicked}
+                loading={isLoading}
                 aria-label="Loading Spinner"
                 data-testid="loader"
               />
