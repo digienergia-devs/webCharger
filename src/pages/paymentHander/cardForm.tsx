@@ -24,7 +24,7 @@ export default function  CardForm(props: any) {
   const [selectedAmount, setSelectedAmount] = useState<number>(0);
 
   const selectAmountHandler = (amount: number) => {
-    setSelectedAmount(amount);
+    setSelectedAmount(amount*100);
   }
 
   useEffect(() => {
