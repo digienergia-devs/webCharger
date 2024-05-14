@@ -24,7 +24,7 @@ export default function  CardForm(props: any) {
   const [selectedAmount, setSelectedAmount] = useState<number>(0);
 
   const selectAmountHandler = (amount: number) => {
-    setSelectedAmount(amount*100);
+    setSelectedAmount(amount);
   }
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function  CardForm(props: any) {
 
 
     }
-  }, [stripe]);
+  }, [stripe, selectedAmount]);
 
 
 
@@ -139,10 +139,10 @@ export default function  CardForm(props: any) {
       
         <div>
         <div className="flex flex-row justify-around w-full">
-              <div className={selectedAmount == 10 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(10)}>10</div>
-              <div className={selectedAmount == 20 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(20)}>20</div>
-              <div className={selectedAmount == 40 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(40)}>40</div>
-              <div className={selectedAmount == 60 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(60)}>60</div>
+              <div className={selectedAmount == 1000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(1000)}>€10</div>
+              <div className={selectedAmount == 2000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(2000)}>€20</div>
+              <div className={selectedAmount == 4000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(4000)}>€40</div>
+              <div className={selectedAmount == 6000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(6000)}>€60</div>
             </div>
           <div className="flex">
             {/* <div className="flex justify-center items-center">
