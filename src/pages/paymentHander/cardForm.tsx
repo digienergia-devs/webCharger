@@ -204,7 +204,7 @@ export default function  CardForm(props: any) {
   const PaymentMethodsComponent = () => {
     return (
       <>
-      <div className="flex">
+      <div className="flex flex-col">
         <button onClick={() => selectAmountHandler(0)}> back </button>
             <div className="applePay">
             {paymentRequest ? <>
