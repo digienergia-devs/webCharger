@@ -205,8 +205,8 @@ export default function  CardForm(props: any) {
     return (
       <>
       <div className="flex flex-col">
-        <div className="flex w-full justify-center">
-        <div className="flex bg-gray-100 rounded-md border border-green-500 p-2 pb-5" onClick={() => selectAmountHandler(0)}> €{selectedAmount/100} </div>
+        <div className="flex w-full justify-center mb-5">
+        <div className="flex bg-gray-100 rounded-md border border-green-500 p-2" onClick={() => selectAmountHandler(0)}> €{selectedAmount/100} </div>
         </div>
             <div className="applePay">
             {paymentRequest ? <>
