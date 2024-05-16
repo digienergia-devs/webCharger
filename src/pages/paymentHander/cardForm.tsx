@@ -29,11 +29,11 @@ export default function  CardForm(props: any) {
 
   useEffect(() => {
     if(selectedAmount > 0 ){
-      createPaymentMethod();
+      createPaymentRequestWhenAmountSelected();
     }
   }, [selectedAmount])
 
-  const createPaymentMethod = () => {
+  const createPaymentRequestWhenAmountSelected= () => {
     if (stripe) {
       const pr = stripe.paymentRequest({
         country: "US",
@@ -77,7 +77,7 @@ export default function  CardForm(props: any) {
       });
     } else {
       setTimeout(() => {
-        createPaymentMethod();
+        createPaymentRequestWhenAmountSelected();
       }, 2000)
     }
   }
@@ -148,6 +148,8 @@ export default function  CardForm(props: any) {
       return;
     }
 
+    
+
     const { paymentMethod, error } = await stripe.createPaymentMethod({
       type: "card",
       card: cardElement,
@@ -155,16 +157,16 @@ export default function  CardForm(props: any) {
 
     console.log("payment method --- ", paymentMethod)
 
-    // if (paymentMethod && paymentMethod.type === "card") {
-    //   // Handle card payment
-    //   console.log("payment method card --- ", paymentMethod)
-    // } else if (paymentMethod && paymentMethod.type === "apple_pay") {
-    //   // Handle Apple Pay payment
-    //   console.log("payment method apple pay --- ", paymentMethod)
-    // } else {
-    //   console.error("Unsupported payment method");
-    //   console.log("Unsupported payment method")
-    // }
+    if (paymentMethod && paymentMethod.type === "card") {
+      // Handle card payment
+      console.log("payment method card --- ", paymentMethod)
+    } else if (paymentMethod && paymentMethod.type === "apple_pay") {
+      // Handle Apple Pay payment
+      console.log("payment method apple pay --- ", paymentMethod)
+    } else {
+      console.error("Unsupported payment method");
+      console.log("Unsupported payment method")
+    }
 
     if (error) {
       console.error(error);
