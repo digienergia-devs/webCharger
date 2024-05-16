@@ -193,15 +193,10 @@ export default function  CardForm(props: any) {
   const SelectAmountComponent = () => {
     return (
       <div className="flex flex-row justify-around  pb-4">
-        <div>
         <div className={selectedAmount == 1000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(1000)}>€10</div>
         <div className={selectedAmount == 2000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(2000)}>€20</div>
         <div className={selectedAmount == 4000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(4000)}>€40</div>
         <div className={selectedAmount == 6000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(6000)}>€60</div>
-        </div>
-        <div>
-          <input type="number" placeholder="€" value={selectedAmount} onChange={(e) => selectAmountHandler(Number(e.target.value)*100)} />
-        </div>
       </div>
     )
   }
