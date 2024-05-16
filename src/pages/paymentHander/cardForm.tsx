@@ -205,6 +205,7 @@ export default function  CardForm(props: any) {
     return (
       <>
       <div className="flex">
+        <button onClick={() => selectAmountHandler(0)}> back </button>
             <div className="applePay">
             {paymentRequest ? <>
               <PaymentRequestButtonElement options={{paymentRequest}}/> </>
