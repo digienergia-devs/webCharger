@@ -82,52 +82,52 @@ export default function  CardForm(props: any) {
     }
   }
 
-  useEffect(() => {
-    if (stripe) {
-      const pr = stripe.paymentRequest({
-        country: "US",
-        currency: "usd",
-        total: {
-          label: "Total",
-          amount: selectedAmount,
+  // useEffect(() => {
+  //   if (stripe) {
+  //     const pr = stripe.paymentRequest({
+  //       country: "US",
+  //       currency: "usd",
+  //       total: {
+  //         label: "Total",
+  //         amount: selectedAmount,
            
-        },
+  //       },
         
-        requestPayerName: true,
-        requestPayerEmail: true,
+  //       requestPayerName: true,
+  //       requestPayerEmail: true,
 
-      });
+  //     });
 
-      console.log("payment request can make request --- ", pr.canMakePayment());
+  //     console.log("payment request can make request --- ", pr.canMakePayment());
 
-      pr.canMakePayment().then((result) => {
-        console.log("result --- ", result);
-        if (result) {
-          setPaymentRequest(pr);
-        }
-      });
+  //     pr.canMakePayment().then((result) => {
+  //       console.log("result --- ", result);
+  //       if (result) {
+  //         setPaymentRequest(pr);
+  //       }
+  //     });
 
-      pr.on("paymentmethod", async (ev) => {
-        try {
-          const sessionId = sessionStorage.getItem("sessionId");
-          const paymentMethodId = ev.paymentMethod.id;
+  //     pr.on("paymentmethod", async (ev) => {
+  //       try {
+  //         const sessionId = sessionStorage.getItem("sessionId");
+  //         const paymentMethodId = ev.paymentMethod.id;
 
-          const responseData = await authorizePayment({
-            paymentMethodId,
-            sessionId,
-          }).then((res) => {
-            // Handle response
-          }).catch((error) => {
-            // Handle error
-          });
-        } catch (error) {
-          // Handle error
-        }
-      });
+  //         const responseData = await authorizePayment({
+  //           paymentMethodId,
+  //           sessionId,
+  //         }).then((res) => {
+  //           // Handle response
+  //         }).catch((error) => {
+  //           // Handle error
+  //         });
+  //       } catch (error) {
+  //         // Handle error
+  //       }
+  //     });
 
 
-    }
-  }, [stripe, selectedAmount]);
+  //   }
+  // }, [stripe, selectedAmount]);
 
 
 
