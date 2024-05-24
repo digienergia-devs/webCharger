@@ -111,37 +111,39 @@ export default function  CardForm(props: any) {
   };
 
   return (
-    <div className="flex flex-row">
-      
-        <div>
-          <div className="flex">
-            <div className="flex justify-center items-center">
-              <img src={require('../../assets/icons/card.png')} alt="" />
-            </div>
-            {paymentRequest ? <>
-              <PaymentRequestButtonElement options={{paymentRequest}}/> </>
-            : <>
-            </>
-            }
+    <>
+    <div className="flex flex-col">
+      <div className="flex w-full justify-center mb-5">
 
-            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
-          </div>
-          {payButtonClicked ?
-            <div className="flex justify-center items-center w-full">
-              <FadeLoader
-                color="#38A169"
-                loading={payButtonClicked}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
-            </div>
-            :
-            <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
-              Pay
-            </button>
+      </div>
+          <div className="applePay">
+          {paymentRequest ? <>
+            <PaymentRequestButtonElement options={{paymentRequest}}/> </>
+          : <>
+          </>
           }
+          </div>
         </div>
-      
-    </div>
-  );
+
+        <br />
+
+          <>
+          <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} /> 
+          </>
+        {payButtonClicked ?
+          <div className="flex justify-center items-center w-full">
+            <FadeLoader
+              color="#38A169"
+              // loading={isLoading}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          </div>
+          :
+          <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
+            Pay
+          </button>
+        }</>
+  )
+
 }
