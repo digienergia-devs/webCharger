@@ -56,6 +56,7 @@ export default function  CardForm(props: any) {
           }).then((res) => {
           });
           ev.complete("success");
+          navigate('/ChargingSessionScreen')
         } catch (error) {
           console.error("Payment authorization failed:", error);
         }
