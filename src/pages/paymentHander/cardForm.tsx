@@ -117,7 +117,6 @@ export default function  CardForm(props: any) {
       <div className="flex w-full justify-center mb-5">
 
       </div>
-      apple pay
           <div className="applePay">
           {paymentRequest ? <>
             <PaymentRequestButtonElement options={{paymentRequest}}/> </>
