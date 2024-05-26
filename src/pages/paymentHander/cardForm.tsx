@@ -29,7 +29,7 @@ export default function  CardForm(props: any) {
         currency: "usd",
         total: {
           label: "Total",
-          amount: 1000, // The amount in cents
+          amount: props.selectedAmount, // The amount in cents
         },
         requestPayerName: true,
         requestPayerEmail: true,

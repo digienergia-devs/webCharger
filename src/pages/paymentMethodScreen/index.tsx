@@ -11,11 +11,29 @@ const stripePromise = loadStripe('pk_test_51MtxkaKRzm9Te7g8OTUxqutdzDY9XqQMydztU
 export default function PaymentMethodScreen(props: any) {
     const [loading, setLoading] = useState<boolean>(false);
     const [language, setLanguage] = useState<string>(props.language)
+    const [selectedAmount, setSelectedAmount] = useState<number>(0);
+
+    const selectAmountHandler = (amount: number) => {
+      setSelectedAmount(amount);
+    }
+  
 
     const setLangua = (e: any) => {
         props.setLanguage(e)
         setLanguage(e);
     }
+
+    const SelectAmountComponent = () => {
+        return (
+          <div className="flex flex-row justify-around w-full pb-4">
+            <div className={selectedAmount == 1000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(1000)}>€10</div>
+            <div className={selectedAmount == 2000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(2000)}>€20</div>
+            <div className={selectedAmount == 4000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(4000)}>€40</div>
+            <div className={selectedAmount == 6000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(6000)}>€60</div>
+          </div>
+        )
+      }
+    
 
     return (
         // this is pay screen
@@ -91,16 +109,24 @@ export default function PaymentMethodScreen(props: any) {
                     {/* <div>
                         <img src={require('../../assets/icons/card.png')} alt="" />
                     </div> */}
-                    <div>
-                        <Elements stripe={stripePromise}>
-                            <CardForm
-                                stripePromise={stripePromise}
-                                setIsPaymentMethodMethodAuthorized={props.setIsPaymentMethodMethodAuthorized}
-                                setLoading={setLoading}
-                                language={language}
+                    <>
+                        {(selectedAmount > 0) ? 
+                        <div>
+
+                        <Elements stripe={stripePromise} >
+                        <CardForm
+                            stripePromise={stripePromise}
+                            setIsPaymentMethodMethodAuthorized={props.setIsPaymentMethodMethodAuthorized}
+                            setLoading={setLoading}
+                            language={language}
+                            selectedAmount={selectedAmount}
                             />
-                        </Elements>
-                    </div>
+                    </Elements>
+                            </div>
+                        : 
+                        <SelectAmountComponent />
+                        }
+                    </>
 
                 </div>
             </div>
