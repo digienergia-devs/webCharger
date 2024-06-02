@@ -4,7 +4,6 @@ import {
   useElements,
   CardElement,
   PaymentRequestButtonElement,
-  PaymentElement
 } from "@stripe/react-stripe-js";
 import { authorizePayment } from "../../api/api";
 import { loadStripe } from "@stripe/stripe-js";
@@ -22,7 +21,6 @@ export default function CardForm(props: any) {
   const [language, setLanguage] = useState<string | undefined>(props.language)
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
   const [authAmount, setAuthAmount] = useState<any>(props.selectedAmount)
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setAuthAmount(props.selectedAmount)
@@ -74,7 +72,6 @@ export default function CardForm(props: any) {
 
 
   const handleSubmit = async (event: any) => {
-    setIsLoading(true);
     props.setLoading(true);
     setPayButtonClicked(true)
     setTimeout(() => { }, 2000);
@@ -119,7 +116,6 @@ export default function CardForm(props: any) {
       }
     }
 
-    setIsLoading(false);
   };
 
   return (
@@ -130,15 +126,7 @@ export default function CardForm(props: any) {
         </div>
         <div className="applePay">
           {paymentRequest ? <>
-            <PaymentRequestButtonElement options={{ paymentRequest }} /> 
-            <br />
-            <PaymentElement options={{ layout: "tabs" }}/>
-            <button disabled={isLoading || !stripe || !elements} id="submit">
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
-        </span>
-      </button>
-            </>
+            <PaymentRequestButtonElement options={{ paymentRequest }} /> </>
             : null
           }
         </div>
