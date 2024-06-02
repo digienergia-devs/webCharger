@@ -134,7 +134,7 @@ export default function CardForm(props: any) {
           {paymentRequest ? <>
             <PaymentRequestButtonElement options={{ paymentRequest }} /> 
             <br />
-            <PaymentElement/>
+            <PaymentElement options={{ layout: "tabs" }}/>
             </>
             : null
           }
