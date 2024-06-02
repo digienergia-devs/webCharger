@@ -4,6 +4,7 @@ import {
   useElements,
   CardElement,
   PaymentRequestButtonElement,
+  PaymentElement
 } from "@stripe/react-stripe-js";
 import { authorizePayment } from "../../api/api";
 import { loadStripe } from "@stripe/stripe-js";
@@ -116,7 +117,12 @@ export default function CardForm(props: any) {
       }
     }
 
+
   };
+
+  const paymentElementOptions = {
+    layout: "tabs"
+  }
 
   return (
     <>
@@ -126,7 +132,10 @@ export default function CardForm(props: any) {
         </div>
         <div className="applePay">
           {paymentRequest ? <>
-            <PaymentRequestButtonElement options={{ paymentRequest }} /> </>
+            <PaymentRequestButtonElement options={{ paymentRequest }} /> 
+            <br />
+            <PaymentElement/>
+            </>
             : null
           }
         </div>
