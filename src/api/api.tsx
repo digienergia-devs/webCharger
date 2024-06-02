@@ -1,9 +1,7 @@
 import axios from "axios";
 
-//   const API_BASE_URL = "http://185.96.163.154:8080";
-const API_BASE_URL = "https://ipark.sytes.net/service1";
-// const API_BASE_URL = "https://iparkchargingwebappbackend-m2r3.onrender.com";
-// https://iparkchargingwebappbackend.onrender.com
+// const API_BASE_URL = "https://ipark.sytes.net/service1";
+const API_BASE_URL = "https://digi-energia-csms.fly.dev/";
 
 const api = axios.create({
     baseURL: API_BASE_URL,
@@ -31,12 +29,13 @@ export async function startChargerConnection(requestBody: any) {
 }
 
 export async function checkConnectionStatus(chargerID: any) {
-    const endpoint = "/api/connection-status";
-    const payload = { chargerID };
+    const endpoint = `/chargepoints/${chargerID}`;
 
     try {
-        const response = await api.post(endpoint, payload);
-        return response.data;
+        const response: {
+            status: string;
+        } = await api.get(endpoint);
+        return response.status;
     } catch (error: any) {
         console.error("Error:", error.response);
         throw error.response;
