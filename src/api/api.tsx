@@ -7,8 +7,8 @@ const api = axios.create({
     baseURL: API_BASE_URL,
 });
 
-export async function startChargerConnection(requestBody: any) {
-    const endpoint = "/api/start-charger-connection";
+export async function startChargerConnection(chargerID: string) {
+    const endpoint = `chargepoint/${chargerID}`;
 
     /* { this should be in the request body
         "chargerID": "f9f16925-28b8-4ba5-99f2-d8080f0860f3-2",
@@ -16,7 +16,8 @@ export async function startChargerConnection(requestBody: any) {
     } */
 
     try {
-        const response = await api.post(endpoint, requestBody);
+        const response = await api.get(endpoint);
+        console.log("argon response --- ", response);
         if (response.status == 200) {
             return (response.data)
         } else {
@@ -30,12 +31,13 @@ export async function startChargerConnection(requestBody: any) {
 
 export async function checkConnectionStatus(chargerID: any) {
     const endpoint = `/chargepoints/${chargerID}`;
-
+    let temp: any;
     try {
         const response: {
             status: string;
         } = await api.get(endpoint);
-        return response.status;
+        console.log("response --- ", response);
+        return temp;
     } catch (error: any) {
         console.error("Error:", error.response);
         throw error.response;

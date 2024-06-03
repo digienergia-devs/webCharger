@@ -14,7 +14,7 @@ export default function ConnectingScreen(props: any) {
   const [chargerID, setChargerID] =
     useState<any>(
       undefined
-    ); 
+    );
   const [sessionID, setSessionID] = useState<any>(null);
   const [language, setLanguage] = useState<string>(props.language);
   useEffect(() => {
@@ -34,12 +34,8 @@ export default function ConnectingScreen(props: any) {
 
     const initiateChargerConnection = async () => {
 
-      const requestBody = {
-        chargerID: "f9f16925-28b8-4ba5-99f2-d8080f0860f3-2",
-        userID: "4dc7736d-b6e9-4006-a3a6-51653cc6cd53",
-      };
       try {
-        const response = await startChargerConnection(requestBody);
+        const response = await startChargerConnection("CP_1");
         if (response.sessionID && !sessionID) {
           setSessionID(response.sessionID);
           sessionStorage.setItem("sessionId", response.sessionID);
@@ -78,7 +74,7 @@ export default function ConnectingScreen(props: any) {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen w-screen bg-green-600">
-      
+
       <div className="flex justify-center items-center h-2/´6">
         <img src={require("../../assets/icons/Final3.png")} alt="" />
       </div>
@@ -89,12 +85,12 @@ export default function ConnectingScreen(props: any) {
         </div>
       </div>
       <div className="flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white">
-      <FadeLoader
-                color="#38A169"
-                loading={true}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
+        <FadeLoader
+          color="#38A169"
+          loading={true}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
         <div
           className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl"
           style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
@@ -115,7 +111,7 @@ export default function ConnectingScreen(props: any) {
           className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl"
           style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
         >
-          
+
           <span>
             We will process automatically once charger cable is connected
           </span>
