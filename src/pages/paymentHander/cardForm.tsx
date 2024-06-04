@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import FadeLoader from "react-spinners/FadeLoader";
 
 const stripePromise = loadStripe("pk_test_01QZ55AeQfGutsrsRjjkToqz");
-export default function  CardForm(props: any) {
+export default function CardForm(props: any) {
   let navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
@@ -93,11 +93,12 @@ export default function  CardForm(props: any) {
       try {
         const sessionId = sessionStorage.getItem("sessionId");
         let paymentMethodId = paymentMethod.id;
+        console.log("paymentMethodId --- ", paymentMethod);
         const responseData = await authorizePayment({
           paymentMethodId,
           sessionId,
         }).then((res: any) => {
-            if(res.paymentId){
+          if (res.paymentId) {
             props.setLoading(false);
             navigate('/ChargingSessionScreen')
           }
@@ -113,37 +114,37 @@ export default function  CardForm(props: any) {
 
   return (
     <>
-    <div className="flex flex-col">
-      <div className="flex w-full justify-center mb-5">
+      <div className="flex flex-col">
+        <div className="flex w-full justify-center mb-5">
 
-      </div>
-          <div className="applePay">
-          {paymentRequest ? <>
-            <PaymentRequestButtonElement options={{paymentRequest}}/> </>
-          : null
-          }
-          </div>
         </div>
+        <div className="applePay">
+          {paymentRequest ? <>
+            <PaymentRequestButtonElement options={{ paymentRequest }} /> </>
+            : null
+          }
+        </div>
+      </div>
 
-        <br />
+      <br />
 
-          <>
-          <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} /> 
-          </>
-        {payButtonClicked ?
-          <div className="flex justify-center items-center w-full">
-            <FadeLoader
-              color="#38A169"
-              // loading={isLoading}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          </div>
-          :
-          <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
-            Pay
-          </button>
-        }</>
+      <>
+        <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
+      </>
+      {payButtonClicked ?
+        <div className="flex justify-center items-center w-full">
+          <FadeLoader
+            color="#38A169"
+            // loading={isLoading}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+        :
+        <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
+          Pay
+        </button>
+      }</>
   )
 
 }

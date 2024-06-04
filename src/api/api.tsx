@@ -17,27 +17,11 @@ export async function startChargerConnection(chargerID: string) {
 
     try {
         const response = await api.get(endpoint);
-        console.log("argon response --- ", response);
         if (response.status == 200) {
             return (response.data)
         } else {
             return ('error')
         }
-    } catch (error: any) {
-        console.error("Error:", error.response);
-        throw error.response;
-    }
-}
-
-export async function checkConnectionStatus(chargerID: any) {
-    const endpoint = `/chargepoints/${chargerID}`;
-    let temp: any;
-    try {
-        const response: {
-            status: string;
-        } = await api.get(endpoint);
-        console.log("response --- ", response);
-        return temp;
     } catch (error: any) {
         console.error("Error:", error.response);
         throw error.response;

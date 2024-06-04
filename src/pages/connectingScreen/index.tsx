@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import { checkConnectionStatus, startChargerConnection } from "../../api/api";
+import { startChargerConnection } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import Language from "../language";
 import { useLocation } from "react-router-dom";
@@ -36,10 +36,16 @@ export default function ConnectingScreen(props: any) {
 
       try {
         const response = await startChargerConnection("CP_1");
-        if (response.sessionID && !sessionID) {
+        console.log("response --- ", response);
+        if (response.session_id && !sessionID) {
           setSessionID(response.sessionID);
           sessionStorage.setItem("sessionId", response.sessionID);
-          checkChargerConnectionStatus(chargerID);
+          navigate("/PaymentMethodScreen");
+          console.log("session ID available --- ")
+        } else {
+          setTimeout(() => {
+            initiateChargerConnection();
+          }, 5000);
         }
       } catch (error) {
         console.error(error);
@@ -47,24 +53,6 @@ export default function ConnectingScreen(props: any) {
     };
 
     initiateChargerConnection();
-  };
-
-  const checkChargerConnectionStatus = async (chargerID: any) => {
-    if (!chargerID) {
-      return;
-    }
-
-    try {
-      const response = await checkConnectionStatus(chargerID);
-
-      if (response.isChargerConnected) {
-        navigate("/PaymentMethodScreen");
-      } else {
-        checkChargerConnectionStatus(chargerID);
-      }
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const setLangua = (e: any) => {
