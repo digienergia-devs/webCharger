@@ -28,48 +28,51 @@ export default function CardForm(props: any) {
     }
   }, [stripe]);
 
-const foo = () => {
-  if(!stripe){
-    return;
+  const foo = () => {
+    if (!stripe) {
+      return;
+    }
+    const pr = stripe.paymentRequest({
+      country: "FI",
+      currency: "eur",
+      total: {
+        label: "Total",
+        amount: props.selectedAmount, // The amount in cents
+      },
+      requestPayerName: true,
+      requestPayerEmail: true,
+
+    });
+
+    console.log("payment request can make request --- ", pr.canMakePayment());
+
+    pr.canMakePayment().then((result) => {
+      console.log("result --- ", result);
+      if (result) {
+        setPaymentRequest(pr);
+      }
+    });
+
+    pr.on("paymentmethod", async (ev) => {
+      try {
+        const sessionId = localStorage.getItem("sessionId");
+        const paymentMethodId = ev.paymentMethod.id;
+        const requestBody = {
+          amount: props.selectedAmount,
+          payment_method: paymentMethodId
+        }
+        const responseData = await authorizePayment(
+          sessionId,
+          requestBody
+        ).then((res) => {
+        });
+        ev.complete("success");
+        navigate('/ChargingSessionScreen')
+      } catch (error) {
+        console.error("Payment authorization failed:", error);
+      }
+    });
   }
-  const pr = stripe.paymentRequest({
-    country: "FI",
-    currency: "eur",
-    total: {
-      label: "Total",
-      amount: props.selectedAmount, // The amount in cents
-    },
-    requestPayerName: true,
-    requestPayerEmail: true,
-
-  });
-
-  console.log("payment request can make request --- ", pr.canMakePayment());
-
-  pr.canMakePayment().then((result) => {
-    console.log("result --- ", result);
-    if (result) {
-      setPaymentRequest(pr);
-    }
-  });
-
-  pr.on("paymentmethod", async (ev) => {
-    try {
-      const sessionId = sessionStorage.getItem("sessionId");
-      const paymentMethodId = ev.paymentMethod.id;
-
-      const responseData = await authorizePayment({
-        paymentMethodId,
-        sessionId,
-      }).then((res) => {
-      });
-      ev.complete("success");
-      navigate('/ChargingSessionScreen')
-    } catch (error) {
-      console.error("Payment authorization failed:", error);
-    }
-  });
-}
 
   const handleSubmit = async (event: any) => {
     foo();
@@ -100,11 +103,17 @@ const foo = () => {
         const sessionId = sessionStorage.getItem("sessionId");
         let paymentMethodId = paymentMethod.id;
         console.log("paymentMethodId --- ", paymentMethod);
-        const responseData = await authorizePayment({
-          paymentMethodId,
+        const requestBody = {
+          amount: props.selectedAmount,
+          payment_method: paymentMethodId
+        }
+        const responseData = await authorizePayment(
           sessionId,
-        }).then((res: any) => {
-          if (res.paymentId) {
+          requestBody
+        ).then((res: any) => {
+          console.log("res from card form --- ", res);
+          localStorage.setItem("transactionId", res.transaction_id);
+          if (res.transaction_id) {
             props.setLoading(false);
             navigate('/ChargingSessionScreen')
           }

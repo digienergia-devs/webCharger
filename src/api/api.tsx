@@ -30,9 +30,9 @@ export async function startChargerConnection(chargerID: string, connectorID: str
     }
 }
 
-export async function authorizePayment({ paymentMethodId, sessionId }: any) {
-    const endpoint = "/api/payment-authorization";
-    const payload = { paymentMethodToken: paymentMethodId, sessionId: sessionId };
+export async function authorizePayment(sessionId: any, requestBody: any) {
+    const endpoint = `chargepoint/authorize_payment?session_id=${sessionId}`;
+    const payload = requestBody;
 
     try {
         const response = await api.post(endpoint, payload);

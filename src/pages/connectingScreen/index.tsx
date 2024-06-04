@@ -11,7 +11,7 @@ export default function ConnectingScreen(props: any) {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   let navigate = useNavigate();
-  const [chargerID, setChargerID] =useState<any>(undefined);
+  const [chargerID, setChargerID] = useState<any>(undefined);
   const [connectorID, setConnectorID] = useState<any>(undefined);
   const [sessionID, setSessionID] = useState<any>(null);
   const [language, setLanguage] = useState<string>(props.language);
@@ -39,8 +39,7 @@ export default function ConnectingScreen(props: any) {
         if (response.session_id && !sessionID) {
           setSessionID(response.sessionID);
           console.log("session ID available --- ")
-          sessionStorage.setItem("sessionId", response.sessionID);
-          sessionStorage.setItem("sessionId", response.session_id);
+          localStorage.setItem("sessionId", response.session_id);
           navigate("/PaymentMethodScreen");
         } else {
           setTimeout(() => {
