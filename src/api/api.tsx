@@ -7,8 +7,10 @@ const api = axios.create({
     baseURL: API_BASE_URL,
 });
 
-export async function startChargerConnection(chargerID: string) {
-    const endpoint = `chargepoint/${chargerID}`;
+export async function startChargerConnection(chargerID: string, connectorID: string) {
+    console.log("chargerID --- ", chargerID);
+    console.log("connectorID --- ", connectorID);
+    const endpoint = `chargepoint/${chargerID}/${connectorID}`;
 
     /* { this should be in the request body
         "chargerID": "f9f16925-28b8-4ba5-99f2-d8080f0860f3-2",
