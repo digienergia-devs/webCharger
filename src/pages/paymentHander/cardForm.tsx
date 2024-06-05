@@ -29,14 +29,14 @@ export default function CardForm(props: any) {
   useEffect(() => {
     if (stripe) {
       const pr = stripe.paymentRequest({
-        country: "US",
-        currency: "usd",
+        country: "FI",
+        currency: "eur",
         total: {
           label: "Total",
           amount: props.selectedAmount, // The amount in cents
         },
-        requestPayerName: true,
-        requestPayerEmail: true,
+        // requestPayerName: true,
+        // requestPayerEmail: true,
 
       });
 
@@ -126,7 +126,11 @@ export default function CardForm(props: any) {
         </div>
         <div className="applePay">
           {paymentRequest ? <>
-            <PaymentRequestButtonElement options={{ paymentRequest }} /> </>
+            <PaymentRequestButtonElement options={{ paymentRequest }} />
+            <br />
+            <PaymentRequestButtonElement options={{ paymentRequest }} />
+
+          </>
             : null
           }
         </div>
