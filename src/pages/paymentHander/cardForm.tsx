@@ -34,7 +34,7 @@ export default function CardForm(props: any) {
     }
     const pr = stripe.paymentRequest({
       country: "FI",
-      currency: "EUR",
+      currency: "eur",
       total: {
         label: "Total",
         amount: props.selectedAmount, // The amount in cents
