@@ -7,6 +7,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 import Language from '../language';
 
 const stripePromise = loadStripe('pk_test_51MtxkaKRzm9Te7g8OTUxqutdzDY9XqQMydztUG1XXtGqzo2olj16lx2NkRwXQjsOxvdbnLKMio1yRBYGQjQ61Zqw00xaJPcjkH');
+const clientSecret = 'pi_3PNzgVKRzm9Te7g8087PFtUW_secret_sNOPS4hHZqH9TPCFfQi5fS1Ju'
 
 export default function PaymentMethodScreen(props: any) {
     const [loading, setLoading] = useState<boolean>(false);
@@ -118,7 +119,7 @@ export default function PaymentMethodScreen(props: any) {
                         {(selectedAmount > 0) ?
                             <div>
 
-                                <Elements stripe={stripePromise} >
+                                <Elements stripe={stripePromise} options={{ clientSecret }}>
                                     <CardForm
                                         stripePromise={stripePromise}
                                         setIsPaymentMethodMethodAuthorized={props.setIsPaymentMethodMethodAuthorized}
