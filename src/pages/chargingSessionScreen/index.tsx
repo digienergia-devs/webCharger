@@ -32,7 +32,10 @@ export default function ChargingSessionScreen(props: any) {
     const startCharging = async () => {
         try {
             const sessionId = sessionStorage.getItem("sessionId");
-            await startChargingSession(sessionId);
+            let transactionId = localStorage.getItem("transactionId");
+            let res= await startChargingSession(transactionId);
+
+            console.log("Start transaction --- ", res);
             document.cookie = `myCookie=${sessionId}; expires=Wed, 31 Dec 2025 23:59:59 GMT; path=/ChargingSessionScreen`
         } catch (error: any) {
 
@@ -60,8 +63,10 @@ export default function ChargingSessionScreen(props: any) {
     const getChargingSessionStatus = async () => {
         const sessionId = sessionStorage.getItem("sessionId");
         let response;
-        await chargingSessionStatus(sessionId).then(
+        let transactionId = localStorage.getItem("transactionId");
+        await chargingSessionStatus(transactionId).then(
             (res: any) => {
+                console.log("reading meter values --- ", res);
                 response = res;
                 setChargingPower(Number((res.powerUsage.toFixed(2))));
                 calculateChargingPrice(res.amountToCapture);

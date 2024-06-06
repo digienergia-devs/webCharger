@@ -31,7 +31,7 @@ export async function startChargerConnection(chargerID: string, connectorID: str
 }
 
 export async function authorizePayment(sessionId: any, requestBody: any) {
-    const endpoint = `chargepoint/authorize_payment?session_id=${sessionId}`;
+    const endpoint = `payment/authorize_payment?session_id=${sessionId}`;
     const payload = requestBody;
 
     try {
@@ -43,9 +43,9 @@ export async function authorizePayment(sessionId: any, requestBody: any) {
     }
 }
 
-export async function startChargingSession(sessionId: any) {
-    const endpoint = "/api/start-charging-session";
-    const payload = { sessionId: sessionId };
+export async function startChargingSession(transactionId: any) {
+    const endpoint = `chargepoint/start_transaction?transaction_id=${transactionId}`;
+    const payload = {  };
 
     try {
         const response = await api.post(endpoint, payload);
@@ -67,9 +67,9 @@ export async function stopChargingSession(sessionId: any) {
     }
 }
 
-export async function chargingSessionStatus(sessionId: any) {
-    const endpoint = "/api/charging-session-status";
-    const payload = { sessionId: sessionId };
+export async function chargingSessionStatus(transactionId: any) {
+    const endpoint = `chargepoint/meter_values?transaction_id=${transactionId}`;
+    const payload = { };
 
     try {
         const response = await api.post(endpoint, payload);
