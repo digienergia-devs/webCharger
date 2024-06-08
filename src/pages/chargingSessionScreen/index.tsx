@@ -57,7 +57,7 @@ export default function ChargingSessionScreen(props: any) {
 
     const calculateChargingPrice = (amount: number) => {
         let euros = amount / 100;
-        setChargingCost(euros)
+        setChargingCost(Number(euros.toFixed(2)))
     }
 
     const getChargingSessionStatus = async () => {
@@ -68,10 +68,10 @@ export default function ChargingSessionScreen(props: any) {
             (res: any) => {
                 console.log("reading meter values --- ", res);
                 response = res;
-                setChargingPower(Number((res.powerUsage.toFixed(2))));
-                calculateChargingPrice(res.amountToCapture);
+                setChargingPower(Number((res.meter_values.value.toFixed(2))));
+                calculateChargingPrice(((Number(res.meter_values.value.toFixed(2))) * Number(res.meter_values.unit_price.toFixed(2))));
                 formatTime(res.elapsedTime);
-                if (res.isChargerConnected == true && res.isChargingCompleted == false) {
+                if (res.charge_point_status == 'Charging') {
                     setTimeout(() => {
                         getChargingSessionStatus();
                     }, 2000)
