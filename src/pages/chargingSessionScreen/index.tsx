@@ -92,6 +92,7 @@ export default function ChargingSessionScreen(props: any) {
                 // calculateChargingPrice(((Number(res.meter_values.value.toFixed(2))) * Number(res.meter_values.unit_price.toFixed(2))));
                 // formatTime(2000);
                 if (res.charge_point_status == 'Charging') {
+                    setStopChargingButtonText('Stop Charging');
                     setTimeout(() => {
                         getChargingSessionStatus();
                     }, 2000)
