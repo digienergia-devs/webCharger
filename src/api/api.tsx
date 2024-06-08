@@ -55,9 +55,9 @@ export async function startChargingSession(transactionId: any) {
     }
 }
 
-export async function stopChargingSession(sessionId: any) {
-    const endpoint = "/api/stop-charging-session";
-    const payload = { sessionId: sessionId };
+export async function stopChargingSession(transaction_id: any) {
+    const endpoint = `chargepoint/stop_transaction?transaction_id=${transaction_id}`;
+    const payload = { };
 
     try {
         const response = await api.post(endpoint, payload);

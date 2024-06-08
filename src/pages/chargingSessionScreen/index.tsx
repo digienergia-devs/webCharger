@@ -6,22 +6,39 @@ import Language from '../language';
 export default function ChargingSessionScreen(props: any) {
     const [chargingPower, setChargingPower] = useState<number>(0.00);
     const [chargingTime, setChargingTime] = useState<string>('0:00:00');
-    const [chargingCost, setChargingCost] = useState<number>(0.00);
+    const [chargingCost, setChargingCost] = useState<number>(0.0000);
     const timeDisplay = document.getElementById('time') as HTMLDivElement;
     const [stopChargingButtonText, setStopChargingButtonText] = useState<string>('Stop Charging');
     const [isChargingStopped, setIsChargingStopped] = useState<boolean>(false);
     const [isChargingStarted, setIsChargingStarted] = useState<boolean>(false);
-    const [language, setLanguage] = useState<string | undefined>(props.language)
+    const [language, setLanguage] = useState<string | undefined>(props.language);
 
-    useEffect(() => {
-        setStopChargingButtonText(language == 'EN' ? 'Stop Charging' : 'Lopeta lataaminen')
-    }, [])
+
+    const [timer, setTimer] = useState<number>(0);
+
+    // useEffect(() => {
+    //         let seconds = 0;
+    //         const timer = setInterval(() => {
+    //             seconds++;
+    //             setTimer(seconds);
+    //         }, 1000);
+            
+    //         return () => {
+    //             clearInterval(timer);
+    //         };
+    // }, []);
+
+    // useEffect(() => {
+    //         formatTime(timer);
+        
+    // }, [timer])
 
     const formatTime = (seconds: number) => {
+        console.log("elapsed time --- ", seconds);
+
         if (seconds < 0) {
             throw new Error('Input must be a non-negative number of seconds.');
         }
-
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
         const remainingSeconds = seconds % 60;
@@ -43,9 +60,9 @@ export default function ChargingSessionScreen(props: any) {
     }
 
     const stopChargingSessionButtonClick = async () => {
+        let transactionId = localStorage.getItem("transactionId");
         try {
-            const sessionId = sessionStorage.getItem("sessionId");
-            const response = await stopChargingSession(sessionId);
+            const response = await stopChargingSession(transactionId);
             if (response.message == 'Charging session stopped successfully') {
                 setStopChargingButtonText(language == 'EN' ? 'Stopped' : 'Lopetettu');
                 setIsChargingStopped(true);
@@ -57,20 +74,23 @@ export default function ChargingSessionScreen(props: any) {
 
     const calculateChargingPrice = (amount: number) => {
         let euros = amount / 100;
-        setChargingCost(Number(euros.toFixed(2)))
+        setChargingCost(Number(euros.toFixed(4)))
     }
 
     const getChargingSessionStatus = async () => {
-        const sessionId = sessionStorage.getItem("sessionId");
         let response;
         let transactionId = localStorage.getItem("transactionId");
         await chargingSessionStatus(transactionId).then(
             (res: any) => {
                 console.log("reading meter values --- ", res);
                 response = res;
-                setChargingPower(Number((res.meter_values.value.toFixed(2))));
-                calculateChargingPrice(((Number(res.meter_values.value.toFixed(2))) * Number(res.meter_values.unit_price.toFixed(2))));
-                formatTime(res.elapsedTime);
+                setChargingPower(Number(res.meter_values.value.toFixed(2)));
+                setChargingCost(Number(res.meter_values.amount.toFixed(2)));
+                if(res.time_elapsed) {
+                    formatTime((res.time_elapsed).toFixed(0));
+                }
+                // calculateChargingPrice(((Number(res.meter_values.value.toFixed(2))) * Number(res.meter_values.unit_price.toFixed(2))));
+                // formatTime(2000);
                 if (res.charge_point_status == 'Charging') {
                     setTimeout(() => {
                         getChargingSessionStatus();
