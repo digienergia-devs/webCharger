@@ -78,3 +78,13 @@ export async function chargingSessionStatus(transactionId: any) {
         throw error.response;
     }
 }
+
+export async function getSession(sessionId: string){
+    const endpoint = `chargepoint/session/${sessionId}`;
+    try {
+        const response = await api.get(endpoint);
+        return response.data;
+    } catch (error: any) {
+        throw error.response;
+    }
+}

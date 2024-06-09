@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './style.css'
 import { stopChargingSession, chargingSessionStatus, startChargingSession } from '../../api/api';
 import Language from '../language';
+import FadeLoader from "react-spinners/FadeLoader";
 
 export default function ChargingSessionScreen(props: any) {
     const [chargingPower, setChargingPower] = useState<number>(0.00);
@@ -12,6 +13,7 @@ export default function ChargingSessionScreen(props: any) {
     const [isChargingStopped, setIsChargingStopped] = useState<boolean>(false);
     const [isChargingStarted, setIsChargingStarted] = useState<boolean>(false);
     const [language, setLanguage] = useState<string | undefined>(props.language);
+    const [isChargingStopButtonClicked, setIsChargingStopButtonClicked] = useState<boolean>(false);
 
 
     const [timer, setTimer] = useState<number>(0);
@@ -60,6 +62,7 @@ export default function ChargingSessionScreen(props: any) {
     }
 
     const stopChargingSessionButtonClick = async () => {
+        setIsChargingStopButtonClicked(true);
         let transactionId = localStorage.getItem("transactionId");
         try {
             const response = await stopChargingSession(transactionId);
@@ -67,8 +70,12 @@ export default function ChargingSessionScreen(props: any) {
                 setStopChargingButtonText(language == 'EN' ? 'Stopped' : 'Lopetettu');
                 setIsChargingStopped(true);
             }
+            else{
+                setIsChargingStopButtonClicked(false);
+            }
         } catch (error: any) {
             console.error(error);
+            setIsChargingStopButtonClicked(false);
         }
     }
 
@@ -202,7 +209,27 @@ export default function ChargingSessionScreen(props: any) {
 
                 </div>
                 <div className="flex p-5 justify-center flex-col items-center w-5/6" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
-                    <button className='flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg' onClick={stopChargingSessionButtonClick}>{stopChargingButtonText}</button>
+                    
+
+                        {isChargingStopButtonClicked ?
+                        
+                        <FadeLoader
+                            color="#38A169"
+                            loading={true}
+                            aria-label="Loading Spinner"
+                            data-testid="loader"
+                        /> : 
+
+                            <button className='flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg' onClick={stopChargingSessionButtonClick}>
+                                {stopChargingButtonText}
+                            </button>
+                 
+                         }
+                        
+                        
+        
+                    
+                    
                     <img src={require('../../assets/icons/carAtChargingPole.png')} alt="" />
 
                 </div>

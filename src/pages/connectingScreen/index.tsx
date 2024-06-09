@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import { startChargerConnection } from "../../api/api";
+import { startChargerConnection, getSession } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import Language from "../language";
 import { useLocation } from "react-router-dom";
 import FadeLoader from "react-spinners/FadeLoader";
 
 export default function ConnectingScreen(props: any) {
+  const [headerInfo, setHeaderInfo] = useState<string>("Insert Cable");
   const [loading, setLoading] = useState<boolean>(true);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -15,9 +16,16 @@ export default function ConnectingScreen(props: any) {
   const [connectorID, setConnectorID] = useState<any>(undefined);
   const [sessionID, setSessionID] = useState<any>(null);
   const [language, setLanguage] = useState<string>(props.language);
+  
   useEffect(() => {
     setChargerID(queryParams.get("chargerId"));
     setConnectorID(queryParams.get("connectorId"));
+    if(localStorage.getItem("sessionId") !== null){
+      let sessionId = localStorage.getItem("sessionId");
+      // setSessionID(sessionId);
+      console.log("session id found from local storage --- ", sessionId);
+      
+    }
   }, []);
 
   useEffect(() => {
@@ -36,16 +44,22 @@ export default function ConnectingScreen(props: any) {
       try {
         const response = await startChargerConnection(chargerID, connectorID);
         console.log("response --- ", response);
-        if (response.session_id && !sessionID) {
-          setSessionID(response.sessionID);
-          console.log("session ID available --- ")
-          localStorage.setItem("sessionId", response.session_id);
-          navigate("/PaymentMethodScreen");
+        if(response.status == 'Charging'){
+          setHeaderInfo("Charger in use")
         } else {
-          setTimeout(() => {
-            initiateChargerConnection();
-          }, 5000);
+          setHeaderInfo("Insert Cable");
+          if (response.session_id && !sessionID) {
+            setSessionID(response.sessionID);
+            console.log("session ID available --- ")
+            localStorage.setItem("sessionId", response.session_id);
+            navigate("/PaymentMethodScreen");
+          } else {
+            setTimeout(() => {
+              initiateChargerConnection();
+            }, 5000);
+          }
         }
+        
       } catch (error) {
         console.error(error);
       }
@@ -68,7 +82,7 @@ export default function ConnectingScreen(props: any) {
       <div className="flex flex-col justify-center items-center h-1/6 w-full">
         <div className="flex justify-center items-center h-1/2"></div>
         <div className="flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-green-500 w-5/6 shadow-md text-white font-bold text-md md:text-xl xl:text-2xl">
-          <p className="m-0">Insert Cable</p>
+          <p className={headerInfo == 'Charger in use' ? "m-0 text-red-500" : "m-0"}>{headerInfo}</p>
         </div>
       </div>
       <div className="flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white">
