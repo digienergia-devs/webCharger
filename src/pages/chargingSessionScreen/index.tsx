@@ -1,20 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
-import { stopChargingSession, chargingSessionStatus, startChargingSession } from '../../api/api';
+import { stopChargingSession, chargingSessionStatus, startChargingSession, getChargingSummary } from '../../api/api';
 import Language from '../language';
 import FadeLoader from "react-spinners/FadeLoader";
 
 export default function ChargingSessionScreen(props: any) {
-    const [chargingPower, setChargingPower] = useState<number>(0.00);
+    const [chargingPower, setChargingPower] = useState<number | undefined>(0.00);
     const [chargingTime, setChargingTime] = useState<string>('0:00:00');
-    const [chargingCost, setChargingCost] = useState<number>(0.0000);
+    const [chargingCost, setChargingCost] = useState<number | undefined>(0.0000);
     const timeDisplay = document.getElementById('time') as HTMLDivElement;
     const [stopChargingButtonText, setStopChargingButtonText] = useState<string>('Stop Charging');
     const [isChargingStopped, setIsChargingStopped] = useState<boolean>(false);
     const [isChargingStarted, setIsChargingStarted] = useState<boolean>(false);
     const [language, setLanguage] = useState<string | undefined>(props.language);
     const [isChargingStopButtonClicked, setIsChargingStopButtonClicked] = useState<boolean>(false);
-
+    const [transactionId, setTransactionId] = useState<string | null>(null);
+    const [chargingSessionSummary, setChargingSessionSummary] = useState<{
+        power_consumed: any,
+        final_amount: any,
+        status: any
+    }>({
+        power_consumed: null,
+        final_amount: null,
+        status: null
+    });
 
     const [timer, setTimer] = useState<number>(0);
 
@@ -35,6 +44,28 @@ export default function ChargingSessionScreen(props: any) {
         
     // }, [timer])
 
+    useEffect(() => {
+        setTransactionId(localStorage.getItem("transactionId"));
+    }, [])
+
+    useEffect(() => {
+        if(isChargingStopped){
+
+            const fetchData = async () => {
+                let chargingSummary = await getChargingSummary(transactionId);
+                setChargingSessionSummary(chargingSummary);
+                setTimeout(() => {
+                    let consumed_power = Number(chargingSummary.power_consumed);
+                    let finalAmount = Number(chargingSummary.final_amount);
+
+                    setChargingPower(Number(consumed_power.toFixed(2))); // Convert the string value to a number
+                    setChargingCost((Number(finalAmount.toFixed(2))));
+                }, 1000);
+            };
+            fetchData();
+        }
+    }, [isChargingStopped])
+
     const formatTime = (seconds: number) => {
         console.log("elapsed time --- ", seconds);
 
@@ -52,10 +83,12 @@ export default function ChargingSessionScreen(props: any) {
         try {
             const sessionId = sessionStorage.getItem("sessionId");
             let transactionId = localStorage.getItem("transactionId");
+            setTransactionId(transactionId);
             let res= await startChargingSession(transactionId);
 
             console.log("Start transaction --- ", res);
             document.cookie = `myCookie=${sessionId}; expires=Wed, 31 Dec 2025 23:59:59 GMT; path=/ChargingSessionScreen`
+            getChargingSessionStatus();
         } catch (error: any) {
 
         }
@@ -66,6 +99,7 @@ export default function ChargingSessionScreen(props: any) {
         let transactionId = localStorage.getItem("transactionId");
         try {
             const response = await stopChargingSession(transactionId);
+            console.log("stop charging response --- ", response);
             if (response.message == 'Charging session stopped successfully') {
                 setStopChargingButtonText(language == 'EN' ? 'Stopped' : 'Lopetettu');
                 setIsChargingStopped(true);
@@ -90,34 +124,40 @@ export default function ChargingSessionScreen(props: any) {
         await chargingSessionStatus(transactionId).then(
             (res: any) => {
                 console.log("reading meter values --- ", res);
-                response = res;
-                setChargingPower(Number(res.meter_values.value.toFixed(2)));
-                setChargingCost(Number(res.meter_values.amount.toFixed(2)));
-                if(res.time_elapsed) {
-                    formatTime((res.time_elapsed).toFixed(0));
+                if(res.charge_point_status == "Preparing"){
+                    startCharging();
+                }else{
+                    response = res;
+                    setChargingPower(Number(res.meter_values.value.toFixed(2)));
+                    setChargingCost(Number(res.meter_values.amount.toFixed(2)));
+                    if(res.time_elapsed) {
+                        formatTime((res.time_elapsed).toFixed(0));
+                    }
+                    // calculateChargingPrice(((Number(res.meter_values.value.toFixed(2))) * Number(res.meter_values.unit_price.toFixed(2))));
+                    // formatTime(2000);
+                    if (res.charge_point_status == 'Charging') {
+                        setStopChargingButtonText('Stop Charging');
+                        setTimeout(() => {
+                            getChargingSessionStatus();
+                        }, 2000)
+                    } else {
+                        setIsChargingStopped(true);
+                        setStopChargingButtonText(language == 'EN' ? 'Charging stoped' : 'Lataus loppui')
+                    }
                 }
-                // calculateChargingPrice(((Number(res.meter_values.value.toFixed(2))) * Number(res.meter_values.unit_price.toFixed(2))));
-                // formatTime(2000);
-                if (res.charge_point_status == 'Charging') {
-                    setStopChargingButtonText('Stop Charging');
-                    setTimeout(() => {
-                        getChargingSessionStatus();
-                    }, 2000)
-                } else {
-                    setIsChargingStopped(true);
-                    setStopChargingButtonText(language == 'EN' ? 'Charging stoped' : 'Lataus loppui')
-                }
+                
             }
         )
     }
 
     useEffect(() => {
-        if (!isChargingStarted) {
-            startCharging();
+        if (!isChargingStarted || transactionId) {
+            getChargingSessionStatus();
+            // startCharging();
             setIsChargingStarted(true);
-            getChargingSessionStatus()
+            
         }
-    }, [isChargingStarted])
+    }, [isChargingStarted, transactionId])
 
     const switchLanguage = () => {
         switch (language) {

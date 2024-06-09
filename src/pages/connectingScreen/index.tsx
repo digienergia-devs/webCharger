@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import { startChargerConnection, getSession } from "../../api/api";
+import { startChargerConnection, chargingSessionStatus } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import Language from "../language";
 import { useLocation } from "react-router-dom";
@@ -16,19 +16,44 @@ export default function ConnectingScreen(props: any) {
   const [connectorID, setConnectorID] = useState<any>(undefined);
   const [sessionID, setSessionID] = useState<any>(null);
   const [language, setLanguage] = useState<string>(props.language);
+  const [transactionId, setTransactionId] = useState<any>(null);
   
   useEffect(() => {
     setChargerID(queryParams.get("chargerId"));
     setConnectorID(queryParams.get("connectorId"));
     if(localStorage.getItem("sessionId") !== null){
       let sessionId = localStorage.getItem("sessionId");
-      // setSessionID(sessionId);
-      console.log("session id found from local storage --- ", sessionId);
-      
+      setSessionID(sessionId);
+      console.log("session id found from local storage --- ", sessionId); 
     }
   }, []);
 
+
+    const fetchData = async (transactionId: string) => {
+        setTransactionId(transactionId);
+        console.log("transaction id found from local storage --- ", transactionId); 
+        try {
+          let metervalues = await chargingSessionStatus(transactionId);
+          
+          if(metervalues.charge_point_status == 'Charging' || metervalues.charge_point_status == 'Finishing'){
+            console.log("metervalues.charge_point_status --- ", metervalues.charge_point_status);
+            navigate('/ChargingSessionScreen')
+          }
+        } catch (error) {
+          console.error(error); 
+        }
+    };
+
+    
+
+
   useEffect(() => {
+
+    let transactionId = localStorage.getItem("transactionId");
+    if(transactionId !== null){
+      fetchData(transactionId);
+    }
+
     if (chargerID?.length > 2) {
       startChargingConnection();
     }

@@ -79,12 +79,15 @@ export async function chargingSessionStatus(transactionId: any) {
     }
 }
 
-export async function getSession(sessionId: string){
-    const endpoint = `chargepoint/session/${sessionId}`;
-    try {
-        const response = await api.get(endpoint);
-        return response.data;
-    } catch (error: any) {
-        throw error.response;
+export async function getChargingSummary(transactionId: string | null){
+    if(transactionId !== null){
+
+        const endpoint = `payment/get_payment_summary?transaction_id=${transactionId}`;
+        try {
+            const response = await api.get(endpoint);
+            return response.data;
+        } catch (error: any) {
+            throw error.response;
+        }
     }
 }
