@@ -49,23 +49,26 @@ export default function ChargingSessionScreen(props: any) {
     }, [])
 
     useEffect(() => {
-        if(isChargingStopped){
+        setTimeout(() => {
 
-            const fetchData = async () => {
-                let chargingSummary = await getChargingSummary(transactionId);
-                setChargingSessionSummary(chargingSummary);
-                setTimeout(() => {
-                    let consumed_power = Number(chargingSummary.power_consumed);
-                    let finalAmount = Number(chargingSummary.final_amount);
+            if(isChargingStopped){
 
-                    setChargingPower(Number(consumed_power.toFixed(2))); // Convert the string value to a number
-                    setChargingCost((Number(finalAmount.toFixed(2))));
-                }, 1000);
-                localStorage.removeItem("transactionId");
-                localStorage.removeItem("sessionId");
-            };
-            fetchData();
-        }
+                const fetchData = async () => {
+                    let chargingSummary = await getChargingSummary(transactionId);
+                    setChargingSessionSummary(chargingSummary);
+                    setTimeout(() => {
+                        let consumed_power = Number(chargingSummary.power_consumed);
+                        let finalAmount = Number(chargingSummary.final_amount);
+    
+                        setChargingPower(Number(consumed_power.toFixed(2))); // Convert the string value to a number
+                        setChargingCost((Number(finalAmount.toFixed(2))));
+                    }, 1000);
+                    localStorage.removeItem("transactionId");
+                    localStorage.removeItem("sessionId");
+                };
+                fetchData();
+            }
+        }, 2000)
     }, [isChargingStopped])
 
     const formatTime = (seconds: number) => {
