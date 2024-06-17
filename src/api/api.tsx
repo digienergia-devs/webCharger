@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useState } from "react";
 
 // const API_BASE_URL = "https://ipark.sytes.net/service1";
 const API_BASE_URL = "https://digi-energia-csms.fly.dev/";
@@ -6,6 +7,8 @@ const API_BASE_URL = "https://digi-energia-csms.fly.dev/";
 const api = axios.create({
     baseURL: API_BASE_URL,
 });
+
+
 
 export async function startChargerConnection(chargerID: string, connectorID: string) {
     console.log("chargerID --- ", chargerID);
@@ -30,9 +33,10 @@ export async function startChargerConnection(chargerID: string, connectorID: str
     }
 }
 
-export async function authorizePayment(sessionId: any, requestBody: any) {
-    const endpoint = `payment/authorize_payment?session_id=${sessionId}`;
+export async function authorizePayment(chargerID: string, connectorID: string, requestBody: any) {
+    const endpoint = `payment/authorize_payment?charge_point_id=${chargerID}&connector_id=${connectorID}`;
     const payload = requestBody;
+    console.log("authorize body --- ", payload);
 
     try {
         const response = await api.post(endpoint, payload);

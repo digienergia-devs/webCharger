@@ -23,11 +23,18 @@ export default function ConnectingScreen(props: any) {
     setConnectorID(queryParams.get("connectorId"));
     if(localStorage.getItem("sessionId") !== null){
       let sessionId = localStorage.getItem("sessionId");
-      setSessionID(sessionId);
+      // setSessionID(sessionId);
       console.log("session id found from local storage --- ", sessionId); 
     }
   }, []);
 
+  useEffect(() => {
+    props.setChargerID(chargerID);
+  }, [chargerID]);
+
+  useEffect(() => {
+    props.setConnectorID(connectorID);
+  }, [connectorID]);
 
     const fetchData = async (transactionId: string) => {
         setTransactionId(transactionId);
@@ -73,10 +80,9 @@ export default function ConnectingScreen(props: any) {
           setHeaderInfo("Charger in use")
         } else {
           setHeaderInfo("Insert Cable");
-          if (response.session_id && !sessionID) {
-            setSessionID(response.sessionID);
-            console.log("session ID available --- ")
-            localStorage.setItem("sessionId", response.session_id);
+          if (response.status == 'Available' || response.status == 'Preparing') {
+            // setSessionID(response.sessionID);
+            // localStorage.setItem("sessionId", response.session_id);
             navigate("/PaymentMethodScreen");
           } else {
             setTimeout(() => {

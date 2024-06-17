@@ -62,7 +62,8 @@ export default function CardForm(props: any) {
           payment_method: paymentMethodId
         }
         const responseData = await authorizePayment(
-          sessionId,
+          props.chargerID,
+          props.connectorID,
           requestBody
         ).then((res) => {
         });
@@ -110,7 +111,8 @@ export default function CardForm(props: any) {
           payment_method: paymentMethodId
         }
         const responseData = await authorizePayment(
-          sessionId,
+          props.chargerID,
+          props.connectorID,
           requestBody
         ).then((res: any) => {
           console.log("res from card form --- ", res);

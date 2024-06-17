@@ -18,10 +18,10 @@ export default function PaymentMethodScreen(props: any) {
         setSelectedAmount(amount);
     }
 
-    useEffect(() => {
-        const sessionId = localStorage.getItem('sessionId');
-        console.log("session id from local storage --- ", sessionId);
-    }, []);
+    // useEffect(() => {
+    //     const sessionId = localStorage.getItem('sessionId');
+    //     console.log("session id from local storage --- ", sessionId);
+    // }, []);
 
 
     const setLangua = (e: any) => {
@@ -32,7 +32,7 @@ export default function PaymentMethodScreen(props: any) {
     const SelectAmountComponent = () => {
         return (
             <div className="flex flex-row justify-around w-full pb-4">
-                <div className={selectedAmount == 1000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(200)}>€10</div>
+                <div className={selectedAmount == 1000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(102)}>€1.02</div>
                 <div className={selectedAmount == 2000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(2000)}>€20</div>
                 <div className={selectedAmount == 4000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(4000)}>€40</div>
                 <div className={selectedAmount == 6000 ? 'flex bg-green-500 rounded-md border border-green-500 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-green-500 p-2'} onClick={() => selectAmountHandler(6000)}>€60</div>
@@ -126,6 +126,8 @@ export default function PaymentMethodScreen(props: any) {
                                         setLoading={setLoading}
                                         language={language}
                                         selectedAmount={selectedAmount}
+                                        chargerID={props.chargerID}
+                                        connectorID={props.connectorID}
                                     />
                                 </Elements>
                             </div>

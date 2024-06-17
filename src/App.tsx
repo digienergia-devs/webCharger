@@ -11,6 +11,9 @@ function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const [language, setLanguage] = useState<string>('EN');
 
+  const [chargerID, setChargerID] = useState<string>();
+  const [connectorID, setConnectorID] = useState<string>()
+
   const changeLanguage = (e: any) => {
     setLanguage(e);
   }
@@ -24,14 +27,20 @@ function App() {
           <Route path='/ConnectingScreen' element={<ConnectingScreen
             language={language}
             setLanguage={changeLanguage}
+            setConnectorID={setConnectorID}
+            setChargerID={setChargerID}
           />} />
           <Route path='/PaymentMethodScreen' element={<PaymentMethodScreen
             language={language}
             setLanguage={changeLanguage}
+            chargerID={chargerID}
+            connectorID={connectorID}
           />} />
           <Route path='/ChargingSessionScreen' element={<ChargingSessionScreen
             language={language}
             setLanguage={changeLanguage}
+            chargerID={chargerID}
+            connectorID={connectorID}
           />} />
         </Routes>
       </Router>

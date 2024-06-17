@@ -86,11 +86,22 @@ export default function ChargingSessionScreen(props: any) {
             const sessionId = sessionStorage.getItem("sessionId");
             let transactionId = localStorage.getItem("transactionId");
             setTransactionId(transactionId);
-            let res= await startChargingSession(transactionId);
+            let res: any;
+            try {
+                await startChargingSession(transactionId).then((result: any) => {
+                    res = result;
+                    console.log("Start transaction --- ", res);
+                    document.cookie = `myCookie=${sessionId}; expires=Wed, 31 Dec 2025 23:59:59 GMT; path=/ChargingSessionScreen`
 
-            console.log("Start transaction --- ", res);
-            document.cookie = `myCookie=${sessionId}; expires=Wed, 31 Dec 2025 23:59:59 GMT; path=/ChargingSessionScreen`
-            getChargingSessionStatus();
+                    setTimeout(() => {
+                        getChargingSessionStatus(transactionId!);
+                    }, 2000);
+                })
+            } catch (error) {
+                console.error(error);
+            }
+
+            
         } catch (error: any) {
 
         }
@@ -120,18 +131,17 @@ export default function ChargingSessionScreen(props: any) {
         setChargingCost(Number(euros.toFixed(4)))
     }
 
-    const getChargingSessionStatus = async () => {
+    const getChargingSessionStatus = async (transactionID: string) => {
         let response;
-        let transactionId = localStorage.getItem("transactionId");
-        await chargingSessionStatus(transactionId).then(
+        await chargingSessionStatus(transactionID).then(
             (res: any) => {
                 console.log("reading meter values --- ", res);
                 if(res.charge_point_status == "Preparing"){
                     startCharging();
                 }else{
                     response = res;
-                    setChargingPower(Number(res.meter_values.value.toFixed(2)));
-                    setChargingCost(Number(res.meter_values.amount.toFixed(2)));
+                    setChargingPower(Number(res.meter_values));
+                    setChargingCost(Number(res.amount));
                     if(res.time_elapsed) {
                         formatTime((res.time_elapsed).toFixed(0));
                     }
@@ -140,7 +150,7 @@ export default function ChargingSessionScreen(props: any) {
                     if (res.charge_point_status == 'Charging') {
                         setStopChargingButtonText('Stop Charging');
                         setTimeout(() => {
-                            getChargingSessionStatus();
+                            getChargingSessionStatus(transactionID);
                         }, 2000)
                     } else {
                         setIsChargingStopped(true);
@@ -154,8 +164,8 @@ export default function ChargingSessionScreen(props: any) {
 
     useEffect(() => {
         if (!isChargingStarted || transactionId) {
-            getChargingSessionStatus();
-            // startCharging();
+            startCharging();
+            // getChargingSessionStatus();
             setIsChargingStarted(true);
             
         }
@@ -229,7 +239,7 @@ export default function ChargingSessionScreen(props: any) {
                             <img src={require('../../assets/icons/Group10.png')} alt="" />
                         </div>
                         <div className='flex w-2/3'>
-                            <span>{chargingPower} kWh</span>
+                            <span>{(chargingPower)?.toFixed(2)} kWh</span>
                         </div>
                     </div>
                     <div className='flex justify-center items-center w-full'>
@@ -245,7 +255,7 @@ export default function ChargingSessionScreen(props: any) {
                             <img src={require('../../assets/icons/Group2498.png')} alt="" />
                         </div>
                         <div className='flex w-2/3'>
-                            {chargingCost}€
+                            {(chargingCost)?.toFixed(2)}€
                         </div>
                     </div>
 
