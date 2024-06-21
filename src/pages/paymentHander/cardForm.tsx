@@ -135,10 +135,14 @@ export default function CardForm(props: any) {
 
   };
 
+  const changePaymentMethod = () => {
+    console.log("change payment method clicked ---");
+  }
+
   return (
     <>
       <div className="flex flex-col">
-        <div className="flex w-full justify-center mb-5">
+        <div className="flex w-full justify-center">
 
         </div>
         <div className="applePay">
@@ -157,17 +161,28 @@ export default function CardForm(props: any) {
       {payButtonClicked ?
         <div className="flex justify-center items-center w-full">
           <FadeLoader
-            color="#38A169"
+            color="#FF6D00"
             // loading={isLoading}
             aria-label="Loading Spinner"
             data-testid="loader"
           />
         </div>
         :
-        <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
+        <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
           Pay
         </button>
-      }</>
+      }
+      <div className="flex flex-col pt-5">
+        <span className="flex flex-row items-center justify-center">
+          Payment method is selected based on your device.
+        </span>
+        <br />
+        <div className="flex flex-row items-center justify-center" onClick={changePaymentMethod}>
+          <img src={require('../../assets/icons/orangeThemeDebitCardIcon.png')} alt="" />
+          <span className="flex pl-5">Pay with something else</span>
+        </div>
+      </div>
+      </>
   )
 
 }

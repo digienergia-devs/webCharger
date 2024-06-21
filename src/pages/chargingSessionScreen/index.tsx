@@ -223,7 +223,7 @@ export default function ChargingSessionScreen(props: any) {
     }
 
     return (
-        <div className="flex flex-col justify-center items-center h-screen w-screen bg-green-600">
+        <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
             <div className="flex justify-center items-center h-2/´6">
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
@@ -231,7 +231,7 @@ export default function ChargingSessionScreen(props: any) {
                 <div className='flex justify-center items-center h-1/2'>
 
                 </div>
-                <div className='flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-green-500 w-5/6 shadow-md text-white font-bold text-md md:text-xl xl:text-2xl'>
+                <div className='flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-iparkOrange400 w-5/6 shadow-md text-white font-bold text-md md:text-xl xl:text-2xl'>
                     <p className="m-0">Charging Session</p>
                 </div>
             </div>
@@ -239,7 +239,7 @@ export default function ChargingSessionScreen(props: any) {
                 <div className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
                     <div className='flex justify-center items-center w-full'>
                         <div className='flex w-1/3 items-center justify-center text-center'>
-                            <img src={require('../../assets/icons/Group10.png')} alt="" />
+                            <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
                         </div>
                         <div className='flex w-2/3'>
                             <span>{(chargingPower)?.toFixed(2)} kWh</span>
@@ -247,7 +247,7 @@ export default function ChargingSessionScreen(props: any) {
                     </div>
                     <div className='flex justify-center items-center w-full'>
                         <div className='flex w-1/3 items-center justify-center text-center'>
-                            <img src={require('../../assets/icons/Filled.png')} alt="" />
+                            <img src={require('../../assets/icons/orangeThemeElapsedTime.png')} alt="" />
                         </div>
                         <div className='flex w-2/3'>
                             {chargingTime}s
@@ -255,7 +255,7 @@ export default function ChargingSessionScreen(props: any) {
                     </div>
                     <div className='flex justify-center items-center w-full'>
                         <div className='flex w-1/3 items-center justify-center text-center'>
-                            <img src={require('../../assets/icons/Group2498.png')} alt="" />
+                            <img src={require('../../assets/icons/orangeThemeAmountSpent.png')} alt="" />
                         </div>
                         <div className='flex w-2/3'>
                             {(chargingCost)?.toFixed(2)}€
@@ -275,7 +275,7 @@ export default function ChargingSessionScreen(props: any) {
                             data-testid="loader"
                         /> : 
 
-                            <button className='flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg' onClick={stopChargingSessionButtonClick}>
+                            <button className='flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg' onClick={stopChargingSessionButtonClick}>
                                 {stopChargingButtonText}
                             </button>
                  
@@ -290,7 +290,7 @@ export default function ChargingSessionScreen(props: any) {
                 </div>
                 <div className="flex p-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
                     <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500' />
-                    <button className='flex bg-green-500 w-full text-center justify-center mt-5 rounded-md text-white text-lg'>Email receipt</button>
+                    <button className='flex bg-iparkOrange800 w-full text-center justify-center mt-5 rounded-md text-white text-lg'>Email receipt</button>
                 </div>
             </div>
         </div>

@@ -105,20 +105,20 @@ export default function ConnectingScreen(props: any) {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen w-screen bg-green-600">
+    <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
 
-      <div className="flex justify-center items-center h-2/´6">
+      <div className="flex justify-center items-center h-2/6">
         <img src={require("../../assets/icons/Final3.png")} alt="" />
       </div>
       <div className="flex flex-col justify-center items-center h-1/6 w-full">
         <div className="flex justify-center items-center h-1/2"></div>
-        <div className="flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-green-500 w-5/6 shadow-md text-white font-bold text-md md:text-xl xl:text-2xl">
+        <div className="flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-iparkOrange400 w-5/6 shadow-md text-white font-bold text-md md:text-xl xl:text-2xl">
           <p className={headerInfo == 'Charger in use' ? "m-0 text-red-500" : "m-0"}>{headerInfo}</p>
         </div>
       </div>
       <div className="flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white">
         <FadeLoader
-          color="#38A169"
+          color="#FF6D00"
           loading={true}
           aria-label="Loading Spinner"
           data-testid="loader"
@@ -135,7 +135,7 @@ export default function ConnectingScreen(props: any) {
           style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
         >
           <img
-            src={require("../../assets/icons/carAtChargingPole.png")}
+            src={require("../../assets/orangeThemeRedCar.png")}
             alt=""
           />
         </div>
