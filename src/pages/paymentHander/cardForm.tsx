@@ -20,7 +20,11 @@ export default function CardForm(props: any) {
   const [payButtonClicked, setPayButtonClicked] = useState<boolean>(false);
   const [language, setLanguage] = useState<string | undefined>(props.language)
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
+  const [authAmount, setAuthAmount] = useState<any>(props.selectedAmount)
 
+  useEffect(() => {
+    setAuthAmount(props.selectedAmount)
+  }, [props.selectedAmount])
 
   useEffect(() => {
     if (stripe) {
