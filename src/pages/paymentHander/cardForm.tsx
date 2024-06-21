@@ -123,7 +123,8 @@ export default function CardForm(props: any) {
           localStorage.setItem("transactionId", res.transaction_id);
           if (res.transaction_id) {
             props.setLoading(false);
-            navigate('/ChargingSessionScreen')
+            // navigate('/ChargingSessionScreen')
+            navigate('/OtpScreen')
           }
 
         })
