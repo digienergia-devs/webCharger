@@ -224,6 +224,14 @@ export default function ChargingSessionScreen(props: any) {
 
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
+            <div className="flex flex-row justify-between w-full pl-5 pr-5 " >
+                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                    25 KW
+                </div>
+                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                    0.25 Euro/kWh
+                </div>
+            </div>
             <div className="flex justify-center items-center h-2/´6">
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
@@ -269,7 +277,7 @@ export default function ChargingSessionScreen(props: any) {
                         {isChargingStopButtonClicked ?
                         
                         <FadeLoader
-                            color="#38A169"
+                            color="#FF6D00"
                             loading={true}
                             aria-label="Loading Spinner"
                             data-testid="loader"
@@ -285,7 +293,7 @@ export default function ChargingSessionScreen(props: any) {
         
                     
                     
-                    <img src={require('../../assets/icons/carAtChargingPole.png')} alt="" />
+                    <img src={require('../../assets/orangeThemeRedCar.png')} alt="" />
 
                 </div>
                 <div className="flex p-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
@@ -294,63 +302,5 @@ export default function ChargingSessionScreen(props: any) {
                 </div>
             </div>
         </div>
-
-
-
-        // <div className='main-container-chargingsession-screen'>
-        //     <Language
-        //         setLan={setLangua}
-        //         language={props.language} />
-        //     <div className='company-branding-chargingsession-screen'>
-        //         <img src={require('../../assets/icons/icon.png')} alt="" />
-        //         <p>plugkaro</p>
-        //     </div>
-        //     <div className='body-container-chargingsession-screen'>
-        //         <div className='body-header-chargingsession-screen'>
-        //             {language == 'EN' ? 'Charging Session' : 'Lataussessio'}
-        //         </div>
-        //         {/* <div className='charger-meter-chargingsession-screen'>
-        //             <img src={require('../../assets/icons/speedometer.png')} alt="" />
-        //         </div> */}
-        //         <div className='charging-power-container-chargingsession-screen'>
-        //             <div className='charging-power-header-chargingsession-screen'>
-        //                 {/* Charging */}
-        //                 <img src={require('../../assets/icons/charging.png')} alt="" />
-        //             </div>
-        //             <div className='charging-power-value-chargingsessio-screen'>
-        //                 {chargingPower / 100000} kWh
-        //             </div>
-        //             <div className='chargingtime-price-container-chargingsession-screen'>
-        //                 <div className='chargingtime-main-container-chargingsession-screen'>
-        //                     <div className='chargingtime-header-chargingsession-screen'>
-        //                         {/* Time */}
-        //                         <img src={require('../../assets/icons/clock.png')} alt="" />
-        //                     </div>
-        //                     <div id='time' className='chargingtime-value-chargingsession-screen'>
-        //                         {/* 01:32:34 */}
-        //                         {chargingTime}s
-        //                     </div>
-        //                 </div>
-        //                 <div className='chargingprice-main-container-chargingsesion-screen'>
-        //                     <div className='chargingprice-header-chargingsession-screen'>
-        //                         {/* Price */}
-        //                         <img src={require('../../assets/icons/price.png')} alt="" />
-        //                     </div>
-        //                     <div className='chargingprice-value-chargingsession-screen'>
-        //                         {chargingCost}€
-        //                     </div>
-        //                 </div>
-        //             </div>
-        //             <div className='stopbutton-container-chargingsession-screen'>
-        //                 <button onClick={stopChargingSessionButtonClick}>
-        //                     {stopChargingButtonText}
-        //                 </button>
-        //             </div>
-        //         </div>
-        //     </div>
-        //     <div className='footer-chargingsession-screen'>
-        //         <img src={require('../../assets/icons/charging-station.png')} alt="" />
-        //     </div>
-        // </div>
     )
 }

@@ -106,6 +106,14 @@ export default function ConnectingScreen(props: any) {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
+      <div className="flex flex-row justify-between w-full pl-5 pr-5">
+        <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+            25 KW
+        </div>
+        <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+            0.25 Euro/kWh
+        </div>
+      </div>
 
       <div className="flex justify-center items-center h-2/6">
         <img src={require("../../assets/icons/Final3.png")} alt="" />
@@ -150,6 +158,47 @@ export default function ConnectingScreen(props: any) {
         </div>
       </div>
     </div>
+    // <div className='main-container-connecting-screen'>
+    //     <Language
+    //         setLan={setLangua}
+    //         language={language} />
+    //     <div className='company-branding-connecting-screen'>
+    //         <img src={require('../../assets/icons/icon.png')} alt="" />
+    //         <p>plugKaro</p>
+    //     </div>
+
+    //     {chargerID !== undefined && chargerID !== null
+    //         ?
+    //         <div className='loading-container'>
+    //             <FadeLoader
+    //                 color="#cacfd9"
+    //                 loading={loading}
+    //                 aria-label="Loading Spinner"
+    //                 data-testid="loader"
+    //             />
+    //         </div>
+    //         :
+    //         <div</div> id='reader'></div>
+    //     }
+
+    //     <div className='body-container-connecting-screen'>
+    //         <div className='information-header-connecting-screen'>
+    //             {language == 'EN' ? 'Insert cable' : 'Aseta kaapeli'}
+    //         </div>
+    //         <div className='information-body-connecting-screen'>
+    //             {language == 'EN' ? '01. Connect cable to the car' : ' 01. Liitä kaapeli autoon'}
+    //         </div>
+    //         <div className='information-body-connecting-screen'>
+    //             {language == 'EN' ? '02. Connect cable to the socket' : '02. Liitä kaapeli pistorasiaan'}
+    //         </div>
+    //         <div className='general-information-connecting-screen'>
+    //             {language == 'EN' ? 'We will proceed automatically once charger cable is connected' : 'Jatkamme automaattisesti, kun latauskaapeli on liitetty'}
+    //         </div>
+    //     </div>
+    //     <div className='footer-connecting-screen'>
+    //         <img src={require('../../assets/icons/charging-station.png')} alt="" />
+    //     </div>
+    // </div>
     // <div className='main-container-connecting-screen'>
     //     <Language
     //         setLan={setLangua}
