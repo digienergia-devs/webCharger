@@ -1,27 +1,82 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
-import { stopChargingSession, chargingSessionStatus, startChargingSession } from '../../api/api';
+import { stopChargingSession, chargingSessionStatus, startChargingSession, getChargingSummary } from '../../api/api';
 import Language from '../language';
+import FadeLoader from "react-spinners/FadeLoader";
 
 export default function ChargingSessionScreen(props: any) {
-    const [chargingPower, setChargingPower] = useState<number>(0.00);
+    const [chargingPower, setChargingPower] = useState<number | undefined>(0.00);
     const [chargingTime, setChargingTime] = useState<string>('0:00:00');
-    const [chargingCost, setChargingCost] = useState<number>(0.00);
+    const [chargingCost, setChargingCost] = useState<number | undefined>(0.0000);
     const timeDisplay = document.getElementById('time') as HTMLDivElement;
     const [stopChargingButtonText, setStopChargingButtonText] = useState<string>('Stop Charging');
     const [isChargingStopped, setIsChargingStopped] = useState<boolean>(false);
     const [isChargingStarted, setIsChargingStarted] = useState<boolean>(false);
-    const [language, setLanguage] = useState<string | undefined>(props.language)
+    const [language, setLanguage] = useState<string | undefined>(props.language);
+    const [isChargingStopButtonClicked, setIsChargingStopButtonClicked] = useState<boolean>(false);
+    const [transactionId, setTransactionId] = useState<string | null>(null);
+    const [chargingSessionSummary, setChargingSessionSummary] = useState<{
+        power_consumed: any,
+        final_amount: any,
+        status: any
+    }>({
+        power_consumed: null,
+        final_amount: null,
+        status: null
+    });
+
+    const [timer, setTimer] = useState<number>(0);
+
+    // useEffect(() => {
+    //         let seconds = 0;
+    //         const timer = setInterval(() => {
+    //             seconds++;
+    //             setTimer(seconds);
+    //         }, 1000);
+            
+    //         return () => {
+    //             clearInterval(timer);
+    //         };
+    // }, []);
+
+    // useEffect(() => {
+    //         formatTime(timer);
+        
+    // }, [timer])
 
     useEffect(() => {
-        setStopChargingButtonText(language == 'EN' ? 'Stop Charging' : 'Lopeta lataaminen')
+        setTransactionId(localStorage.getItem("transactionId"));
     }, [])
 
+    useEffect(() => {
+        setTimeout(() => {
+
+            if(isChargingStopped){
+
+                const fetchData = async () => {
+                    let chargingSummary = await getChargingSummary(transactionId);
+                    setChargingSessionSummary(chargingSummary);
+                    setTimeout(() => {
+                        let consumed_power = Number(chargingSummary.power_consumed);
+                        let finalAmount = Number(chargingSummary.final_amount);
+    
+                        setChargingPower(Number(consumed_power.toFixed(2))); // Convert the string value to a number
+                        setChargingCost((Number(finalAmount.toFixed(2))));
+                    }, 1000);
+                    localStorage.removeItem("transactionId");
+                    localStorage.removeItem("sessionId");
+                };
+                fetchData();
+            }
+        }, 2000)
+    }, [isChargingStopped])
+
     const formatTime = (seconds: number) => {
+        console.log("elapsed time --- ", seconds);
+
         if (seconds < 0) {
             throw new Error('Input must be a non-negative number of seconds.');
         }
-
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
         const remainingSeconds = seconds % 60;
@@ -32,59 +87,92 @@ export default function ChargingSessionScreen(props: any) {
     const startCharging = async () => {
         try {
             const sessionId = sessionStorage.getItem("sessionId");
-            await startChargingSession(sessionId);
-            document.cookie = `myCookie=${sessionId}; expires=Wed, 31 Dec 2025 23:59:59 GMT; path=/ChargingSessionScreen`
+            let transactionId = localStorage.getItem("transactionId");
+            setTransactionId(transactionId);
+            let res: any;
+            try {
+                await startChargingSession(transactionId).then((result: any) => {
+                    res = result;
+                    console.log("Start transaction --- ", res);
+                    document.cookie = `myCookie=${sessionId}; expires=Wed, 31 Dec 2025 23:59:59 GMT; path=/ChargingSessionScreen`
+
+                    setTimeout(() => {
+                        getChargingSessionStatus(transactionId!);
+                    }, 2000);
+                })
+            } catch (error) {
+                console.error(error);
+            }
+
+            
         } catch (error: any) {
 
         }
     }
 
     const stopChargingSessionButtonClick = async () => {
+        setIsChargingStopButtonClicked(true);
+        let transactionId = localStorage.getItem("transactionId");
         try {
-            const sessionId = sessionStorage.getItem("sessionId");
-            const response = await stopChargingSession(sessionId);
+            const response = await stopChargingSession(transactionId);
+            console.log("stop charging response --- ", response);
             if (response.message == 'Charging session stopped successfully') {
                 setStopChargingButtonText(language == 'EN' ? 'Stopped' : 'Lopetettu');
                 setIsChargingStopped(true);
             }
+            else{
+                setIsChargingStopButtonClicked(false);
+            }
         } catch (error: any) {
             console.error(error);
+            setIsChargingStopButtonClicked(false);
         }
     }
 
     const calculateChargingPrice = (amount: number) => {
         let euros = amount / 100;
-        setChargingCost(euros)
+        setChargingCost(Number(euros.toFixed(4)))
     }
 
-    const getChargingSessionStatus = async () => {
-        const sessionId = sessionStorage.getItem("sessionId");
+    const getChargingSessionStatus = async (transactionID: string) => {
         let response;
-        await chargingSessionStatus(sessionId).then(
+        await chargingSessionStatus(transactionID).then(
             (res: any) => {
-                response = res;
-                setChargingPower(Number((res.powerUsage.toFixed(2))));
-                calculateChargingPrice(res.amountToCapture);
-                formatTime(res.elapsedTime);
-                if (res.isChargerConnected == true && res.isChargingCompleted == false) {
-                    setTimeout(() => {
-                        getChargingSessionStatus();
-                    }, 2000)
-                } else {
-                    setIsChargingStopped(true);
-                    setStopChargingButtonText(language == 'EN' ? 'Charging stoped' : 'Lataus loppui')
+                console.log("reading meter values --- ", res);
+                if(res.charge_point_status == "Preparing"){
+                    startCharging();
+                }else{
+                    response = res;
+                    setChargingPower(Number(res.meter_values));
+                    setChargingCost(Number(res.amount));
+                    if(res.time_elapsed) {
+                        formatTime((res.time_elapsed).toFixed(0));
+                    }
+                    // calculateChargingPrice(((Number(res.meter_values.value.toFixed(2))) * Number(res.meter_values.unit_price.toFixed(2))));
+                    // formatTime(2000);
+                    if (res.charge_point_status == 'Charging') {
+                        setStopChargingButtonText('Stop Charging');
+                        setTimeout(() => {
+                            getChargingSessionStatus(transactionID);
+                        }, 2000)
+                    } else {
+                        setIsChargingStopped(true);
+                        setStopChargingButtonText(language == 'EN' ? 'Charging stoped' : 'Lataus loppui')
+                    }
                 }
+                
             }
         )
     }
 
     useEffect(() => {
-        if (!isChargingStarted) {
+        if (!isChargingStarted || transactionId) {
             startCharging();
+            // getChargingSessionStatus();
             setIsChargingStarted(true);
-            getChargingSessionStatus()
+            
         }
-    }, [isChargingStarted])
+    }, [isChargingStarted, transactionId])
 
     const switchLanguage = () => {
         switch (language) {
@@ -154,7 +242,7 @@ export default function ChargingSessionScreen(props: any) {
                             <img src={require('../../assets/icons/Group10.png')} alt="" />
                         </div>
                         <div className='flex w-2/3'>
-                            <span>{chargingPower} kWh</span>
+                            <span>{(chargingPower)?.toFixed(2)} kWh</span>
                         </div>
                     </div>
                     <div className='flex justify-center items-center w-full'>
@@ -170,13 +258,33 @@ export default function ChargingSessionScreen(props: any) {
                             <img src={require('../../assets/icons/Group2498.png')} alt="" />
                         </div>
                         <div className='flex w-2/3'>
-                            {chargingCost}€
+                            {(chargingCost)?.toFixed(2)}€
                         </div>
                     </div>
 
                 </div>
                 <div className="flex p-5 justify-center flex-col items-center w-5/6" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
-                    <button className='flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg' onClick={stopChargingSessionButtonClick}>{stopChargingButtonText}</button>
+                    
+
+                        {isChargingStopButtonClicked ?
+                        
+                        <FadeLoader
+                            color="#38A169"
+                            loading={true}
+                            aria-label="Loading Spinner"
+                            data-testid="loader"
+                        /> : 
+
+                            <button className='flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg' onClick={stopChargingSessionButtonClick}>
+                                {stopChargingButtonText}
+                            </button>
+                 
+                         }
+                        
+                        
+        
+                    
+                    
                     <img src={require('../../assets/icons/carAtChargingPole.png')} alt="" />
 
                 </div>

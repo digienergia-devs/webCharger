@@ -1,27 +1,66 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import { checkConnectionStatus, startChargerConnection } from "../../api/api";
+import { startChargerConnection, chargingSessionStatus } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import Language from "../language";
 import { useLocation } from "react-router-dom";
 import FadeLoader from "react-spinners/FadeLoader";
 
 export default function ConnectingScreen(props: any) {
+  const [headerInfo, setHeaderInfo] = useState<string>("Insert Cable");
   const [loading, setLoading] = useState<boolean>(true);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   let navigate = useNavigate();
-  const [chargerID, setChargerID] =
-    useState<any>(
-      undefined
-    ); 
+  const [chargerID, setChargerID] = useState<any>(undefined);
+  const [connectorID, setConnectorID] = useState<any>(undefined);
   const [sessionID, setSessionID] = useState<any>(null);
   const [language, setLanguage] = useState<string>(props.language);
+  const [transactionId, setTransactionId] = useState<any>(null);
+  
   useEffect(() => {
     setChargerID(queryParams.get("chargerId"));
+    setConnectorID(queryParams.get("connectorId"));
+    if(localStorage.getItem("sessionId") !== null){
+      let sessionId = localStorage.getItem("sessionId");
+      // setSessionID(sessionId);
+      console.log("session id found from local storage --- ", sessionId); 
+    }
   }, []);
 
   useEffect(() => {
+    props.setChargerID(chargerID);
+  }, [chargerID]);
+
+  useEffect(() => {
+    props.setConnectorID(connectorID);
+  }, [connectorID]);
+
+    const fetchData = async (transactionId: string) => {
+        setTransactionId(transactionId);
+        console.log("transaction id found from local storage --- ", transactionId); 
+        try {
+          let metervalues = await chargingSessionStatus(transactionId);
+          
+          if(metervalues.charge_point_status == 'Charging' || metervalues.charge_point_status == 'Finishing'){
+            console.log("metervalues.charge_point_status --- ", metervalues.charge_point_status);
+            navigate('/ChargingSessionScreen')
+          }
+        } catch (error) {
+          console.error(error); 
+        }
+    };
+
+    
+
+
+  useEffect(() => {
+
+    let transactionId = localStorage.getItem("transactionId");
+    if(transactionId !== null){
+      fetchData(transactionId);
+    }
+
     if (chargerID?.length > 2) {
       startChargingConnection();
     }
@@ -34,41 +73,30 @@ export default function ConnectingScreen(props: any) {
 
     const initiateChargerConnection = async () => {
 
-      const requestBody = {
-        chargerID: "f9f16925-28b8-4ba5-99f2-d8080f0860f3-2",
-        userID: "4dc7736d-b6e9-4006-a3a6-51653cc6cd53",
-      };
       try {
-        const response = await startChargerConnection(requestBody);
-        if (response.sessionID && !sessionID) {
-          setSessionID(response.sessionID);
-          sessionStorage.setItem("sessionId", response.sessionID);
-          checkChargerConnectionStatus(chargerID);
+        const response = await startChargerConnection(chargerID, connectorID);
+        console.log("response --- ", response);
+        if(response.status == 'Charging'){
+          setHeaderInfo("Charger in use")
+        } else {
+          setHeaderInfo("Insert Cable");
+          if (response.status == 'Available' || response.status == 'Preparing') {
+            // setSessionID(response.sessionID);
+            // localStorage.setItem("sessionId", response.session_id);
+            navigate("/PaymentMethodScreen");
+          } else {
+            setTimeout(() => {
+              initiateChargerConnection();
+            }, 5000);
+          }
         }
+        
       } catch (error) {
         console.error(error);
       }
     };
 
     initiateChargerConnection();
-  };
-
-  const checkChargerConnectionStatus = async (chargerID: any) => {
-    if (!chargerID) {
-      return;
-    }
-
-    try {
-      const response = await checkConnectionStatus(chargerID);
-
-      if (response.isChargerConnected) {
-        navigate("/PaymentMethodScreen");
-      } else {
-        checkChargerConnectionStatus(chargerID);
-      }
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const setLangua = (e: any) => {
@@ -78,23 +106,23 @@ export default function ConnectingScreen(props: any) {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen w-screen bg-green-600">
-      
+
       <div className="flex justify-center items-center h-2/´6">
         <img src={require("../../assets/icons/Final3.png")} alt="" />
       </div>
       <div className="flex flex-col justify-center items-center h-1/6 w-full">
         <div className="flex justify-center items-center h-1/2"></div>
         <div className="flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-green-500 w-5/6 shadow-md text-white font-bold text-md md:text-xl xl:text-2xl">
-          <p className="m-0">Insert Cable</p>
+          <p className={headerInfo == 'Charger in use' ? "m-0 text-red-500" : "m-0"}>{headerInfo}</p>
         </div>
       </div>
       <div className="flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white">
-      <FadeLoader
-                color="#38A169"
-                loading={true}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
+        <FadeLoader
+          color="#38A169"
+          loading={true}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
         <div
           className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl"
           style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
@@ -115,7 +143,7 @@ export default function ConnectingScreen(props: any) {
           className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl"
           style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
         >
-          
+
           <span>
             We will process automatically once charger cable is connected
           </span>

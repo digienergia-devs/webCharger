@@ -28,50 +28,59 @@ export default function CardForm(props: any) {
 
   useEffect(() => {
     if (stripe) {
-      const pr = stripe.paymentRequest({
-        country: "FI",
-        currency: "eur",
-        total: {
-          label: "Total",
-          amount: props.selectedAmount, // The amount in cents
-        },
-        // requestPayerName: true,
-        // requestPayerEmail: true,
-
-      });
-
-      console.log("payment request can make request --- ", pr.canMakePayment());
-
-      pr.canMakePayment().then((result) => {
-        console.log("result --- ", result);
-        if (result) {
-          setPaymentRequest(pr);
-        }
-      });
-
-      pr.on("paymentmethod", async (ev) => {
-        try {
-          const sessionId = sessionStorage.getItem("sessionId");
-          const paymentMethodId = ev.paymentMethod.id;
-
-          const responseData = await authorizePayment({
-            paymentMethodId,
-            sessionId,
-            authAmount
-          }).then((res) => {
-          });
-          ev.complete("success");
-          navigate('/ChargingSessionScreen')
-        } catch (error) {
-          console.error("Payment authorization failed:", error);
-        }
-      });
+      foo();
     }
   }, [stripe]);
 
+  const foo = () => {
+    if (!stripe) {
+      return;
+    }
+    const pr = stripe.paymentRequest({
+      country: "FI",
+      currency: "eur",
+      total: {
+        label: "Total",
+        amount: props.selectedAmount, // The amount in cents
+      },
+      // requestPayerName: true,
+      // requestPayerEmail: true,
 
+    });
+
+    console.log("payment request can make request --- ", pr.canMakePayment());
+
+    pr.canMakePayment().then((result) => {
+      console.log("result --- ", result);
+      if (result) {
+        setPaymentRequest(pr);
+      }
+    });
+
+    pr.on("paymentmethod", async (ev) => {
+      try {
+        const sessionId = localStorage.getItem("sessionId");
+        const paymentMethodId = ev.paymentMethod.id;
+        const requestBody = {
+          amount: props.selectedAmount,
+          payment_method: paymentMethodId
+        }
+        const responseData = await authorizePayment(
+          props.chargerID,
+          props.connectorID,
+          requestBody
+        ).then((res) => {
+        });
+        ev.complete("success");
+        navigate('/ChargingSessionScreen')
+      } catch (error) {
+        console.error("Payment authorization failed:", error);
+      }
+    });
+  }
 
   const handleSubmit = async (event: any) => {
+    foo();
     props.setLoading(true);
     setPayButtonClicked(true)
     setTimeout(() => { }, 2000);
@@ -96,15 +105,23 @@ export default function CardForm(props: any) {
       console.error(error);
     } else {
       try {
-        const sessionId = sessionStorage.getItem("sessionId");
+        let sessionId = localStorage.getItem("sessionId");
         let paymentMethodId = paymentMethod.id;
-        const responseData = await authorizePayment({
-          paymentMethodId,
-          sessionId,
-          authAmount
+        console.log("paymentMethodId --- ", paymentMethod);
+        console.log("sessionId --- ", sessionId);
 
-        }).then((res: any) => {
-          if (res.paymentId) {
+        const requestBody = {
+          amount: props.selectedAmount,
+          payment_method: paymentMethodId
+        }
+        const responseData = await authorizePayment(
+          props.chargerID,
+          props.connectorID,
+          requestBody
+        ).then((res: any) => {
+          console.log("res from card form --- ", res);
+          localStorage.setItem("transactionId", res.transaction_id);
+          if (res.transaction_id) {
             props.setLoading(false);
             navigate('/ChargingSessionScreen')
           }
@@ -126,11 +143,7 @@ export default function CardForm(props: any) {
         </div>
         <div className="applePay">
           {paymentRequest ? <>
-            <PaymentRequestButtonElement options={{ paymentRequest }} />
-            <br />
-            <PaymentRequestButtonElement options={{ paymentRequest }} />
-
-          </>
+            <PaymentRequestButtonElement options={{ paymentRequest }} /> </>
             : null
           }
         </div>

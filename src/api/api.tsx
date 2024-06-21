@@ -1,16 +1,19 @@
 import axios from "axios";
+import { useState } from "react";
 
-//   const API_BASE_URL = "http://185.96.163.154:8080";
-const API_BASE_URL = "https://ipark.sytes.net/service1";
-// const API_BASE_URL = "https://iparkchargingwebappbackend-m2r3.onrender.com";
-// https://iparkchargingwebappbackend.onrender.com
+// const API_BASE_URL = "https://ipark.sytes.net/service1";
+const API_BASE_URL = "https://digi-energia-csms.fly.dev/";
 
 const api = axios.create({
     baseURL: API_BASE_URL,
 });
 
-export async function startChargerConnection(requestBody: any) {
-    const endpoint = "/api/start-charger-connection";
+
+
+export async function startChargerConnection(chargerID: string, connectorID: string) {
+    console.log("chargerID --- ", chargerID);
+    console.log("connectorID --- ", connectorID);
+    const endpoint = `chargepoint/${chargerID}/${connectorID}`;
 
     /* { this should be in the request body
         "chargerID": "f9f16925-28b8-4ba5-99f2-d8080f0860f3-2",
@@ -18,7 +21,7 @@ export async function startChargerConnection(requestBody: any) {
     } */
 
     try {
-        const response = await api.post(endpoint, requestBody);
+        const response = await api.get(endpoint);
         if (response.status == 200) {
             return (response.data)
         } else {
@@ -30,9 +33,10 @@ export async function startChargerConnection(requestBody: any) {
     }
 }
 
-export async function checkConnectionStatus(chargerID: any) {
-    const endpoint = "/api/connection-status";
-    const payload = { chargerID };
+export async function authorizePayment(chargerID: string, connectorID: string, requestBody: any) {
+    const endpoint = `payment/authorize_payment?charge_point_id=${chargerID}&connector_id=${connectorID}`;
+    const payload = requestBody;
+    console.log("authorize body --- ", payload);
 
     try {
         const response = await api.post(endpoint, payload);
@@ -43,22 +47,9 @@ export async function checkConnectionStatus(chargerID: any) {
     }
 }
 
-export async function authorizePayment({ paymentMethodId, sessionId, authAmount }: any) {
-    const endpoint = "/api/payment-authorization";
-    const payload = { paymentMethodToken: paymentMethodId, sessionId: sessionId, AuthorisationAmount: authAmount };
-
-    try {
-        const response = await api.post(endpoint, payload);
-        return response.data;
-    } catch (error: any) {
-        console.error("Error:", error.response);
-        throw error.response;
-    }
-}
-
-export async function startChargingSession(sessionId: any) {
-    const endpoint = "/api/start-charging-session";
-    const payload = { sessionId: sessionId };
+export async function startChargingSession(transactionId: any) {
+    const endpoint = `chargepoint/start_transaction?transaction_id=${transactionId}`;
+    const payload = {  };
 
     try {
         const response = await api.post(endpoint, payload);
@@ -68,9 +59,9 @@ export async function startChargingSession(sessionId: any) {
     }
 }
 
-export async function stopChargingSession(sessionId: any) {
-    const endpoint = "/api/stop-charging-session";
-    const payload = { sessionId: sessionId };
+export async function stopChargingSession(transaction_id: any) {
+    const endpoint = `chargepoint/stop_transaction?transaction_id=${transaction_id}`;
+    const payload = { };
 
     try {
         const response = await api.post(endpoint, payload);
@@ -80,14 +71,27 @@ export async function stopChargingSession(sessionId: any) {
     }
 }
 
-export async function chargingSessionStatus(sessionId: any) {
-    const endpoint = "/api/charging-session-status";
-    const payload = { sessionId: sessionId };
+export async function chargingSessionStatus(transactionId: any) {
+    const endpoint = `chargepoint/meter_values?transaction_id=${transactionId}`;
+    const payload = { };
 
     try {
         const response = await api.post(endpoint, payload);
         return response.data;
     } catch (error: any) {
         throw error.response;
+    }
+}
+
+export async function getChargingSummary(transactionId: string | null){
+    if(transactionId !== null){
+
+        const endpoint = `payment/get_payment_summary?transaction_id=${transactionId}`;
+        try {
+            const response = await api.get(endpoint);
+            return response.data;
+        } catch (error: any) {
+            throw error.response;
+        }
     }
 }
