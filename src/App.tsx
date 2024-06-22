@@ -6,6 +6,7 @@ import PaymentMethodScreen from './pages/paymentMethodScreen';
 import ChargingSessionScreen from './pages/chargingSessionScreen';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import OtpScreen from './pages/otpPage';
+import AskOtpPage from './pages/askOtpPage';
 
 function App() {
 
@@ -44,8 +45,9 @@ function App() {
             connectorID={connectorID}
           />} />
           <Route path='/OtpScreen' element={<OtpScreen
-      
            />}/>
+           <Route path='/AskOtpPage' element={<AskOtpPage
+            />}/>
         </Routes>
       </Router>
     </div>

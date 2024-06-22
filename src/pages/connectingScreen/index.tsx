@@ -23,7 +23,6 @@ export default function ConnectingScreen(props: any) {
     setConnectorID(queryParams.get("connectorId"));
     if(localStorage.getItem("sessionId") !== null){
       let sessionId = localStorage.getItem("sessionId");
-      // setSessionID(sessionId);
       console.log("session id found from local storage --- ", sessionId); 
     }
   }, []);
