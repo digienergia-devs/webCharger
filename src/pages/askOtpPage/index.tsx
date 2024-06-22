@@ -14,7 +14,11 @@ export default function AskOtpPage(props: any){
         if((props.transactionId !== null) && (userProvidedOtp !== '')){
             const response = await validateOtp(props.transactionId, userProvidedOtp).then((response: any) => {
                 console.log("response --- ", response);
-                navigate('/ChargingSessionScreen');
+                if(response.status === 'Valid'){
+                    navigate('/ChargingSessionScreen');
+                }else{
+                    alert('Invalid OTP');
+                }
             })
 
         }
