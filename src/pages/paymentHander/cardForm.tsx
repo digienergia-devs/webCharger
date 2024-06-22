@@ -72,9 +72,16 @@ export default function CardForm(props: any) {
           props.connectorID,
           requestBody
         ).then((res) => {
+          localStorage.setItem("transactionId", res.transaction_id);
+          if (res.transaction_id) {
+            ev.complete("success");
+            props.setLoading(false);
+            // navigate('/ChargingSessionScreen')
+            props.setOtp(res.otp)
+            navigate('/OtpScreen')
+          }
         });
-        ev.complete("success");
-        navigate('/ChargingSessionScreen')
+        // navigate('/ChargingSessionScreen')
       } catch (error) {
         console.error("Payment authorization failed:", error);
       }
