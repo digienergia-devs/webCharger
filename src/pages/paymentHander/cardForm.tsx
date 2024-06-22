@@ -20,7 +20,9 @@ export default function CardForm(props: any) {
   const [payButtonClicked, setPayButtonClicked] = useState<boolean>(false);
   const [language, setLanguage] = useState<string | undefined>(props.language)
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
-  const [authAmount, setAuthAmount] = useState<any>(props.selectedAmount)
+  const [authAmount, setAuthAmount] = useState<any>(props.selectedAmount);
+
+  const [paymentOption, setPaymentOption] = useState<string>('card');
 
   useEffect(() => {
     setAuthAmount(props.selectedAmount)
@@ -139,25 +141,18 @@ export default function CardForm(props: any) {
 
   const changePaymentMethod = () => {
     console.log("change payment method clicked ---");
+    if (paymentOption === 'card') {
+      setPaymentOption('applePay');
+    } else {
+      setPaymentOption('card');
+    }
   }
 
   return (
     <>
-      <div className="flex flex-col">
-        <div className="flex w-full justify-center">
-
-        </div>
-        <div className="applePay">
-          {paymentRequest ? <>
-            <PaymentRequestButtonElement options={{ paymentRequest }} /> </>    
-            : null
-          }
-        </div>
-      </div>
-
-      <br />
-
-      <>
+      {
+        paymentOption === 'card' ? <>
+        <>
         <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
       </>
       {payButtonClicked ?
@@ -173,6 +168,23 @@ export default function CardForm(props: any) {
         <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
           Pay
         </button>
+      }
+         </>
+
+         :
+         <>
+         <div className="flex flex-col">
+        <div className="flex w-full justify-center">
+
+        </div>
+        <div className="applePay">
+          {paymentRequest ? <>
+            <PaymentRequestButtonElement options={{ paymentRequest }} /> </>    
+            : null
+          }
+        </div>
+      </div>
+         </>
       }
       <div className="flex flex-col pt-5">
         <span className="flex flex-row items-center justify-center">
