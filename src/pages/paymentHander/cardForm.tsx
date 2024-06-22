@@ -149,7 +149,7 @@ export default function CardForm(props: any) {
         </div>
         <div className="applePay">
           {paymentRequest ? <>
-            <PaymentRequestButtonElement options={{ paymentRequest }} /> </>
+            <PaymentRequestButtonElement options={{ paymentRequest }} /> </>    
             : null
           }
         </div>
