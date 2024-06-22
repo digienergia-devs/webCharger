@@ -117,7 +117,7 @@ export default function ChargingSessionScreen(props: any) {
             const response = await stopChargingSession(transactionId);
             console.log("stop charging response --- ", response);
             if (response.message == 'Charging session stopped successfully') {
-                setStopChargingButtonText(language == 'EN' ? 'Stopped' : 'Lopetettu');
+                setStopChargingButtonText('Charging Stoped');
                 setIsChargingStopped(true);
             }
             else{
@@ -157,7 +157,7 @@ export default function ChargingSessionScreen(props: any) {
                         }, 2000)
                     } else {
                         setIsChargingStopped(true);
-                        setStopChargingButtonText(language == 'EN' ? 'Charging stoped' : 'Lataus loppui')
+                        setStopChargingButtonText('Charging Stoped')
                     }
                 }
                 
@@ -173,54 +173,6 @@ export default function ChargingSessionScreen(props: any) {
             
         }
     }, [isChargingStarted, transactionId])
-
-    const switchLanguage = () => {
-        switch (language) {
-            case 'EN':
-                switch (stopChargingButtonText) {
-                    case 'Stop Charging':
-                        setStopChargingButtonText('Lopeta lataaminen')
-                        break;
-
-                    case 'Stopped':
-                        setStopChargingButtonText('Lopetettu')
-                        break;
-
-                    case 'Charging stoped':
-                        setStopChargingButtonText('Lataus loppui')
-                        break;
-
-                    default:
-                        break;
-                }
-                break;
-            case 'FI':
-                switch (stopChargingButtonText) {
-                    case 'Lopeta lataaminen':
-                        setStopChargingButtonText('Stop Charging')
-                        break;
-                    case 'Lopetettu':
-                        setStopChargingButtonText('Stopped')
-                        break;
-                    case 'Lataus loppui':
-                        setStopChargingButtonText('Charging stoped')
-                        break;
-                    default:
-                        break;
-                }
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    const setLangua = (e: any) => {
-        props.setLanguage(e)
-        setLanguage(e);
-
-        switchLanguage();
-    }
 
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
@@ -283,7 +235,9 @@ export default function ChargingSessionScreen(props: any) {
                             data-testid="loader"
                         /> : 
 
-                            <button className='flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg' onClick={stopChargingSessionButtonClick}>
+                        // stopChargingButtonText
+                        // 'flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg'
+                            <button className={(stopChargingButtonText == 'Charging Stoped' ? 'flex bg-gray-100 w-full text-center justify-center rounded-md text-gray-400 text-lg' : 'flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg')} onClick={stopChargingSessionButtonClick}>
                                 {stopChargingButtonText}
                             </button>
                  

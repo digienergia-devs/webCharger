@@ -172,7 +172,7 @@ export default function CardForm(props: any) {
               />
             </div>
             :
-            <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5 pr-2" onClick={handleSubmit}>
+            <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
               Pay
             </button>
           }
