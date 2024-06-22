@@ -95,3 +95,17 @@ export async function getChargingSummary(transactionId: string | null){
         }
     }
 }
+
+export async function validateOtp(transactionId: any, otp: string) {
+    console.log("OTP --- ", otp);
+    console.log("transaction id --- ", transactionId)
+    const endpoint = `/authentication/validate_otp?transaction_id=${transactionId}&otp=${otp}`;
+    const payload = { };
+
+    try {
+        const response = await api.post(endpoint, payload);
+        return response.data;
+    } catch (error: any) {
+        throw error.response;
+    }
+}

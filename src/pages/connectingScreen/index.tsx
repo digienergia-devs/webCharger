@@ -21,10 +21,10 @@ export default function ConnectingScreen(props: any) {
   useEffect(() => {
     setChargerID(queryParams.get("chargerId"));
     setConnectorID(queryParams.get("connectorId"));
-    if(localStorage.getItem("sessionId") !== null){
-      let sessionId = localStorage.getItem("sessionId");
-      console.log("session id found from local storage --- ", sessionId); 
-    }
+    // if(localStorage.getItem("sessionId") !== null){
+    //   let sessionId = localStorage.getItem("sessionId");
+    //   console.log("session id found from local storage --- ", sessionId); 
+    // }
   }, []);
 
   useEffect(() => {
@@ -35,31 +35,37 @@ export default function ConnectingScreen(props: any) {
     props.setConnectorID(connectorID);
   }, [connectorID]);
 
-    const fetchData = async (transactionId: string) => {
-        setTransactionId(transactionId);
-        console.log("transaction id found from local storage --- ", transactionId); 
-        try {
-          let metervalues = await chargingSessionStatus(transactionId);
-          
-          if(metervalues.charge_point_status == 'Charging' || metervalues.charge_point_status == 'Finishing'){
-            console.log("metervalues.charge_point_status --- ", metervalues.charge_point_status);
-            navigate('/ChargingSessionScreen')
-          }
-        } catch (error) {
-          console.error(error); 
+  const fetchData = async (transactionId: string) => {
+      setTransactionId(transactionId);
+      console.log("transaction id found from local storage --- ", transactionId); 
+      try {
+        let metervalues = await chargingSessionStatus(transactionId);
+        
+        if(metervalues.charge_point_status == 'Charging' || metervalues.charge_point_status == 'Finishing'){
+          console.log("metervalues.charge_point_status --- ", metervalues.charge_point_status);
+          navigate('/ChargingSessionScreen')
         }
-    };
+      } catch (error) {
+        console.error(error); 
+      }
+  };
 
     
 
 
   useEffect(() => {
+    // check the chargign status on the endpoint 'chargepoint/chargerid/connectorid
+
+    /*
+
+    ### there will be no transaction id in location storage in future...
 
     let transactionId = localStorage.getItem("transactionId");
     if(transactionId !== null){
       fetchData(transactionId);
     }
-
+    
+    */
     if (chargerID?.length > 2) {
       startChargingConnection();
     }
@@ -74,14 +80,15 @@ export default function ConnectingScreen(props: any) {
 
       try {
         const response = await startChargerConnection(chargerID, connectorID);
-        console.log("response --- ", response);
-        if(response.status == 'Charging'){
+        props.setTransactionId(response.transaction_id);
+        console.log("response to get transaction id --- ", response);
+        if(response.status == 'Charging' || response.status == 'Occupied'){ // in future this state can be 'Charging' and 'Occupied' both
           setHeaderInfo("Charger in use")
+          // navigate to ask otp page
+          navigate('/AskOtpPage')
         } else {
           setHeaderInfo("Insert Cable");
-          if (response.status == 'Available' || response.status == 'Preparing') {
-            // setSessionID(response.sessionID);
-            // localStorage.setItem("sessionId", response.session_id);
+          if (response.status == 'Available' || response.status == 'Preparing' || response.status == 'Finishing') {
             navigate("/PaymentMethodScreen");
           } else {
             setTimeout(() => {

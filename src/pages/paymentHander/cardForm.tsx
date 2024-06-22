@@ -124,6 +124,7 @@ export default function CardForm(props: any) {
           if (res.transaction_id) {
             props.setLoading(false);
             // navigate('/ChargingSessionScreen')
+            props.setOtp(res.otp)
             navigate('/OtpScreen')
           }
 

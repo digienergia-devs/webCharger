@@ -16,6 +16,9 @@ function App() {
   const [chargerID, setChargerID] = useState<string>();
   const [connectorID, setConnectorID] = useState<string>()
 
+  const [transactionId, setTransactionId] = useState<string>();
+  const [otp, setOtp] = useState<string>();
+
   const changeLanguage = (e: any) => {
     setLanguage(e);
   }
@@ -31,12 +34,14 @@ function App() {
             setLanguage={changeLanguage}
             setConnectorID={setConnectorID}
             setChargerID={setChargerID}
+            setTransactionId={setTransactionId}
           />} />
           <Route path='/PaymentMethodScreen' element={<PaymentMethodScreen
             language={language}
             setLanguage={changeLanguage}
             chargerID={chargerID}
             connectorID={connectorID}
+            setOtp={setOtp}
           />} />
           <Route path='/ChargingSessionScreen' element={<ChargingSessionScreen
             language={language}
@@ -45,8 +50,10 @@ function App() {
             connectorID={connectorID}
           />} />
           <Route path='/OtpScreen' element={<OtpScreen
+            otp={otp}
            />}/>
            <Route path='/AskOtpPage' element={<AskOtpPage
+            transactionId={transactionId}
             />}/>
         </Routes>
       </Router>

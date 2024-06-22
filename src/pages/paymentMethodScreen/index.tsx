@@ -86,6 +86,7 @@ export default function PaymentMethodScreen(props: any) {
                                         selectedAmount={selectedAmount}
                                         chargerID={props.chargerID}
                                         connectorID={props.connectorID}
+                                        setOtp={props.setOtp}
                                     />
                                 </Elements>
                             </div>
