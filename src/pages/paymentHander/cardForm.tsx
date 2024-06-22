@@ -153,30 +153,28 @@ export default function CardForm(props: any) {
       {
         paymentOption === 'card' ? <>
         <>
-        <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
-      </>
-      {payButtonClicked ?
-        <div className="flex justify-center items-center w-full">
-          <FadeLoader
-            color="#FF6D00"
-            // loading={isLoading}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
-        </div>
-        :
-        <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
-          Pay
-        </button>
-      }
+          <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
+        </>
+          {payButtonClicked ?
+            <div className="flex justify-center items-center w-full">
+              <FadeLoader
+                color="#FF6D00"
+                // loading={isLoading}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+              />
+            </div>
+            :
+            <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5 pr-2" onClick={handleSubmit}>
+              Pay
+            </button>
+          }
          </>
-
          :
          <>
          <div className="flex flex-col">
-        <div className="flex w-full justify-center">
-
-        </div>
+          < div className="flex w-full justify-center">
+          </div>
         <div className="applePay">
           {paymentRequest ? <>
             <PaymentRequestButtonElement options={{ paymentRequest }} /> </>    
@@ -187,7 +185,7 @@ export default function CardForm(props: any) {
          </>
       }
       <div className="flex flex-col pt-5">
-        <span className="flex flex-row items-center justify-center">
+        <span className="flex flex-row items-center justify-center text-center">
           Payment method is selected based on your device.
         </span>
         <br />
