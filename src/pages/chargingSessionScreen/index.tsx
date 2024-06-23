@@ -199,14 +199,6 @@ export default function ChargingSessionScreen(props: any) {
             <div className="flex justify-center items-center h-1/6">
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
-            {/* <div className='flex flex-col justify-center items-center h-1/6 w-full'>
-                <div className='flex justify-center items-center h-1/2'>
-
-                </div>
-                <div className='flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-iparkOrange400 w-5/6 shadow-md text-white font-bold text-xs md:text-md xl:text-xl'>
-                    <p className="m-0">Charging Session</p>
-                </div>
-            </div> */}
             <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-5/6 w-screen bg-white'>
                 <div className="flex py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" >
                     <div className='flex justify-center items-center w-full'>
@@ -237,10 +229,10 @@ export default function ChargingSessionScreen(props: any) {
                 </div>
                     {
                         isChargingStopped == false ?
-                <div className='flex h-1/4 w-full justify-center'>
-                         {/* <img src={require('../../assets/orangeThemeRedCar.png')} alt="" /> */}
-                        <Lottie animationData={batteryCharging} />
-                </div>
+                        <div className='flex h-1/5 w-full justify-center'>
+                                {/* <img src={require('../../assets/orangeThemeRedCar.png')} alt="" /> */}
+                                <Lottie animationData={batteryCharging} />
+                        </div>
                         : null
                     }
                 <div className="flex justify-center flex-col items-center w-5/6 pb-5">
