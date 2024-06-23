@@ -205,7 +205,7 @@ export default function ChargingSessionScreen(props: any) {
                         <div className='flex w-1/3 items-center justify-center text-center'>
                             <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
                         </div>
-                        <div className='flex w-2/3'>
+                        <div className='flex w-2/3 ml-10'>
                             <span>{(chargingPower)?.toFixed(2)} kWh</span>
                         </div>
                     </div>
@@ -213,7 +213,7 @@ export default function ChargingSessionScreen(props: any) {
                         <div className='flex w-1/3 items-center justify-center text-center'>
                             <img src={require('../../assets/icons/orangeThemeElapsedTime.png')} alt="" />
                         </div>
-                        <div className='flex w-2/3'>
+                        <div className='flex w-2/3 ml-10'>
                             {chargingTime}s
                         </div>
                     </div>
@@ -221,7 +221,7 @@ export default function ChargingSessionScreen(props: any) {
                         <div className='flex w-1/3 items-center justify-center text-center'>
                             <img src={require('../../assets/icons/orangeThemeAmountSpent.png')} alt="" />
                         </div>
-                        <div className='flex w-2/3'>
+                        <div className='flex w-2/3 ml-10'>
                             {(chargingCost)?.toFixed(2)}€
                         </div>
                     </div>
