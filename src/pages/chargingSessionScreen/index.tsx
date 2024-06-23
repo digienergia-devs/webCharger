@@ -233,16 +233,15 @@ export default function ChargingSessionScreen(props: any) {
                             {(chargingCost)?.toFixed(2)}€
                         </div>
                     </div>
+
                 </div>
-                <div className="flex justify-center flex-col items-center h-2/6 w-5/6 pt-10">
+                <div className="flex justify-center flex-col items-center w-5/6 pb-5">
+                    
+
                 {
                             isChargingStopped == false ?
                                 // <img src={require('../../assets/orangeThemeRedCar.png')} alt="" />
-
-                                <div className='flex h-5/6 w-full justify-center'>
-
-                                    <Lottie  animationData={batteryCharging} />
-                                </div>
+                                <Lottie animationData={batteryCharging} />
                             : null
                          }
                         {isChargingStopButtonClicked ?
@@ -256,19 +255,23 @@ export default function ChargingSessionScreen(props: any) {
 
                         // stopChargingButtonText
                         // 'flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg'
-                            <button className={(isChargingStopped ? 'flex bg-gray-100 w-full text-center justify-center rounded-md text-gray-400 text-md py-3' : 'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-md py-3')} onClick={stopChargingSessionButtonClick}>
+                            <button className={(isChargingStopped ? 'flex bg-iparkOrange200 w-full text-center justify-center rounded-md text-black text-md py-3' : 'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-md py-3')} onClick={stopChargingSessionButtonClick}>
                                 {stopChargingButtonText}
                             </button>
+                 
                          }
+
+                         
+
                 </div>
                 {
                     isChargingStopped == true ? 
-                <div className="flex justify-center flex-col items-center text-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-sxl">
+                    <div className="flex justify-center flex-col items-center text-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-sxl">
                     <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center' placeholder='Enter your email'/>
                     <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md'>Email receipt</button>
-                </div> 
-                : null
+                </div> : null
                 }
+                
             </div>
         </div>
     )
