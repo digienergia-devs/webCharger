@@ -11,14 +11,14 @@ export default function OtpScreen(props: any){
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
             <div className="flex flex-row justify-between w-full pl-5 pr-5 " >
-                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
                     25 KW
                 </div>
-                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
                     0.25 Euro/kWh
                 </div>
             </div>
-            <div className="flex justify-center items-center h-2/´6">
+            <div className="flex justify-center items-center h-1/6">
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
             <div className='flex flex-col justify-center items-center h-1/6 w-full'>
@@ -30,11 +30,9 @@ export default function OtpScreen(props: any){
                 </div>
             </div>
             <div className='flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white'>
-                <div className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
+                <div className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-3xl md:text-xl xl:text-2xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
                     {props.otp}
                 </div>
-
-
                 <div className="flex flex-col pt-5">
                     <span className="flex flex-row items-center justify-center">
                         Please keep this OTP safe. 

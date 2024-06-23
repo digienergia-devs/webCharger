@@ -177,14 +177,14 @@ export default function ChargingSessionScreen(props: any) {
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
             <div className="flex flex-row justify-between w-full pl-5 pr-5 " >
-                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
                     25 KW
                 </div>
-                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
                     0.25 Euro/kWh
                 </div>
             </div>
-            <div className="flex justify-center items-center h-2/´6">
+            <div className="flex justify-center items-center h-1/6">
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
             <div className='flex flex-col justify-center items-center h-1/6 w-full'>
@@ -237,7 +237,7 @@ export default function ChargingSessionScreen(props: any) {
 
                         // stopChargingButtonText
                         // 'flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg'
-                            <button className={(stopChargingButtonText == 'Charging Stoped' ? 'flex bg-gray-100 w-full text-center justify-center rounded-md text-gray-400 text-lg' : 'flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg')} onClick={stopChargingSessionButtonClick}>
+                            <button className={(stopChargingButtonText == 'Charging Stoped' ? 'flex bg-gray-100 w-full text-center justify-center rounded-md text-gray-400 text-lg py-3' : 'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-lg py-3')} onClick={stopChargingSessionButtonClick}>
                                 {stopChargingButtonText}
                             </button>
                  
