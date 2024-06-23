@@ -22,7 +22,7 @@ export default function CardForm(props: any) {
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
   const [authAmount, setAuthAmount] = useState<any>(props.selectedAmount);
 
-  const [paymentOption, setPaymentOption] = useState<string>('card');
+  const [paymentOption, setPaymentOption] = useState<string>('applePay');
 
   useEffect(() => {
     setAuthAmount(props.selectedAmount)
@@ -172,7 +172,7 @@ export default function CardForm(props: any) {
               />
             </div>
             :
-            <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
+            <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5 py-2" onClick={handleSubmit}>
               Pay
             </button>
           }
@@ -185,21 +185,25 @@ export default function CardForm(props: any) {
         <div className="applePay">
           {paymentRequest ? <>
             <PaymentRequestButtonElement options={{ paymentRequest }} /> </>    
-            : null
+            : 
+            <>
+              <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > Other payment options not available.</span>
+              <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > Please select another payment option below.</span>
+            </>
           }
         </div>
       </div>
          </>
       }
       <div className="flex flex-col pt-5">
-        <span className="flex flex-row items-center justify-center text-center">
+      <div className="flex flex-row items-center justify-center" onClick={changePaymentMethod}>
+          <img src={require('../../assets/icons/orangeThemeDebitCardIcon.png')} alt="" />
+          <span className="flex pl-5 text-black">Pay with something else</span>
+        </div>
+        <br />
+        <span className="flex flex-row items-center justify-center text-center text-black">
           Payment method is selected based on your device.
         </span>
-        <br />
-        <div className="flex flex-row items-center justify-center" onClick={changePaymentMethod}>
-          <img src={require('../../assets/icons/orangeThemeDebitCardIcon.png')} alt="" />
-          <span className="flex pl-5">Pay with something else</span>
-        </div>
       </div>
       </>
   )

@@ -90,7 +90,7 @@ export default function ConnectingScreen(props: any) {
           navigate('/AskOtpPage')
         } else {
           setHeaderInfo("Insert Cable");
-          if (response.status == 'Available' || response.status == 'Preparing' || response.status == 'Finishing') {
+          if (response.status == 'Preparing' || response.status == 'Finishing') {
             navigate("/PaymentMethodScreen");
           } else {
             setTimeout(() => {
@@ -126,13 +126,13 @@ export default function ConnectingScreen(props: any) {
       <div className="flex justify-center items-center h-1/6">
         <img src={require("../../assets/icons/Final3.png")} alt="" />
       </div>
-      <div className="flex flex-col justify-center items-center h-1/6 w-full">
+      {/* <div className="flex flex-col justify-center items-center h-1/6 w-full">
         <div className="flex justify-center items-center h-1/2"></div>
         <div className="flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-iparkOrange400 w-5/6 shadow-md text-white font-bold text-xs md:text-md xl:text-xl">
           <p className={headerInfo == 'Charger in use' ? "m-0 text-red-500" : "m-0"}>{headerInfo}</p>
         </div>
-      </div>
-      <div className="flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white">
+      </div> */}
+      <div className="flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white pt-5">
         <FadeLoader
           color="#FF6D00"
           loading={true}
@@ -141,7 +141,7 @@ export default function ConnectingScreen(props: any) {
         />
         <div
           className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-xs md:text-md xl:text-xl"
-          style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
+          
         >
           <span>1.Connect cable to the car</span>
           <span>2.Connect cable to the socket</span>
@@ -156,9 +156,7 @@ export default function ConnectingScreen(props: any) {
           />
         </div>
         <div
-          className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-xs md:text-md xl:text-xl"
-          style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
-        >
+          className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-xs md:text-md xl:text-xl">
 
           <span>
             We will process automatically once charger cable is connected

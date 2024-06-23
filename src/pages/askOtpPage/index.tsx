@@ -45,15 +45,15 @@ export default function AskOtpPage(props: any){
             <div className="flex justify-center items-center h-1/6">
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
-            <div className='flex flex-col justify-center items-center h-1/6 w-full'>
+            {/* <div className='flex flex-col justify-center items-center h-1/6 w-full'>
                 <div className='flex justify-center items-center h-1/2'>
 
                 </div>
                 <div className='flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-iparkOrange400 w-5/6 shadow-md text-white font-bold text-xs md:text-md xl:text-xl'>
                     <p className="m-0">Your OTP to restore session</p>
                 </div>
-            </div>
-            <div className='flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white'>
+            </div> */}
+            <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white py-5'>
                 <input type='text' className="flex text-center p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-xs md:text-md xl:text-xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }} onBlur={(e: any) => setUserProvidedOtp(e.target.value)} />
                     
 
