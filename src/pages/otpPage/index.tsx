@@ -19,7 +19,7 @@ export default function OtpScreen(props: any){
                     {props.chargerPower} KW
                 </div>
                 <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
-                    {props.chargerRate} Euro/kWh
+                    {props.chargerRate} €/kWh
                 </div>
             </div>
             <div className="flex justify-center items-center h-1/6">
