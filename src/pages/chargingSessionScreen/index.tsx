@@ -208,7 +208,7 @@ export default function ChargingSessionScreen(props: any) {
                 </div>
             </div> */}
             <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-5/6 w-screen bg-white'>
-                <div className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" >
+                <div className="flex py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" >
                     <div className='flex justify-center items-center w-full'>
                         <div className='flex w-1/3 items-center justify-center text-center'>
                             <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
@@ -235,13 +235,16 @@ export default function ChargingSessionScreen(props: any) {
                     </div>
 
                 </div>
+                    {
+                        isChargingStopped == false ?
+                <div className='flex h-1/4 w-full justify-center'>
+                         {/* <img src={require('../../assets/orangeThemeRedCar.png')} alt="" /> */}
+                        <Lottie animationData={batteryCharging} />
+                </div>
+                        : null
+                    }
                 <div className="flex justify-center flex-col items-center w-5/6 pb-5">
-                {
-                            isChargingStopped == false ?
-                                // <img src={require('../../assets/orangeThemeRedCar.png')} alt="" />
-                                <Lottie className='flex w-full h-1/2' animationData={batteryCharging} />
-                            : null
-                         }
+                
                         {isChargingStopButtonClicked ?
                         
                         <FadeLoader
