@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import Language from "../language";
 import { useLocation } from "react-router-dom";
 import FadeLoader from "react-spinners/FadeLoader";
+import Lottie from "lottie-react";
+import connectCable from "../../assets/connectCable.json";
 
 export default function ConnectingScreen(props: any) {
   const [headerInfo, setHeaderInfo] = useState<string>("Insert Cable");
@@ -150,10 +152,7 @@ export default function ConnectingScreen(props: any) {
           className="flex p-5 m-5 justify-center flex-col items-center w-5/6"
           style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
         >
-          <img
-            src={require("../../assets/orangeThemeRedCar.png")}
-            alt=""
-          />
+          <Lottie animationData={connectCable} />
         </div>
         <div
           className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-xs md:text-md xl:text-xl">

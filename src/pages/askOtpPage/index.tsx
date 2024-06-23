@@ -6,18 +6,21 @@ export default function AskOtpPage(props: any){
     let navigate = useNavigate();
     const [userProvidedOtp, setUserProvidedOtp] = useState<string>(''); 
 
+    const [isInvalidOtp, setIsInvalidOtp] = useState<boolean>(false);
+
     useEffect(() => {
         console.log("user provided otp --- ", userProvidedOtp);
     }, [userProvidedOtp])
 
     const restoreSession = async () => {
+        setIsInvalidOtp(false);
         if((props.transactionId !== null) && (userProvidedOtp !== '')){
             const response = await validateOtp(props.transactionId, userProvidedOtp).then((response: any) => {
                 console.log("response --- ", response);
                 if(response.status === 'Valid'){
                     navigate('/ChargingSessionScreen');
                 }else{
-                    alert('Invalid OTP');
+                    setIsInvalidOtp(true);
                 }
             })
 
@@ -54,16 +57,24 @@ export default function AskOtpPage(props: any){
                 </div>
             </div> */}
             <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white py-5'>
-                <input type='text' className="flex text-center p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-xs md:text-md xl:text-xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }} onBlur={(e: any) => setUserProvidedOtp(e.target.value)} />
-                    
-
-
+                <input type='text' className="flex p-5 m-5 justify-center flex-col text-center items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-3xl md:text-xl xl:text-2xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }} onBlur={(e: any) => setUserProvidedOtp(e.target.value)} />
+                {
+                    isInvalidOtp ?
+                    <div className='flex flex-col'>
+                        <span className="flex flex-row items-center justify-center text-red-500 font-bold">
+                            Invalid OTP
+                        </span>
+                    </div> : null
+                }
+                
                 <div className="flex flex-col pt-5">
+                    
                     <span className="flex flex-row items-center justify-center">
                         Please provide OTP to restore session.
                     </span>
                     
                 </div>
+            
 
                 <div className="flex justify-center flex-col items-centertext-center w-5/6 text-gray-400 text-md md:text-xl xl:text-2xl">
                     <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={restoreSession}>Proceed to charging screen</button>
