@@ -49,6 +49,10 @@ export default function ChargingSessionScreen(props: any) {
     }, [])
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+
+    useEffect(() => {
         setTimeout(() => {
 
             if(isChargingStopped){

@@ -28,6 +28,10 @@ export default function ConnectingScreen(props: any) {
   }, []);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     props.setChargerID(chargerID);
   }, [chargerID]);
 

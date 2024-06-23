@@ -18,6 +18,10 @@ export default function PaymentMethodScreen(props: any) {
         setSelectedAmount(amount);
     }
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+
     // useEffect(() => {
     //     const sessionId = localStorage.getItem('sessionId');
     //     console.log("session id from local storage --- ", sessionId);

@@ -25,6 +25,10 @@ export default function AskOtpPage(props: any){
     }
 
     useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+
+    useEffect(() => {
         console.log('transactionId in ask otp page --- ', props.transactionId)
     }, [])
 

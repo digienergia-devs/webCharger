@@ -8,6 +8,10 @@ export default function OtpScreen(props: any){
         navigate('/ChargingSessionScreen')
     }
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
             <div className="flex flex-row justify-between w-full pl-5 pr-5 " >
