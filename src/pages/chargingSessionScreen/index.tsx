@@ -188,7 +188,7 @@ export default function ChargingSessionScreen(props: any) {
 
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
-            <div className="flex flex-row justify-between w-full pl-5 pr-5 z-10" >
+            <div className={isChargingStopped ? "flex flex-row justify-between w-full pl-5 pr-5 z-10 mt-10" : "flex flex-row justify-between w-full pl-5 pr-5 z-10"} >
                 <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
                     {props.chargerPower} KW
                 </div>
