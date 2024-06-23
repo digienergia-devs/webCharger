@@ -10,6 +10,9 @@ import AskOtpPage from './pages/askOtpPage';
 
 function App() {
 
+  const [chargerPower, setChargerPower] = useState<string>();
+  const [chargerRate, setChargerRate] = useState<string>();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [language, setLanguage] = useState<string>('EN');
 
@@ -35,6 +38,10 @@ function App() {
             setConnectorID={setConnectorID}
             setChargerID={setChargerID}
             setTransactionId={setTransactionId}
+            chargerPower={chargerPower}
+            setChargerPower={setChargerPower}
+            chargerRate={chargerRate}
+            setChargerRate={setChargerRate}
           />} />
           <Route path='/PaymentMethodScreen' element={<PaymentMethodScreen
             language={language}
@@ -42,18 +49,34 @@ function App() {
             chargerID={chargerID}
             connectorID={connectorID}
             setOtp={setOtp}
+            chargerPower={chargerPower}
+            setChargerPower={setChargerPower}
+            chargerRate={chargerRate}
+            setChargerRate={setChargerRate}
           />} />
           <Route path='/ChargingSessionScreen' element={<ChargingSessionScreen
             language={language}
             setLanguage={changeLanguage}
             chargerID={chargerID}
             connectorID={connectorID}
+            chargerPower={chargerPower}
+            setChargerPower={setChargerPower}
+            chargerRate={chargerRate}
+            setChargerRate={setChargerRate}
           />} />
           <Route path='/OtpScreen' element={<OtpScreen
             otp={otp}
+            chargerPower={chargerPower}
+            setChargerPower={setChargerPower}
+            chargerRate={chargerRate}
+            setChargerRate={setChargerRate}
            />}/>
            <Route path='/AskOtpPage' element={<AskOtpPage
             transactionId={transactionId}
+            chargerPower={chargerPower}
+            setChargerPower={setChargerPower}
+            chargerRate={chargerRate}
+            setChargerRate={setChargerRate}
             />}/>
         </Routes>
       </Router>

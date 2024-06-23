@@ -36,10 +36,10 @@ export default function AskOtpPage(props: any){
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
             <div className="flex flex-row justify-between w-full pl-5 pr-5 " >
                 <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
-                    25 KW
+                    {props.chargerPower} KW
                 </div>
                 <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
-                    0.25 Euro/kWh
+                    {props.chargerRate} Euro/kWh
                 </div>
             </div>
             <div className="flex justify-center items-center h-1/6">
