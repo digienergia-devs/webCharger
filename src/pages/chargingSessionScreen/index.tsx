@@ -236,12 +236,10 @@ export default function ChargingSessionScreen(props: any) {
 
                 </div>
                 <div className="flex justify-center flex-col items-center w-5/6 pb-5">
-                    
-
                 {
                             isChargingStopped == false ?
                                 // <img src={require('../../assets/orangeThemeRedCar.png')} alt="" />
-                                <Lottie animationData={batteryCharging} />
+                                <Lottie className='flex w-full h-1/2' animationData={batteryCharging} />
                             : null
                          }
                         {isChargingStopButtonClicked ?
