@@ -233,15 +233,16 @@ export default function ChargingSessionScreen(props: any) {
                             {(chargingCost)?.toFixed(2)}€
                         </div>
                     </div>
-
                 </div>
-
-                
-                <div className="flex justify-center flex-col items-center h-1/6 w-5/6 pt-10">
+                <div className="flex justify-center flex-col items-center h-2/6 w-5/6 pt-10">
                 {
                             isChargingStopped == false ?
                                 // <img src={require('../../assets/orangeThemeRedCar.png')} alt="" />
-                                <Lottie animationData={batteryCharging} />
+
+                                <div className='flex h-5/6 w-full justify-center'>
+
+                                    <Lottie  animationData={batteryCharging} />
+                                </div>
                             : null
                          }
                         {isChargingStopButtonClicked ?
@@ -258,11 +259,7 @@ export default function ChargingSessionScreen(props: any) {
                             <button className={(isChargingStopped ? 'flex bg-gray-100 w-full text-center justify-center rounded-md text-gray-400 text-md py-3' : 'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-md py-3')} onClick={stopChargingSessionButtonClick}>
                                 {stopChargingButtonText}
                             </button>
-                 
                          }
-
-                         
-
                 </div>
                 {
                     isChargingStopped == true ? 
