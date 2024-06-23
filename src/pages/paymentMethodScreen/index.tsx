@@ -62,8 +62,8 @@ export default function PaymentMethodScreen(props: any) {
                 <div className='flex justify-center items-center h-1/2'>
                 </div>
                 <div className='flex flex-col h-full justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-iparkOrange400 w-5/6 shadow-md text-white font-bold text-xs md:text-md xl:text-xl'>
-                    <p className="m-0">Kempower charger | 22 kW</p>
-                    <p className="m-0">Price: 0.45 Euro/kWh</p>
+                    <p className="m-0">Kempower charger | {props.chargerPower} kW</p>
+                    <p className="m-0">Price: {props.chargerRate} Euro/kWh</p>
                 </div>
             </div>
             <div className='flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white'>
