@@ -46,7 +46,7 @@ export default function OtpScreen(props: any){
                     </span>
                 </div>
 
-                <div className="flex p-5 justify-center flex-col items-centertext-center w-5/6 text-gray-400 text-md md:text-xl xl:text-2xl">
+                <div className="flex justify-center flex-col items-centertext-center w-5/6 text-gray-400 text-md md:text-xl xl:text-2xl">
                     <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={proceedToChargingSessionScreen}>Proceed to charging screen</button>
                 </div>
             </div>

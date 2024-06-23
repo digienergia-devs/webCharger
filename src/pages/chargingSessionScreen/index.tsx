@@ -3,6 +3,8 @@ import './style.css'
 import { stopChargingSession, chargingSessionStatus, startChargingSession, getChargingSummary } from '../../api/api';
 import Language from '../language';
 import FadeLoader from "react-spinners/FadeLoader";
+import Lottie from 'lottie-react';
+import batteryCharging from '../../assets/batteryCharging.json';
 
 export default function ChargingSessionScreen(props: any) {
     const [chargingPower, setChargingPower] = useState<number | undefined>(0.00);
@@ -205,7 +207,7 @@ export default function ChargingSessionScreen(props: any) {
                     <p className="m-0">Charging Session</p>
                 </div>
             </div> */}
-            <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white'>
+            <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-5/6 w-screen bg-white'>
                 <div className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" >
                     <div className='flex justify-center items-center w-full'>
                         <div className='flex w-1/3 items-center justify-center text-center'>
@@ -233,9 +235,15 @@ export default function ChargingSessionScreen(props: any) {
                     </div>
 
                 </div>
-                <div className="flex p-5 justify-center flex-col items-center w-5/6" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
+                <div className="flex justify-center flex-col items-center w-5/6 pb-5">
                     
 
+                {
+                            isChargingStopped == false ?
+                                // <img src={require('../../assets/orangeThemeRedCar.png')} alt="" />
+                                <Lottie animationData={batteryCharging} />
+                            : null
+                         }
                         {isChargingStopButtonClicked ?
                         
                         <FadeLoader
@@ -253,17 +261,13 @@ export default function ChargingSessionScreen(props: any) {
                  
                          }
 
-                         {
-                            isChargingStopped == false ?
-                                <img src={require('../../assets/orangeThemeRedCar.png')} alt="" />
-                            : null
-                         }
+                         
 
                 </div>
                 {
                     isChargingStopped == true ? 
-                    <div className="flex p-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-sxl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
-                    <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500' />
+                    <div className="flex justify-center flex-col items-center text-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-sxl">
+                    <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center' placeholder='Enter your email'/>
                     <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md'>Email receipt</button>
                 </div> : null
                 }

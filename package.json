@@ -16,6 +16,7 @@
     "axios": "^1.5.0",
     "html5-qrcode": "^2.3.8",
     "http-proxy-middleware": "^2.0.6",
+    "lottie-react": "^2.4.0",
     "postcss-cli": "^11.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

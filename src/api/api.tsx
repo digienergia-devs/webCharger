@@ -40,7 +40,7 @@ export async function authorizePayment(chargerID: string, connectorID: string, r
 
     try {
         const response = await api.post(endpoint, payload);
-        return response.data;
+         return response.data;
     } catch (error: any) {
         console.error("Error:", error.response);
         throw error.response;
