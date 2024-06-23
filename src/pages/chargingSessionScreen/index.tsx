@@ -200,7 +200,7 @@ export default function ChargingSessionScreen(props: any) {
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
             <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-5/6 w-screen bg-white'>
-                <div className="flex -my-10 py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" >
+                <div className="flex -my-20 py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" >
                     <div className='flex justify-center items-center w-full'>
                         <div className='flex w-1/3 items-center justify-center text-center'>
                             <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
