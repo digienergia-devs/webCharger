@@ -195,7 +195,7 @@ export default function ChargingSessionScreen(props: any) {
                     <p className="m-0">Charging Session</p>
                 </div>
             </div> */}
-            <div className='flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white'>
+            <div className='flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white'>
                 <div className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-xs md:text-md xl:text-xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
                     <div className='flex justify-center items-center w-full'>
                         <div className='flex w-1/3 items-center justify-center text-center'>
@@ -252,7 +252,7 @@ export default function ChargingSessionScreen(props: any) {
                 </div>
                 <div className="flex p-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-sxl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
                     <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500' />
-                    <button className='flex bg-iparkOrange800 w-full text-center justify-center mt-5 rounded-md text-white text-md'>Email receipt</button>
+                    <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md'>Email receipt</button>
                 </div>
             </div>
         </div>
