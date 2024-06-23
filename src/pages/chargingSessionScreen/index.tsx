@@ -205,7 +205,7 @@ export default function ChargingSessionScreen(props: any) {
                     <p className="m-0">Charging Session</p>
                 </div>
             </div> */}
-            <div className='flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white'>
+            <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white'>
                 <div className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" >
                     <div className='flex justify-center items-center w-full'>
                         <div className='flex w-1/3 items-center justify-center text-center'>
@@ -252,7 +252,12 @@ export default function ChargingSessionScreen(props: any) {
                             </button>
                  
                          }
-                    <img src={require('../../assets/orangeThemeRedCar.png')} alt="" />
+
+                         {
+                            isChargingStopped == false ?
+                                <img src={require('../../assets/orangeThemeRedCar.png')} alt="" />
+                            : null
+                         }
 
                 </div>
                 {
