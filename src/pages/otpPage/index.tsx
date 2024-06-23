@@ -25,7 +25,7 @@ export default function OtpScreen(props: any){
                 <div className='flex justify-center items-center h-1/2'>
 
                 </div>
-                <div className='flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-iparkOrange400 w-5/6 shadow-md text-white font-bold text-md md:text-xl xl:text-2xl'>
+                <div className='flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-iparkOrange400 w-5/6 shadow-md text-white font-bold text-xs md:text-md xl:text-xl'>
                     <p className="m-0">Your OTP to restore session</p>
                 </div>
             </div>
@@ -42,8 +42,8 @@ export default function OtpScreen(props: any){
                     </span>
                 </div>
 
-                <div className="flex p-5 justify-center flex-col items-centertext-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-2xl">
-                    <button className='flex bg-iparkOrange800 w-full text-center justify-center mt-5 rounded-md text-white text-lg' onClick={proceedToChargingSessionScreen}>Proceed to charging screen</button>
+                <div className="flex p-5 justify-center flex-col items-centertext-center w-5/6 text-gray-400 text-xs md:text-md xl:text-xl">
+                    <button className='flex bg-iparkOrange800 w-full text-center justify-center mt-5 rounded-md text-white text-md' onClick={proceedToChargingSessionScreen}>Proceed to charging screen</button>
                 </div>
             </div>
         </div>

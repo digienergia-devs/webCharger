@@ -57,23 +57,23 @@ export default function PaymentMethodScreen(props: any) {
             <div className='flex flex-col justify-center items-center h-1/6 w-full'>
                 <div className='flex justify-center items-center h-1/2'>
                 </div>
-                <div className='flex flex-col h-full justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-iparkOrange400 w-5/6 shadow-md text-white font-bold text-md md:text-xl xl:text-2xl'>
+                <div className='flex flex-col h-full justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-iparkOrange400 w-5/6 shadow-md text-white font-bold text-xs md:text-md xl:text-xl'>
                     <p className="m-0">Kempower charger | 22 kW</p>
                     <p className="m-0">Price: 0.45 Euro/kWh</p>
                 </div>
             </div>
             <div className='flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white'>
-                <div className="flex flex-col pb-5 justify-center items-center text-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-2xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
+                <div className="flex flex-col pb-5 justify-center items-center text-center w-5/6 text-gray-400 text-xs md:text-md xl:text-xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
                     <div>
                         <img src={require('../../assets/orangeThemePaymentImage.png')} alt="" />
                     </div>
                     <div>
-                        <span className='flex text-iparkOrange800 font-bold text-xl'>
+                        <span className='flex text-iparkOrange800 font-bold text-md'>
                             Payment Authorization
                         </span>
                     </div>
                 </div>
-                <div className="flex justify-center items-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-2xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
+                <div className="flex justify-center items-center w-5/6 text-gray-400 text-xs md:text-md xl:text-xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
                     <>
                         {(selectedAmount > 0) ?
                             <div>
