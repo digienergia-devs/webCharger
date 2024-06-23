@@ -229,7 +229,7 @@ export default function ChargingSessionScreen(props: any) {
                 </div>
                     {
                         isChargingStopped == false ?
-                        <div className='flex h-1/5 w-full justify-center'>
+                        <div className='flex h-1/3 w-full justify-center'>
                                 {/* <img src={require('../../assets/orangeThemeRedCar.png')} alt="" /> */}
                                 <Lottie animationData={batteryCharging} />
                         </div>
