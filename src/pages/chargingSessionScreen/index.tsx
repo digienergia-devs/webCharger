@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './style.css'
-import { stopChargingSession, chargingSessionStatus, startChargingSession, getChargingSummary } from '../../api/api';
+import { stopChargingSession, chargingSessionStatus, startChargingSession, getChargingSummary, sendEmailInvoice } from '../../api/api';
 import Language from '../language';
 import FadeLoader from "react-spinners/FadeLoader";
 import Lottie from 'lottie-react';
@@ -17,6 +17,8 @@ export default function ChargingSessionScreen(props: any) {
     const [language, setLanguage] = useState<string | undefined>(props.language);
     const [isChargingStopButtonClicked, setIsChargingStopButtonClicked] = useState<boolean>(false);
     const [transactionId, setTransactionId] = useState<string | null>(null);
+    const [transactionRef, setTransactionRef] = useState<string | null>(null);
+    const [userEmail, setUserEmail] = useState<string | null>(null);
     const [chargingSessionSummary, setChargingSessionSummary] = useState<{
         power_consumed: any,
         final_amount: any,
@@ -69,6 +71,8 @@ export default function ChargingSessionScreen(props: any) {
                     let chargingSummary = await getChargingSummary(transactionId);
                     setChargingSessionSummary(chargingSummary);
                     setTimeout(() => {
+                        let transactionRef = chargingSummary.transaction_ref;
+                        setTransactionRef(transactionRef);
                         let consumed_power = Number(chargingSummary.power_consumed);
                         let finalAmount = Number(chargingSummary.final_amount);
     
@@ -177,6 +181,15 @@ export default function ChargingSessionScreen(props: any) {
         )
     }
 
+    const requestEmailInvoice = async () => {
+
+        let requestBody = {
+            "transaction_ref": transactionRef,
+            "email": userEmail
+          }
+        await sendEmailInvoice(requestBody);
+    }
+
     useEffect(() => {
         if (!isChargingStarted || transactionId) {
             startCharging();
@@ -258,10 +271,10 @@ export default function ChargingSessionScreen(props: any) {
 
                 </div>
                 {
-                    isChargingStopped == true ? 
+                    transactionRef ? 
                     <div className="flex justify-center flex-col items-center text-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-sxl">
-                    <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center' placeholder='Enter your email'/>
-                    <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md'>Email receipt</button>
+                    <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center' placeholder='Enter your email' onBlur={(e: any) => setUserEmail(e.target.value)}/>
+                    <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={requestEmailInvoice}>Email receipt</button>
                 </div> : null
                 }
                 

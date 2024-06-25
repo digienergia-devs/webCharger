@@ -109,3 +109,17 @@ export async function validateOtp(transactionId: any, otp: string) {
         throw error.response;
     }
 }
+
+export async function sendEmailInvoice(requestOption: any){
+    const endpoint = `/invoices/payment_receipt`;
+    const payload = requestOption;
+
+    try {
+        const response = await api.post(endpoint, payload);
+        return response.data;
+    } catch (error: any) {
+        throw error.response;
+    }
+
+
+}
