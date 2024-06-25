@@ -87,9 +87,9 @@ export default function CardForm(props: any) {
         console.error("Payment authorization failed:", error);
       }
     });
-    if(!paymentRequest){
-      setPaymentOption('card');
-    }
+    // if(!paymentRequest){
+    //   setPaymentOption('card');
+    // }
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
