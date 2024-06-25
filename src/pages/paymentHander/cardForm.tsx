@@ -196,10 +196,15 @@ export default function CardForm(props: any) {
          </>
       }
       <div className="flex flex-col pt-5">
-      <div className="flex flex-row items-center justify-center" onClick={changePaymentMethod}>
+        {payButtonClicked ? 
+        null 
+        : 
+        <div className="flex flex-row items-center justify-center" onClick={changePaymentMethod}>
           <img src={require('../../assets/icons/orangeThemeDebitCardIcon.png')} alt="" />
           <span className="flex pl-5 text-black">Pay with something else</span>
         </div>
+        }
+      
         <br />
         <span className="flex flex-row items-center justify-center text-center text-black">
           Payment method is selected based on your device.
