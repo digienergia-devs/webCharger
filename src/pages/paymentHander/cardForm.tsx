@@ -21,6 +21,7 @@ export default function CardForm(props: any) {
   const [language, setLanguage] = useState<string | undefined>(props.language)
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
   const [authAmount, setAuthAmount] = useState<any>(props.selectedAmount);
+  const [loading, setIsLoading] = useState<boolean>(true);
 
   const [paymentOption, setPaymentOption] = useState<string>('applePay');
 
@@ -86,6 +87,12 @@ export default function CardForm(props: any) {
         console.error("Payment authorization failed:", error);
       }
     });
+    if(!paymentRequest){
+      setPaymentOption('card');
+    }
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
   }
 
   const handleSubmit = async (event: any) => {
@@ -155,62 +162,77 @@ export default function CardForm(props: any) {
     }
   }
 
-  return (
-    <>
-      {
-        paymentOption === 'card' ? <>
-        <>
-          <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
-        </>
-          {payButtonClicked ?
-            <div className="flex justify-center items-center w-full">
-              <FadeLoader
-                color="#FF6D00"
-                // loading={isLoading}
-                aria-label="Loading Spinner"
-                data-testid="loader"
-              />
+  if(loading){
+    return (
+      <div className="flex justify-center items-center w-full">
+        <FadeLoader
+          color="#FF6D00"
+          // loading={isLoading}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
+      </div>
+    )
+  }else {
+    return (
+      <>
+        {
+          paymentOption === 'card' ? <>
+          <>
+            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
+          </>
+            {payButtonClicked ?
+              <div className="flex justify-center items-center w-full">
+                <FadeLoader
+                  color="#FF6D00"
+                  // loading={isLoading}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              </div>
+              :
+              <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5 py-2" onClick={handleSubmit}>
+                Pay
+              </button>
+            }
+           </>
+           :
+           <>
+           <div className="flex flex-col">
+            < div className="flex w-full justify-center">
             </div>
-            :
-            <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5 py-2" onClick={handleSubmit}>
-              Pay
-            </button>
-          }
-         </>
-         :
-         <>
-         <div className="flex flex-col">
-          < div className="flex w-full justify-center">
+          <div className="applePay">
+            {paymentRequest ? <>
+              <PaymentRequestButtonElement options={{ paymentRequest }} /> </>    
+              : 
+              <>
+                <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > Other payment options not available.</span>
+                <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > Please select another payment option below.</span>
+              </>
+            }
           </div>
-        <div className="applePay">
-          {paymentRequest ? <>
-            <PaymentRequestButtonElement options={{ paymentRequest }} /> </>    
-            : 
-            <>
-              <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > Other payment options not available.</span>
-              <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > Please select another payment option below.</span>
-            </>
-          }
         </div>
-      </div>
-         </>
-      }
-      <div className="flex flex-col pt-5">
-        {payButtonClicked ? 
-        null 
-        : 
-        <div className="flex flex-row items-center justify-center" onClick={changePaymentMethod}>
-          <img src={require('../../assets/icons/orangeThemeDebitCardIcon.png')} alt="" />
-          <span className="flex pl-5 text-black">Pay with something else</span>
-        </div>
+           </>
         }
-      
-        <br />
-        <span className="flex flex-row items-center justify-center text-center text-black">
-          Payment method is selected based on your device.
-        </span>
-      </div>
-      </>
-  )
+        <div className="flex flex-col pt-5">
+          {payButtonClicked ? 
+          null 
+          : 
+          <div className="flex flex-row items-center justify-center" onClick={changePaymentMethod}>
+            <img src={require('../../assets/icons/orangeThemeDebitCardIcon.png')} alt="" />
+            <span className="flex pl-5 text-black">Pay with something else</span>
+          </div>
+          }
+        
+          <br />
+          <span className="flex flex-row items-center justify-center text-center text-black">
+            Payment method is selected based on your device.
+          </span>
+        </div>
+        </>
+    )
+  }
+
+  
 
 }
