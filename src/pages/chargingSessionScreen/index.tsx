@@ -17,7 +17,7 @@ export default function ChargingSessionScreen(props: any) {
     const [language, setLanguage] = useState<string | undefined>(props.language);
     const [isChargingStopButtonClicked, setIsChargingStopButtonClicked] = useState<boolean>(false);
     const [transactionId, setTransactionId] = useState<string | null>(null);
-    const [transactionRef, setTransactionRef] = useState<string | null>(null);
+    const [transactionRef, setTransactionRef] = useState<string>('');
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const [chargingSessionSummary, setChargingSessionSummary] = useState<{
         power_consumed: any,
@@ -184,7 +184,7 @@ export default function ChargingSessionScreen(props: any) {
     const requestEmailInvoice = async () => {
 
         let requestBody = {
-            "transaction_ref": transactionRef,
+            "transaction_ref": transactionRef!,
             "email": userEmail
           }
         await sendEmailInvoice(requestBody);
@@ -271,10 +271,10 @@ export default function ChargingSessionScreen(props: any) {
 
                 </div>
                 {
-                    transactionRef ? 
+                    isChargingStopped ? 
                     <div className="flex justify-center flex-col items-center text-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-sxl">
-                    <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center' placeholder='Enter your email' onBlur={(e: any) => setUserEmail(e.target.value)}/>
-                    <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={requestEmailInvoice}>Email receipt</button>
+                    <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center text-black' placeholder='Enter your email' onBlur={(e: any) => setUserEmail(e.target.value)}/>
+                    <button className={transactionRef ? 'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md' : 'flex bg-iparkOrange200 w-full text-center justify-center py-3 mt-5 rounded-md text-gray-400 text-md'} disabled={transactionRef ? false : true} onClick={requestEmailInvoice}>Email receipt</button>
                 </div> : null
                 }
                 
