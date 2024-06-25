@@ -116,12 +116,14 @@ export default function ConnectingScreen(props: any) {
           <img src={require("../../assets/icons/Final3.png")} alt="" />
         </div>
         <div className="flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white pt-5">
+          <div className="flex w-full h-1/2 items-center justify-center">
               <FadeLoader
                 color="#FF6D00"
                 // loading={isLoading}
                 aria-label="Loading Spinner"
                 data-testid="loader"
-              />
+                />
+          </div>
         </div>
       </div>
     )
