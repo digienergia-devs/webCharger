@@ -33,6 +33,14 @@ export default function ChargingSessionScreen(props: any) {
     const [timer, setTimer] = useState<number>(0);
 
     useEffect(() => {
+        if(chargingTime == '0:00:00'){
+            setStopChargingButtonText('Preparing') 
+        }else {
+            setStopChargingButtonText('Stop Charging')
+        }
+    }, [chargingTime])
+
+    useEffect(() => {
         if(isChargingStopped){
             setIsChargingStopButtonClicked(false);
         }
@@ -261,7 +269,6 @@ export default function ChargingSessionScreen(props: any) {
                     {
                         isChargingStopped == false ?
                         <div className='flex h-1/3 w-full justify-center'>
-                                {/* <img src={require('../../assets/orangeThemeRedCar.png')} alt="" /> */}
                                 <Lottie animationData={batteryCharging} />
                         </div>
                         : null
@@ -276,10 +283,16 @@ export default function ChargingSessionScreen(props: any) {
                             aria-label="Loading Spinner"
                             data-testid="loader"
                         /> : 
-
-                        // stopChargingButtonText
-                        // 'flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg'
-                            <button className={(isChargingStopped ? 'flex bg-iparkOrange200 w-full text-center justify-center rounded-md text-black text-md py-3' : 'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-md py-3')} onClick={stopChargingSessionButtonClick}>
+                            <button className={(isChargingStopped ? 
+                            'flex bg-iparkOrange200 w-full text-center justify-center rounded-md text-black text-md py-3' 
+                            : 
+                            (chargingTime == '0:00:00' ?
+                                'flex bg-iparkOrange200 w-full text-center justify-center rounded-md text-black text-md py-3' 
+                                :
+                                'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-md py-3'
+                            )
+                            
+                            )} onClick={stopChargingSessionButtonClick}>
                                 {stopChargingButtonText}
                             </button>
                  
@@ -299,7 +312,7 @@ export default function ChargingSessionScreen(props: any) {
                 }
                 {
                     invoiceEmailState == 'sent' ?
-                    <span>Sent</span>
+                    <span className='flex pt-5'>Invoice Sent!</span>
                     :
                     null
                 }
