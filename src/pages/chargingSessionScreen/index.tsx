@@ -212,8 +212,19 @@ export default function ChargingSessionScreen(props: any) {
             <div className="flex justify-center items-center h-1/6">
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
+            
             <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-5/6 w-screen bg-white'>
                 <div className={isChargingStopped ? "flex py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" : "flex py-5 -mb-20 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl"} >
+                    
+                {(chargingTime == '0:00:00' ) ? 
+                    <FadeLoader
+                    color="#FF6D00"
+                    loading={true}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                    />
+                    : 
+                    <>
                     <div className='flex justify-center items-center w-full'>
                         <div className='flex w-1/3 items-center justify-center text-center'>
                             <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
@@ -237,7 +248,10 @@ export default function ChargingSessionScreen(props: any) {
                         <div className='flex w-2/3 ml-10'>
                             {(chargingCost)?.toFixed(2)}€
                         </div>
-                    </div>
+                    </div></>
+                    }
+                    
+                    
 
                 </div>
                     {
