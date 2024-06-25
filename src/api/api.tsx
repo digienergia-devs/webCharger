@@ -116,7 +116,7 @@ export async function sendEmailInvoice(requestOption: any){
 
     try {
         const response = await api.post(endpoint, payload);
-        return response.data;
+        return response;
     } catch (error: any) {
         throw error.response;
     }
