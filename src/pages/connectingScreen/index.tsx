@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import { startChargerConnection, chargingSessionStatus } from "../../api/api";
+import { startChargerConnection, chargingSessionStatus, getChargerDetails } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import Language from "../language";
 import { useLocation } from "react-router-dom";
@@ -21,11 +21,26 @@ export default function ConnectingScreen(props: any) {
   const [transactionId, setTransactionId] = useState<any>(null);
   
   useEffect(() => {
-    setChargerID(queryParams.get("chargerId"));
-    setConnectorID(queryParams.get("connectorId"));
-    props.setChargerPower(queryParams.get("chargerPower"));
-    props.setChargerRate(queryParams.get("chargerRate"));
+    let url = window.location.href;
+    let alias = url.split("/connectingScreen/")[1];
+    getChargePointDetails(alias);
   }, []);
+
+  const getChargePointDetails = async (chargerID: string | null) => {
+    let response: any;
+    try {
+      response = await getChargerDetails(chargerID);
+
+      setChargerID(response.charge_point_id);
+      setConnectorID(response.connector_id);
+      props.setChargerPower('25');
+      props.setChargerRate('0.02');
+
+      // get the charger power and charging rate from using the backend --- Inform to Argon
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);

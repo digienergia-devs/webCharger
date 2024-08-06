@@ -32,7 +32,7 @@ function App() {
         <Routes>
           <Route path='/' element={<SplashScreen
           />} />
-          <Route path='/ConnectingScreen' element={<ConnectingScreen
+          <Route path='/ConnectingScreen/*' element={<ConnectingScreen
             language={language}
             setLanguage={changeLanguage}
             setConnectorID={setConnectorID}

@@ -8,7 +8,16 @@ const api = axios.create({
     baseURL: API_BASE_URL,
 });
 
+export async function getChargerDetails(chargerID: string | null ){
+    const endpoint = `chargepoint/${chargerID}`;
 
+    try {
+        const response = await api.get(endpoint);
+        return response.data;
+    } catch (error: any) {
+        throw error.response;
+    }
+}
 
 export async function startChargerConnection(chargerID: string, connectorID: string) {
     console.log("chargerID --- ", chargerID);
