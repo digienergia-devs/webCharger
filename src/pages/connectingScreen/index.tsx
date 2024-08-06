@@ -22,7 +22,7 @@ export default function ConnectingScreen(props: any) {
   
   useEffect(() => {
     let url = window.location.href;
-    let alias = url.split("/connectingScreen/")[1];
+    let alias: any = url.split("/").pop();
     getChargePointDetails(alias);
   }, []);
 

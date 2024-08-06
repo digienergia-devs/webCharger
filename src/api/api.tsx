@@ -20,8 +20,6 @@ export async function getChargerDetails(chargerID: string | null ){
 }
 
 export async function startChargerConnection(chargerID: string, connectorID: string) {
-    console.log("chargerID --- ", chargerID);
-    console.log("connectorID --- ", connectorID);
     const endpoint = `chargepoint/${chargerID}/${connectorID}`;
 
     /* { this should be in the request body
