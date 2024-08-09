@@ -206,7 +206,7 @@ export default function CardForm(props: any) {
               <PaymentRequestButtonElement options={{ paymentRequest }} /> </>    
               : 
               <>
-                <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > Other payment options not available.</span>
+                <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > Apple Pay / Google Pay not available right now.</span>
                 <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > Please select another payment option below.</span>
               </>
             }
@@ -218,7 +218,7 @@ export default function CardForm(props: any) {
           {payButtonClicked ? 
           null 
           : 
-          <div className="flex flex-row items-center justify-center" onClick={changePaymentMethod}>
+          <div className="flex flex-row items-center justify-center bg-gray-200 p-2 rounded-md" onClick={changePaymentMethod}>
             <img src={require('../../assets/icons/orangeThemeDebitCardIcon.png')} alt="" />
             <span className="flex pl-5 text-black">Pay with something else</span>
           </div>

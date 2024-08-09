@@ -126,19 +126,23 @@ export default function ConnectingScreen(props: any) {
               {props.chargerRate} €/kWh
           </div>
         </div>
-  
+
         <div className="flex justify-center items-center h-1/6">
           <img src={require("../../assets/icons/Final3.png")} alt="" />
         </div>
         <div className="flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white pt-5">
-          <div className="flex w-full h-1/2 items-center justify-center">
+          <div className="flex w-full h-1/2 items-center justify-center flex-col">
               <FadeLoader
                 color="#FF6D00"
                 // loading={isLoading}
                 aria-label="Loading Spinner"
                 data-testid="loader"
                 />
+                <div className="text-center text-gray-500 mt-4 animate-pulse">
+            Please wait, we are initiating a charging session...
           </div>
+          </div>
+          
         </div>
       </div>
     )
