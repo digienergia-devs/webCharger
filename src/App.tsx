@@ -83,6 +83,8 @@ function App() {
             setChargerPower={setChargerPower}
             chargerRate={chargerRate}
             setChargerRate={setChargerRate}
+            idleRate={idleRate}
+            setOtp={setOtp}
             />}/>
         </Routes>
       </Router>
