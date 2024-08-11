@@ -10,8 +10,9 @@ import AskOtpPage from './pages/askOtpPage';
 
 function App() {
 
-  const [chargerPower, setChargerPower] = useState<string>();
-  const [chargerRate, setChargerRate] = useState<string>();
+  const [chargerPower, setChargerPower] = useState<string>('25');
+  const [chargerRate, setChargerRate] = useState<string>('0.25');
+  const [idleRate, setIdleRate] = useState<string>('0.02');
 
   const [loading, setLoading] = useState<boolean>(false);
   const [language, setLanguage] = useState<string>('EN');
@@ -42,6 +43,7 @@ function App() {
             setChargerPower={setChargerPower}
             chargerRate={chargerRate}
             setChargerRate={setChargerRate}
+            idleRate={idleRate}
           />} />
           <Route path='/PaymentMethodScreen' element={<PaymentMethodScreen
             language={language}
@@ -53,6 +55,7 @@ function App() {
             setChargerPower={setChargerPower}
             chargerRate={chargerRate}
             setChargerRate={setChargerRate}
+            idleRate={idleRate}
           />} />
           <Route path='/ChargingSessionScreen' element={<ChargingSessionScreen
             language={language}
@@ -63,6 +66,8 @@ function App() {
             setChargerPower={setChargerPower}
             chargerRate={chargerRate}
             setChargerRate={setChargerRate}
+            idleRate={idleRate}
+            otp={otp}
           />} />
           <Route path='/OtpScreen' element={<OtpScreen
             otp={otp}
@@ -70,6 +75,7 @@ function App() {
             setChargerPower={setChargerPower}
             chargerRate={chargerRate}
             setChargerRate={setChargerRate}
+            setOtp={setOtp}
            />}/>
            <Route path='/AskOtpPage' element={<AskOtpPage
             transactionId={transactionId}

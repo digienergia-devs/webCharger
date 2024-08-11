@@ -48,11 +48,28 @@ export default function PaymentMethodScreen(props: any) {
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
             <div className="flex flex-row justify-between w-full pl-5 pr-5">
-                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                <div className="flex bg-white py-5 my-5 font-bold rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 w-full justify-between text-xs pl-10 pr-10" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                    <div>
                     {props.chargerPower} KW
-                </div>
-                <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    Power
+                    </div>
+                    </div>
+                    <div>
                     {props.chargerRate} €/kWh
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    Unit price
+                    </div>
+                    </div>
+                    <div>
+                    {props.idleRate} €/min
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    Idle fee
+                    </div>
+                    </div>
                 </div>
             </div>
             <div className="flex justify-center items-center h-1/6">
