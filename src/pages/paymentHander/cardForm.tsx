@@ -10,6 +10,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import "./cardForm.css";
 import { useNavigate } from 'react-router-dom';
 import FadeLoader from "react-spinners/FadeLoader";
+import { useTranslation } from "react-i18next";
 
 const stripePromise = loadStripe("pk_test_01QZ55AeQfGutsrsRjjkToqz");
 export default function CardForm(props: any) {
@@ -22,6 +23,7 @@ export default function CardForm(props: any) {
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
   const [authAmount, setAuthAmount] = useState<any>(props.selectedAmount);
   const [loading, setIsLoading] = useState<boolean>(true);
+  const [t, i18n] = useTranslation('global');
 
   const [paymentOption, setPaymentOption] = useState<string>('applePay');
 
@@ -192,7 +194,7 @@ export default function CardForm(props: any) {
               </div>
               :
               <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5 py-2" onClick={handleSubmit}>
-                Pay
+                {t("cardFormScreen.pay")}
               </button>
             }
            </>
@@ -206,8 +208,8 @@ export default function CardForm(props: any) {
               <PaymentRequestButtonElement options={{ paymentRequest }} /> </>    
               : 
               <>
-                <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > Apple Pay / Google Pay not available right now.</span>
-                <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > Please select another payment option below.</span>
+                <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > {t("cardFormScreen.applePayGooglePayNotAvailable")}</span>
+                <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > {t("cardFormScreen.pleaseSelectAnotherPaymentOption")}</span>
               </>
             }
           </div>
@@ -220,13 +222,13 @@ export default function CardForm(props: any) {
           : 
           <div className="flex flex-row items-center justify-center bg-gray-200 p-2 rounded-md" onClick={changePaymentMethod}>
             <img src={require('../../assets/icons/orangeThemeDebitCardIcon.png')} alt="" />
-            <span className="flex pl-5 text-black">Pay with something else</span>
+            <span className="flex pl-5 text-black">{t("cardFormScreen.payWithSomethingElse")}</span>
           </div>
           }
         
           <br />
           <span className="flex flex-row items-center justify-center text-center text-black">
-            Payment method is selected based on your device.
+            {t("cardFormScreen.paymetnMethodSelectedBasedOnDevice")}
           </span>
         </div>
         </>

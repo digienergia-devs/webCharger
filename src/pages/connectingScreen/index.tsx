@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import FadeLoader from "react-spinners/FadeLoader";
 import Lottie from "lottie-react";
 import connectCable from "../../assets/connectCable.json";
+import { useTranslation } from "react-i18next";
 
 export default function ConnectingScreen(props: any) {
   const [headerInfo, setHeaderInfo] = useState<string>("Insert Cable");
@@ -19,6 +20,7 @@ export default function ConnectingScreen(props: any) {
   const [sessionID, setSessionID] = useState<any>(null);
   const [language, setLanguage] = useState<string>(props.language);
   const [transactionId, setTransactionId] = useState<any>(null);
+  const [t, i18n] = useTranslation('global');
   
   useEffect(() => {
     let url = window.location.href;
@@ -124,21 +126,24 @@ export default function ConnectingScreen(props: any) {
                     {props.chargerPower} KW
                     <br />
                     <div className='flex text-gray-400 font-light'>
-                    Power
+                    {/* Power */}
+                    {t("generalDetails.power")}
                     </div>
                     </div>
                     <div>
                     {props.chargerRate} €/kWh
                     <br />
                     <div className='flex text-gray-400 font-light'>
-                    Unit price
+                    {/* Unit price */}
+                    {t("generalDetails.unitPrice")}
                     </div>
                     </div>
                     <div>
                     {props.idleRate} €/min
                     <br />
                     <div className='flex text-gray-400 font-light'>
-                    Idle fee
+                    {/* Idle fee */}
+                    {t("generalDetails.idleFee")}
                     </div>
                     </div>
                 </div>
@@ -156,7 +161,7 @@ export default function ConnectingScreen(props: any) {
                 data-testid="loader"
                 />
                 <div className="text-center text-gray-500 mt-4 animate-pulse">
-            Please wait, we are initiating a charging session...
+            {t("connectingScreen.connectionEstabllishMessage")}
           </div>
           </div>
           
@@ -167,13 +172,33 @@ export default function ConnectingScreen(props: any) {
     return (
       <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
         <div className="flex flex-row justify-between w-full pl-5 pr-5">
-          <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
-              {props.chargerPower} KW
-          </div>
-          <div className="flex bg-white py-5 my-5 font-bold rounded-full w-36 justify-center text-xs" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
-              {props.chargerRate} €/kWh
-          </div>
-        </div>
+                <div className="flex bg-white py-5 my-5 font-bold rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 w-full justify-between text-xs pl-10 pr-10" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                    <div>
+                    {props.chargerPower} KW
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    {/* Power */}
+                    {t("generalDetails.power")}
+                    </div>
+                    </div>
+                    <div>
+                    {props.chargerRate} €/kWh
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    {/* Unit price */}
+                    {t("generalDetails.unitPrice")}
+                    </div>
+                    </div>
+                    <div>
+                    {props.idleRate} €/min
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    {/* Idle fee */}
+                    {t("generalDetails.idleFee")}
+                    </div>
+                    </div>
+                </div>
+            </div>
   
         <div className="flex justify-center items-center h-1/6">
           <img src={require("../../assets/icons/Final3.png")} alt="" />
@@ -183,8 +208,8 @@ export default function ConnectingScreen(props: any) {
             className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black text-sm md:text-ms xl:text-xl"
             
           >
-            <span>1.Connect cable to the car</span>
-            <span>2.Connect cable to the socket</span>
+            <span>1.{t("connectingScreen.connectCableToTheCar")}</span>
+            <span>2.{t("connectingScreen.connectCableToTheSocket")}</span>
           </div>
           <div
             className="flex p-5 m-5 justify-center flex-col items-center w-5/6 -my-10"
@@ -196,7 +221,7 @@ export default function ConnectingScreen(props: any) {
             className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black text-sm md:text-md xl:text-xl">
   
             <span>
-              We will process automatically once charger cable is connected
+              {t("connectingScreen.cableConnectionMessage")}
             </span>
           </div>
         </div>

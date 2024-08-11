@@ -5,13 +5,15 @@ import Language from '../language';
 import FadeLoader from "react-spinners/FadeLoader";
 import Lottie from 'lottie-react';
 import batteryCharging from '../../assets/batteryCharging.json';
+import { useTranslation } from 'react-i18next';
 
 export default function ChargingSessionScreen(props: any) {
+    const [t, i18n] = useTranslation('global');
     const [chargingPower, setChargingPower] = useState<number | undefined>(0.00);
     const [chargingTime, setChargingTime] = useState<string>('0:00:00');
     const [chargingCost, setChargingCost] = useState<number | undefined>(0.0000);
     const timeDisplay = document.getElementById('time') as HTMLDivElement;
-    const [stopChargingButtonText, setStopChargingButtonText] = useState<string>('Stop Charging');
+    const [stopChargingButtonText, setStopChargingButtonText] = useState<string>(t("chargingSessionScreen.stopCharging"));
     const [isChargingStopped, setIsChargingStopped] = useState<boolean>(false);
     const [isChargingStarted, setIsChargingStarted] = useState<boolean>(false);
     const [language, setLanguage] = useState<string | undefined>(props.language);
@@ -20,6 +22,7 @@ export default function ChargingSessionScreen(props: any) {
     const [transactionRef, setTransactionRef] = useState<string>('');
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const [invoiceEmailState, setInvoiceEmailState] = useState<string>('');
+    
     const [chargingSessionSummary, setChargingSessionSummary] = useState<{
         power_consumed: any,
         final_amount: any,
@@ -34,9 +37,9 @@ export default function ChargingSessionScreen(props: any) {
 
     useEffect(() => {
         if(chargingTime == '0:00:00'){
-            setStopChargingButtonText('Preparing') 
+            setStopChargingButtonText(t("chargingSessionScreen.preparing")); 
         }else {
-            setStopChargingButtonText('Stop Charging')
+            setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
         }
     }, [chargingTime])
 
@@ -45,23 +48,6 @@ export default function ChargingSessionScreen(props: any) {
             setIsChargingStopButtonClicked(false);
         }
     }, [isChargingStopped])
-
-    // useEffect(() => {
-    //         let seconds = 0;
-    //         const timer = setInterval(() => {
-    //             seconds++;
-    //             setTimer(seconds);
-    //         }, 1000);
-            
-    //         return () => {
-    //             clearInterval(timer);
-    //         };
-    // }, []);
-
-    // useEffect(() => {
-    //         formatTime(timer);
-        
-    // }, [timer])
 
     useEffect(() => {
         setTransactionId(localStorage.getItem("transactionId"));
@@ -143,7 +129,7 @@ export default function ChargingSessionScreen(props: any) {
             console.log("stop charging response --- ", response);
             if (response.message == 'Charging session stopped successfully') {
                 setIsChargingStopped(true);
-                setStopChargingButtonText('Charging Stoped');
+                setStopChargingButtonText(t("chargingSessionScreen.chargingStopped"));
             }
             // else{
             //     setIsChargingStopButtonClicked(false);
@@ -176,13 +162,13 @@ export default function ChargingSessionScreen(props: any) {
                     // calculateChargingPrice(((Number(res.meter_values.value.toFixed(2))) * Number(res.meter_values.unit_price.toFixed(2))));
                     // formatTime(2000);
                     if (res.charge_point_status == 'Charging') {
-                        setStopChargingButtonText('Stop Charging');
+                        setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
                         setTimeout(() => {
                             getChargingSessionStatus(transactionID);
                         }, 2000)
                     } else {
                         setIsChargingStopped(true);
-                        setStopChargingButtonText('Charging Stoped')
+                        setStopChargingButtonText(t("chargingSessionScreen.chargingStopped"));
                     }
                 }
                 
@@ -220,26 +206,26 @@ export default function ChargingSessionScreen(props: any) {
                             {props.chargerPower} KW
                             <br />
                             <div className='flex text-gray-400 font-light'>
-                            Power
+                            {t("generalDetails.power")}
                             </div>
                         </div>
                         <div>
                             {props.chargerRate} €/kWh
                             <br />
                             <div className='flex text-gray-400 font-light'>
-                            Unit price
+                            {t("generalDetails.unitPrice")}
                             </div>
                         </div>
                         <div>
                             {props.idleRate} €/min
                             <br />
                             <div className='flex text-gray-400 font-light'>
-                            Idle fee
+                            {t("generalDetails.idleFee")}
                             </div>
                         </div>
                     </div>
                     <div className='flex text-xs pl-10 pr-10 text-gray-400 font-light pt-5'>
-                        Your OTP for restore the session is :- {props.otp}
+                        {t("generalDetails.otp")} :- {props.otp}
                     </div>
                 </div>
             </div>
@@ -334,7 +320,7 @@ export default function ChargingSessionScreen(props: any) {
                 }
                 {
                     invoiceEmailState == 'sent' ?
-                    <span className='flex pt-5'>Invoice Sent!</span>
+                    <span className='flex pt-5'>{t("chargingSessionScreen.invoiceSent")}</span>
                     :
                     null
                 }

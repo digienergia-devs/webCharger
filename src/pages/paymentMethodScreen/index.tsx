@@ -5,6 +5,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import CardForm from '../paymentHander/cardForm';
 import FadeLoader from "react-spinners/FadeLoader";
 import Language from '../language';
+import { useTranslation } from 'react-i18next';
 
 const stripePromise = loadStripe('pk_test_51MtxkaKRzm9Te7g8OTUxqutdzDY9XqQMydztUG1XXtGqzo2olj16lx2NkRwXQjsOxvdbnLKMio1yRBYGQjQ61Zqw00xaJPcjkH');
 const clientSecret = 'pi_3PNzgVKRzm9Te7g8087PFtUW_secret_sNOPS4hHZqH9TPCFfQi5fS1Ju'
@@ -13,6 +14,7 @@ export default function PaymentMethodScreen(props: any) {
     const [loading, setLoading] = useState<boolean>(false);
     const [language, setLanguage] = useState<string>(props.language)
     const [selectedAmount, setSelectedAmount] = useState<number>(0);
+    const [t, i18n] = useTranslation('global');
 
     const selectAmountHandler = (amount: number) => {
         setSelectedAmount(amount);
@@ -53,21 +55,21 @@ export default function PaymentMethodScreen(props: any) {
                     {props.chargerPower} KW
                     <br />
                     <div className='flex text-gray-400 font-light'>
-                    Power
+                    {t("generalDetails.power")}
                     </div>
                     </div>
                     <div>
                     {props.chargerRate} €/kWh
                     <br />
                     <div className='flex text-gray-400 font-light'>
-                    Unit price
+                    {t("generalDetails.unitPrice")}
                     </div>
                     </div>
                     <div>
                     {props.idleRate} €/min
                     <br />
                     <div className='flex text-gray-400 font-light'>
-                    Idle fee
+                    {t("generalDetails.idleFee")}
                     </div>
                     </div>
                 </div>
@@ -78,7 +80,7 @@ export default function PaymentMethodScreen(props: any) {
             <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white pt-5'>
                 <div>
                     <span className='flex text-iparkOrange800 font-bold text-md'>
-                        Payment Authorization
+                        {t("paymentMethodScreen.paymentAuthorization")}
                     </span>
                 </div>
                 <div className="flex flex-col pb-5 justify-center items-center text-center w-5/6 text-gray-400 text-xs md:text-md xl:text-xl">

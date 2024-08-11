@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 export default function OtpScreen(props: any){
@@ -7,6 +8,7 @@ export default function OtpScreen(props: any){
     const proceedToChargingSessionScreen = () => {
         navigate('/ChargingSessionScreen')
     }
+    const [t, i18n] = useTranslation('global');
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -21,26 +23,26 @@ export default function OtpScreen(props: any){
                             {props.chargerPower} KW
                             <br />
                             <div className='flex text-gray-400 font-light'>
-                            Power
+                            {t("generalDetails.power")}
                             </div>
                         </div>
                         <div>
                             {props.chargerRate} €/kWh
                             <br />
                             <div className='flex text-gray-400 font-light'>
-                            Unit price
+                            {t("generalDetails.unitPrice")}
                             </div>
                         </div>
                         <div>
                             {props.idleRate} €/min
                             <br />
                             <div className='flex text-gray-400 font-light'>
-                            Idle fee
+                            {t("generalDetails.idleFee")}
                             </div>
                         </div>
                     </div>
                     <div className='flex text-xs pl-10 pr-10 text-gray-400 font-light pt-5'>
-                        Your OTP for restore the session is :- {props.otp}
+                        {t("generalDetails.otp")} :- {props.otp}
                     </div>
                 </div>
             </div>
@@ -53,15 +55,15 @@ export default function OtpScreen(props: any){
                 </div>
                 <div className="flex flex-col pt-5">
                     <span className="flex flex-row items-center justify-center">
-                        Please keep this OTP safe. 
+                        {t("otpPage.keepOtpSafe")}
                     </span>
                     <span className="flex flex-row items-center justify-center">
-                        You will need it to restore your charging session.
+                        {t("otpPage.youNeedOtpAgain")}
                     </span>
                 </div>
 
                 <div className="flex justify-center flex-col items-centertext-center w-5/6 text-gray-400 text-md md:text-xl xl:text-2xl">
-                    <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={proceedToChargingSessionScreen}>Proceed to charging screen</button>
+                    <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={proceedToChargingSessionScreen}>{t("otpPage.proceedToChargingScreen")}</button>
                 </div>
             </div>
         </div>

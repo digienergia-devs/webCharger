@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import OtpScreen from './pages/otpPage';
 import AskOtpPage from './pages/askOtpPage';
 
+
 function App() {
 
   const [chargerPower, setChargerPower] = useState<string>('25');

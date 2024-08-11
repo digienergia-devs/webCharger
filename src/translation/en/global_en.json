@@ -1,0 +1,36 @@
+{
+    "generalDetails" : {
+        "power" : "Power",
+        "unitPrice" : "Unit Price",
+        "idleFee" : "Idle Fee",
+        "otp" : "Your OTP is for restore the session is :- "
+    },
+    "connectingScreen" : {
+        "connectionEstabllishMessage" : "Please wait, we are initiating a charging session...",
+        "connectCableToTheCar" : "Connect cable to the car",
+        "connectCableToTheSocket" : "Connect cable to the socket",
+        "cableConnectionMessage" : "We will process automatically once charger cable is connected"
+    },
+    "paymentMethodScreen" : {
+        "paymentAuthorization" : "Payment Authorization"
+    },
+    "cardFormScreen" : {
+        "pay" : "Pay",
+        "applePayGooglePayNotAvailable" : "Apple Pay / Google Pay not available right now.",
+        "pleaseSelectAnotherPaymentOption" : "Please select another payment option below.",
+        "payWithSomethingElse" : "Pay with something else",
+        "paymetnMethodSelectedBasedOnDevice" : "Payment method is selected based on your device."
+    },
+    "otpPage" : {
+        "keepOtpSafe" : "Please keep this OTP safe.",
+        "youNeedOtpAgain" : "You will need it to restore your charging session.",
+        "proceedToChargingScreen" : "Proceed to charging screen"
+    },
+    "chargingSessionScreen" : {
+        "preparing" : "Preparing",
+        "stopCharging" : "Stop Charging",
+        "chargingStoped" : "Charging Stoped",
+        "invoiceSent" : "Invoice Sent!"
+    }
+
+}

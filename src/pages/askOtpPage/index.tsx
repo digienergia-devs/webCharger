@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { validateOtp } from '../../api/api';
+import { useTranslation } from 'react-i18next';
 
 export default function AskOtpPage(props: any){
     let navigate = useNavigate();
     const [userProvidedOtp, setUserProvidedOtp] = useState<string>(''); 
 
     const [isInvalidOtp, setIsInvalidOtp] = useState<boolean>(false);
+
+    const [t, i18n] = useTranslation('global');
 
     useEffect(() => {
         console.log("user provided otp --- ", userProvidedOtp);
@@ -44,7 +47,8 @@ export default function AskOtpPage(props: any){
                     {props.chargerPower} KW
                     <br />
                     <div className='flex text-gray-400 font-light'>
-                    Power
+                    {/* Power */}
+                    {t("generalDetails.power")}
                     </div>
                     </div>
                     <div>
