@@ -49,6 +49,17 @@ export default function PaymentMethodScreen(props: any) {
 
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
+            <div className='flex flex-row-reverse w-full pr-5 pt-5'>
+            <select
+                value={props.language}
+                onChange={(e) => props.handleChangeLanguage(e.target.value)}
+                className="bg-white border border-gray-300 rounded-md text-xs focus:outline-none"
+            >
+                <option value="fi">FI</option>
+                <option value="en">EN</option>
+                {/* <option value="sw">SW</option> */}
+            </select>
+            </div>
             <div className="flex flex-row justify-between w-full pl-5 pr-5">
                 <div className="flex bg-white py-5 my-5 font-bold rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 w-full justify-between text-xs pl-10 pr-10" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
                     <div>

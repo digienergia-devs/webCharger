@@ -7,6 +7,7 @@ import ChargingSessionScreen from './pages/chargingSessionScreen';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import OtpScreen from './pages/otpPage';
 import AskOtpPage from './pages/askOtpPage';
+import { useTranslation } from 'react-i18next';
 
 
 function App() {
@@ -16,13 +17,20 @@ function App() {
   const [idleRate, setIdleRate] = useState<string>('0.02');
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [language, setLanguage] = useState<string>('EN');
+  const [language, setLanguage] = useState<string>('en');
 
   const [chargerID, setChargerID] = useState<string>();
   const [connectorID, setConnectorID] = useState<string>()
 
   const [transactionId, setTransactionId] = useState<string>();
   const [otp, setOtp] = useState<string>();
+  
+  const [t, i18n] = useTranslation("global");
+
+  const handleChangeLanguage = (lang: string) => {
+    i18n.changeLanguage(lang);
+    setLanguage(lang)
+  }
 
   const changeLanguage = (e: any) => {
     setLanguage(e);
@@ -45,6 +53,7 @@ function App() {
             chargerRate={chargerRate}
             setChargerRate={setChargerRate}
             idleRate={idleRate}
+            handleChangeLanguage={handleChangeLanguage}
           />} />
           <Route path='/PaymentMethodScreen' element={<PaymentMethodScreen
             language={language}
@@ -56,6 +65,7 @@ function App() {
             setChargerPower={setChargerPower}
             chargerRate={chargerRate}
             setChargerRate={setChargerRate}
+            handleChangeLanguage={handleChangeLanguage}
             idleRate={idleRate}
           />} />
           <Route path='/ChargingSessionScreen' element={<ChargingSessionScreen
@@ -69,16 +79,20 @@ function App() {
             setChargerRate={setChargerRate}
             idleRate={idleRate}
             otp={otp}
+            handleChangeLanguage={handleChangeLanguage}
           />} />
           <Route path='/OtpScreen' element={<OtpScreen
+          language={language}
             otp={otp}
             chargerPower={chargerPower}
             setChargerPower={setChargerPower}
             chargerRate={chargerRate}
             setChargerRate={setChargerRate}
             setOtp={setOtp}
+            handleChangeLanguage={handleChangeLanguage}
            />}/>
            <Route path='/AskOtpPage' element={<AskOtpPage
+           language={language}
             transactionId={transactionId}
             chargerPower={chargerPower}
             setChargerPower={setChargerPower}
@@ -86,6 +100,7 @@ function App() {
             setChargerRate={setChargerRate}
             idleRate={idleRate}
             setOtp={setOtp}
+            handleChangeLanguage={handleChangeLanguage}
             />}/>
         </Routes>
       </Router>
