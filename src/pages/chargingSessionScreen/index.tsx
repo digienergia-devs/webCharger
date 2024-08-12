@@ -128,7 +128,7 @@ export default function ChargingSessionScreen(props: any) {
             console.log("stop charging response --- ", response);
             if (response.message == 'Charging session stopped successfully') {
                 setIsChargingStopped(true);
-                setStopChargingButtonText(t("chargingSessionScreen.chargingStopped"));
+                setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
             }
             // else{
             //     setIsChargingStopButtonClicked(false);
@@ -149,7 +149,7 @@ export default function ChargingSessionScreen(props: any) {
         await chargingSessionStatus(transactionID).then(
             (res: any) => {
                 console.log("reading meter values --- ", res);
-                if(res.charge_point_status == "Preparing"){
+                if((res.charge_point_status) == "preparing"){
                     startCharging();
                 }else{
                     response = res;
@@ -160,14 +160,14 @@ export default function ChargingSessionScreen(props: any) {
                     }
                     // calculateChargingPrice(((Number(res.meter_values.value.toFixed(2))) * Number(res.meter_values.unit_price.toFixed(2))));
                     // formatTime(2000);
-                    if (res.charge_point_status == 'Charging') {
+                    if (res.charge_point_status == 'charging') {
                         setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
                         setTimeout(() => {
                             getChargingSessionStatus(transactionID);
                         }, 2000)
                     } else {
                         setIsChargingStopped(true);
-                        setStopChargingButtonText(t("chargingSessionScreen.chargingStopped"));
+                        setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
                     }
                 }
                 
