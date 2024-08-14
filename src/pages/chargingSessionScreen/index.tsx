@@ -40,6 +40,8 @@ export default function ChargingSessionScreen(props: any) {
         }else {
             setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
         }
+
+        console.log("chargingTime --- ", chargingTime)
     }, [chargingTime])
 
     useEffect(() => {
@@ -104,7 +106,13 @@ export default function ChargingSessionScreen(props: any) {
                 await startChargingSession(transactionId).then((result: any) => {
                     res = result;
                     console.log("Start transaction --- ", res);
-                    document.cookie = `myCookie=${sessionId}; expires=Wed, 31 Dec 2025 23:59:59 GMT; path=/ChargingSessionScreen`
+                    if(result.status == "success"){
+                        document.cookie = `myCookie=${sessionId}; expires=Wed, 31 Dec 2025 23:59:59 GMT; path=/ChargingSessionScreen`
+                    } else {
+                        setTimeout(() => {
+                            startCharging();
+                        }, 30000);
+                    }
 
                     setTimeout(() => {
                         getChargingSessionStatus(transactionId!);
@@ -126,13 +134,25 @@ export default function ChargingSessionScreen(props: any) {
         try {
             const response = await stopChargingSession(transactionId);
             console.log("stop charging response --- ", response);
-            if (response.message == 'Charging session stopped successfully') {
-                setIsChargingStopped(true);
-                setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
-            }
-            // else{
-            //     setIsChargingStopButtonClicked(false);
+            // if (response.message == 'Charging session stopped successfully') {
+            //     setIsChargingStopped(true);
+            //     setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
             // }
+            if(response){
+                if (response.status == 'success') {
+                    setChargingCost(Number(response.final_amount));
+                    setChargingPower(Number(response.power_consumed));
+                    // Set the timer later ...
+                    setIsChargingStopped(true);
+                    setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
+                    
+                } else {
+                    setTimeout(() => {
+                        stopChargingSessionButtonClick();
+                    }, 30000);
+                }
+            }
+            
         } catch (error: any) {
             console.error(error);
             setIsChargingStopButtonClicked(false);
@@ -144,12 +164,22 @@ export default function ChargingSessionScreen(props: any) {
         setChargingCost(Number(euros.toFixed(4)))
     }
 
+    const runTimer = (prevTimer: number) => {
+        const interval = setInterval(() => {
+            setTimer((prevTimer) => prevTimer + 1);
+        }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
+    };
+
     const getChargingSessionStatus = async (transactionID: string) => {
         let response;
         await chargingSessionStatus(transactionID).then(
             (res: any) => {
                 console.log("reading meter values --- ", res);
-                if((res.charge_point_status) == "preparing"){
+                if(res.charge_point_status == "preparing"){
                     startCharging();
                 }else{
                     response = res;
@@ -164,7 +194,7 @@ export default function ChargingSessionScreen(props: any) {
                         setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
                         setTimeout(() => {
                             getChargingSessionStatus(transactionID);
-                        }, 2000)
+                        }, 60000)
                     } else {
                         setIsChargingStopped(true);
                         setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));

@@ -62,7 +62,7 @@ export default function ConnectingScreen(props: any) {
       try {
         let metervalues = await chargingSessionStatus(transactionId);
         
-        if(metervalues.charge_point_status == 'charging' || metervalues.charge_point_status == 'Finishing'){
+        if(metervalues.charge_point_status == 'charging' || metervalues.charge_point_status == 'finished'){
           navigate('/ChargingSessionScreen')
         }
       } catch (error) {
