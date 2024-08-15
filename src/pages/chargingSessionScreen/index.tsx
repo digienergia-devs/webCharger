@@ -67,8 +67,8 @@ export default function ChargingSessionScreen(props: any) {
                     let chargingSummary = await getChargingSummary(transactionId);
                     setChargingSessionSummary(chargingSummary);
                     setTimeout(() => {
-                        let transactionRef = chargingSummary.transaction_ref;
-                        setTransactionRef(transactionRef);
+                        // let transactionRef = chargingSummary.transaction_ref;   // check this again with argon
+                        // setTransactionRef(transactionRef);
                         let consumed_power = Number(chargingSummary.power_consumed);
                         let finalAmount = Number(chargingSummary.final_amount);
     
@@ -84,7 +84,7 @@ export default function ChargingSessionScreen(props: any) {
     }, [isChargingStopped])
 
     const formatTime = (seconds: number) => {
-        console.log("elapsed time --- ", seconds);
+        // console.log("elapsed time --- ", seconds);
 
         if (seconds < 0) {
             throw new Error('Input must be a non-negative number of seconds.');
@@ -99,23 +99,23 @@ export default function ChargingSessionScreen(props: any) {
     const startCharging = async () => {
         try {
             const sessionId = sessionStorage.getItem("sessionId");
-            let transactionId = localStorage.getItem("transactionId");
+            let transactionId = localStorage.getItem("transactionId"); 
             setTransactionId(transactionId);
             let res: any;
             try {
                 await startChargingSession(transactionId).then((result: any) => {
                     res = result;
-                    console.log("Start transaction --- ", res);
-                    if(result.status == "success"){
+                    if(result.status == "charging" || result.status == "Charging"){
+                        runTimer();
                         document.cookie = `myCookie=${sessionId}; expires=Wed, 31 Dec 2025 23:59:59 GMT; path=/ChargingSessionScreen`
-                    } else {
+                    } else if(result.status == "Available"){
                         setTimeout(() => {
                             startCharging();
                         }, 30000);
                     }
 
                     setTimeout(() => {
-                        getChargingSessionStatus(transactionId!);
+                         getChargingSessionStatus(transactionId!);
                     }, 2000);
                 })
             } catch (error) {
@@ -140,7 +140,7 @@ export default function ChargingSessionScreen(props: any) {
             // }
             if(response){
                 if (response.status == 'success') {
-                    setChargingCost(Number(response.final_amount));
+                    setChargingCost(Number(response.final_payment));
                     setChargingPower(Number(response.power_consumed));
                     // Set the timer later ...
                     setIsChargingStopped(true);
@@ -164,15 +164,24 @@ export default function ChargingSessionScreen(props: any) {
         setChargingCost(Number(euros.toFixed(4)))
     }
 
-    const runTimer = (prevTimer: number) => {
+    const runTimer = () => {
+        let tempTimer = timer;
         const interval = setInterval(() => {
-            setTimer((prevTimer) => prevTimer + 1);
+            formatTime(tempTimer + 1);
+            // console.log("format timer ---");
         }, 1000);
+//  console.log("after fomat timer ---");
 
         return () => {
             clearInterval(interval);
         };
     };
+    const [initialMeterValue, setInitialMeterValue] = useState<number>(0);
+    const [finalMeterValue, setFinalMeterValue] = useState<number>(0);
+
+    useEffect(() => {
+        setChargingPower(finalMeterValue - initialMeterValue);
+    }, [finalMeterValue])
 
     const getChargingSessionStatus = async (transactionID: string) => {
         let response;
@@ -183,8 +192,24 @@ export default function ChargingSessionScreen(props: any) {
                     startCharging();
                 }else{
                     response = res;
-                    setChargingPower(Number(res.meter_values));
+                    console.log("initial value --- ", res.meter_values[0].value)
+                    if(res.meter_values.length == 1){
+                        console.log("array length")
+                        setInitialMeterValue(res.meter_values[0].value);
+                        setChargingPower(0);
+                    } 
+
+                    if(res.meter_values.length > 1){
+                        let objectLength = res.meter_values.length;
+                        setFinalMeterValue(res.meter_values[objectLength - 1].value);
+                    }    
+                    
+                    // charging power is calculated inside the useEffect hook by checking 'firstMeterValue' and 'finalMeterValue'
+                    // amount captures is also need to calculate at the same useEffect hook
+                    
                     setChargingCost(Number(res.amount));
+                    // setTimer('0:00:00')
+                    // setChargingTime('2:11:1') // this is the one need...
                     if(res.time_elapsed) {
                         formatTime((res.time_elapsed).toFixed(0));
                     }
@@ -222,7 +247,6 @@ export default function ChargingSessionScreen(props: any) {
             startCharging();
             // getChargingSessionStatus();
             setIsChargingStarted(true);
-            
         }
     }, [isChargingStarted, transactionId])
 
@@ -265,7 +289,7 @@ export default function ChargingSessionScreen(props: any) {
                         </div>
                     </div>
                     <div className='flex text-xs pl-10 pr-10 text-gray-400 font-light pt-5'>
-                        {t("generalDetails.otp")} :- {props.otp}
+                        {t("generalDetails.otp")} {props.otp}
                     </div>
                 </div>
             </div>
@@ -276,7 +300,8 @@ export default function ChargingSessionScreen(props: any) {
             <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-5/6 w-screen bg-white'>
                 <div className={isChargingStopped ? "flex py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" : "flex py-5 -mb-20 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl"} >
                     
-                {(chargingTime == '0:00:00' ) ? 
+                {/* {(chargingTime == '0:00:00' ) ?  */}
+                {(isChargingStarted == false ) ? 
                     <FadeLoader
                     color="#FF6D00"
                     loading={true}

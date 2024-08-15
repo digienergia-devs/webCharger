@@ -15,6 +15,26 @@ export default function AskOtpPage(props: any){
         console.log("user provided otp --- ", userProvidedOtp);
     }, [userProvidedOtp])
 
+
+    // useEffect(() => {
+
+    //     let temp = 1;
+    //     const test = async () => {
+    //         const response = await validateOtp(props.transactionId, temp.toString()).then((response: any) => {
+    //             console.log("response --- ", response);
+    //             if(response.status === 'Valid'){
+    //                 navigate('/ChargingSessionScreen');
+    //             }else{
+    //                temp = temp + 1;
+    //                test(); 
+    //             }
+    //         })
+    //     }
+
+    //     test();
+        
+    // }, [])
+
     const restoreSession = async () => {
         props.setOtp(userProvidedOtp);
         setIsInvalidOtp(false);
