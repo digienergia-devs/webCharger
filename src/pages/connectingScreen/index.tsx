@@ -50,6 +50,9 @@ export default function ConnectingScreen(props: any) {
 
   useEffect(() => {
     props.setChargerID(chargerID);
+    if (chargerID?.length > 2) {
+      startChargingConnection();
+    }
   }, [chargerID]);
 
   useEffect(() => {
@@ -70,17 +73,10 @@ export default function ConnectingScreen(props: any) {
       }
   };
 
-  useEffect(() => {
-    if (chargerID?.length > 2) {
-      startChargingConnection();
-    }
-  }, [chargerID]);
-
   const startChargingConnection = () => {
-    if (sessionID !== null) {
+    if (sessionID !== null) {  // somehow this session id is not using in this development phase... Double check it and remove this condition...
       return;
     }
-    // set loading spinner true
     setLoading(true);
     const initiateChargerConnection = async () => {
       try {
@@ -100,7 +96,7 @@ export default function ConnectingScreen(props: any) {
               // set loading spinner false
               setLoading(false);
               initiateChargerConnection();
-            }, 5000);
+            }, 1000);
           }
         }
         

@@ -67,8 +67,8 @@ export default function ChargingSessionScreen(props: any) {
                     let chargingSummary = await getChargingSummary(transactionId);
                     setChargingSessionSummary(chargingSummary);
                     setTimeout(() => {
-                        // let transactionRef = chargingSummary.transaction_ref;   // check this again with argon
-                        // setTransactionRef(transactionRef);
+                        let transactionRef = chargingSummary.transaction_ref;   // check this again with argon
+                        setTransactionRef(transactionRef);
                         let consumed_power = Number(chargingSummary.power_consumed);
                         let finalAmount = Number(chargingSummary.final_amount);
     
@@ -192,10 +192,10 @@ export default function ChargingSessionScreen(props: any) {
                     startCharging();
                 }else{
                     response = res;
-                    console.log("initial value --- ", res.meter_values[0].value)
+                    console.log("initial value --- ", res.meter_values[0].values)
                     if(res.meter_values.length == 1){
                         console.log("array length")
-                        setInitialMeterValue(res.meter_values[0].value);
+                        setInitialMeterValue(Number(res.meter_values[0].values));
                         setChargingPower(0);
                     } 
 
