@@ -75,7 +75,7 @@ export default function ChargingSessionScreen(props: any) {
                         let finalAmount = Number(chargingSummary.final_amount);
     
                         setChargingPower(Number(consumed_power.toFixed(2))); // Convert the string value to a number
-                        setChargingCost((Number(finalAmount.toFixed(2)))*1000);
+                        setChargingCost(Number(((Number(finalAmount))).toFixed(2)));
                     }, 1000);
                     localStorage.removeItem("transactionId");
                     localStorage.removeItem("sessionId");
@@ -144,11 +144,14 @@ export default function ChargingSessionScreen(props: any) {
             // }
             if(response){
                 if (response.status == 'success') {
-                    setChargingCost(Number(response.final_payment));
-                    setChargingPower((Number(response.power_consumed))/1000);
-                    // Set the timer later ...
-                    setIsChargingStopped(true);
-                    setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
+
+                        setChargingCost(Number(response.final_payment));
+                        setChargingPower((Number(response.power_consumed))/1000);
+                        // Set the timer later ...
+                        setIsChargingStopped(true);
+                        setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
+                    
+                    
                     
                 } else {
                     setTimeout(() => {
@@ -179,7 +182,7 @@ export default function ChargingSessionScreen(props: any) {
             let currentTime = new Date(current_time).getTime();
             let elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
             console.log("helsinki elapsed time --- ", elapsedTimeInSeconds);
-            formatTime(elapsedTimeInSeconds - 10800); // reduce three hours from UTC time. 
+            formatTime(elapsedTimeInSeconds - 10800); // reduce three hours from UTC time. Only for pilot project
         }
  
     }
@@ -383,7 +386,7 @@ export default function ChargingSessionScreen(props: any) {
                             'flex bg-iparkOrange200 w-full text-center justify-center rounded-md text-black text-md py-3' 
                             : 
                             (chargingTime == '0:00:00' ?
-                                'flex bg-iparkOrange200 w-full text-center justify-center rounded-md text-black text-md py-3' 
+                                'flex bg-red-600 w-full text-center justify-center rounded-md text-black text-md py-3' 
                                 :
                                 'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-md py-3'
                             )
