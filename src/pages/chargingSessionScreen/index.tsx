@@ -5,6 +5,7 @@ import FadeLoader from "react-spinners/FadeLoader";
 import Lottie from 'lottie-react';
 import batteryCharging from '../../assets/batteryCharging.json';
 import { useTranslation } from 'react-i18next';
+import { format } from 'path';
 
 export default function ChargingSessionScreen(props: any) {
     const [t, i18n] = useTranslation('global');
@@ -21,6 +22,7 @@ export default function ChargingSessionScreen(props: any) {
     const [transactionRef, setTransactionRef] = useState<string>('');
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const [invoiceEmailState, setInvoiceEmailState] = useState<string>('');
+    const [meterStartTime, setMeterStartTime] = useState<string>('');
     
     const [chargingSessionSummary, setChargingSessionSummary] = useState<{
         power_consumed: any,
@@ -69,11 +71,11 @@ export default function ChargingSessionScreen(props: any) {
                     setTimeout(() => {
                         let transactionRef = chargingSummary.transaction_ref;   // check this again with argon
                         setTransactionRef(transactionRef);
-                        let consumed_power = Number(chargingSummary.power_consumed);
+                        let consumed_power = (Number(chargingSummary.power_consumed))/1000;
                         let finalAmount = Number(chargingSummary.final_amount);
     
                         setChargingPower(Number(consumed_power.toFixed(2))); // Convert the string value to a number
-                        setChargingCost((Number(finalAmount.toFixed(2))));
+                        setChargingCost((Number(finalAmount.toFixed(2)))*1000);
                     }, 1000);
                     localStorage.removeItem("transactionId");
                     localStorage.removeItem("sessionId");
@@ -84,7 +86,7 @@ export default function ChargingSessionScreen(props: any) {
     }, [isChargingStopped])
 
     const formatTime = (seconds: number) => {
-        // console.log("elapsed time --- ", seconds);
+        console.log("elapsed time --- ", seconds);
 
         if (seconds < 0) {
             throw new Error('Input must be a non-negative number of seconds.');
@@ -106,7 +108,9 @@ export default function ChargingSessionScreen(props: any) {
                 await startChargingSession(transactionId).then((result: any) => {
                     res = result;
                     if(result.status == "charging" || result.status == "Charging"){
-                        runTimer();
+                        setTimeout(() => {
+                            // runTimer();
+                        }, 1000)
                         document.cookie = `myCookie=${sessionId}; expires=Wed, 31 Dec 2025 23:59:59 GMT; path=/ChargingSessionScreen`
                     } else if(result.status == "Available"){
                         setTimeout(() => {
@@ -141,7 +145,7 @@ export default function ChargingSessionScreen(props: any) {
             if(response){
                 if (response.status == 'success') {
                     setChargingCost(Number(response.final_payment));
-                    setChargingPower(Number(response.power_consumed));
+                    setChargingPower((Number(response.power_consumed))/1000);
                     // Set the timer later ...
                     setIsChargingStopped(true);
                     setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
@@ -159,60 +163,79 @@ export default function ChargingSessionScreen(props: any) {
         }
     }
 
-    const calculateChargingPrice = (amount: number) => {
-        let euros = amount / 100;
-        setChargingCost(Number(euros.toFixed(4)))
-    }
+    // const calculateChargingPrice = (amount: number) => {
+    //     let euros = amount / 100;
+    //     setChargingCost(Number(euros.toFixed(4)))
+    // }
 
     const runTimer = () => {
-        let tempTimer = timer;
-        const interval = setInterval(() => {
-            formatTime(tempTimer + 1);
-            // console.log("format timer ---");
-        }, 1000);
-//  console.log("after fomat timer ---");
+        console.log("meter start time --- ", meterStartTime);
 
-        return () => {
-            clearInterval(interval);
-        };
-    };
+        if(meterStartTime !== ''){
+            let myTimer = new Date(meterStartTime).toISOString();
+
+            let current_time = new Date().toISOString();
+            let startTime = new Date(myTimer).getTime();
+            let currentTime = new Date(current_time).getTime();
+            let elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
+            console.log("helsinki elapsed time --- ", elapsedTimeInSeconds);
+            formatTime(elapsedTimeInSeconds - 10800); // reduce three hours from UTC time. 
+        }
+ 
+    }
+
+    const startTimer = () => {
+        const interval = setInterval(() => {
+            if(isChargingStopped == true){
+                return;
+            }
+            runTimer();
+        }, 1000);
+        return () => clearInterval(interval);
+    }
+
+    useEffect(() => {
+        startTimer();
+    }, [meterStartTime]);
+
     const [initialMeterValue, setInitialMeterValue] = useState<number>(0);
     const [finalMeterValue, setFinalMeterValue] = useState<number>(0);
 
     useEffect(() => {
-        setChargingPower(finalMeterValue - initialMeterValue);
+        setChargingPower((finalMeterValue - initialMeterValue)/1000);
     }, [finalMeterValue])
 
     const getChargingSessionStatus = async (transactionID: string) => {
         let response;
         await chargingSessionStatus(transactionID).then(
             (res: any) => {
-                console.log("reading meter values --- ", res);
+                console.log("charging session status dim --- ", res);
+                setMeterStartTime(new Date(res.meter_start_time).toLocaleString());
+                console.log("meter start time --- ", res.meter_start_time);
                 if(res.charge_point_status == "preparing"){
                     startCharging();
                 }else{
                     response = res;
-                    console.log("initial value --- ", res.meter_values[0].values)
                     if(res.meter_values.length == 1){
-                        console.log("array length")
-                        setInitialMeterValue(Number(res.meter_values[0].values));
+                        setInitialMeterValue(Number(res.meter_values[0].value));
                         setChargingPower(0);
                     } 
 
                     if(res.meter_values.length > 1){
                         let objectLength = res.meter_values.length;
-                        setFinalMeterValue(res.meter_values[objectLength - 1].value);
+                        setInitialMeterValue(Number(res.meter_values[0].value));
+                        setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
                     }    
                     
                     // charging power is calculated inside the useEffect hook by checking 'firstMeterValue' and 'finalMeterValue'
                     // amount captures is also need to calculate at the same useEffect hook
                     
-                    setChargingCost(Number(res.amount));
+                    // setChargingCost(Number(res.amount));
                     // setTimer('0:00:00')
                     // setChargingTime('2:11:1') // this is the one need...
-                    if(res.time_elapsed) {
-                        formatTime((res.time_elapsed).toFixed(0));
-                    }
+                    // if(res.time_elapsed) {
+                    //     formatTime((res.time_elapsed).toFixed(0));
+                    // }
                     // calculateChargingPrice(((Number(res.meter_values.value.toFixed(2))) * Number(res.meter_values.unit_price.toFixed(2))));
                     // formatTime(2000);
                     if (res.charge_point_status == 'charging') {
