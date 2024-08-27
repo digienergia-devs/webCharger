@@ -12,9 +12,9 @@ import { useTranslation } from 'react-i18next';
 
 function App() {
 
-  const [chargerPower, setChargerPower] = useState<string>('25');
-  const [chargerRate, setChargerRate] = useState<string>('0.25');
-  const [idleRate, setIdleRate] = useState<string>('0.02');
+  const [chargerPower, setChargerPower] = useState<string>('');
+  const [chargerRate, setChargerRate] = useState<string>('');
+  const [idleRate, setIdleRate] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(false);
   const [language, setLanguage] = useState<string>('en');
@@ -52,6 +52,8 @@ function App() {
             setChargerPower={setChargerPower}
             chargerRate={chargerRate}
             setChargerRate={setChargerRate}
+            setIdleRate={setIdleRate}
+            
             idleRate={idleRate}
             handleChangeLanguage={handleChangeLanguage}
           />} />
@@ -89,6 +91,7 @@ function App() {
             chargerRate={chargerRate}
             setChargerRate={setChargerRate}
             setOtp={setOtp}
+            idleRate={idleRate}
             handleChangeLanguage={handleChangeLanguage}
            />}/>
            <Route path='/AskOtpPage' element={<AskOtpPage

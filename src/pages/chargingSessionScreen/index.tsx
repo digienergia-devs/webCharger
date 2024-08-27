@@ -278,7 +278,7 @@ export default function ChargingSessionScreen(props: any) {
 
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
-            <div className='flex flex-row-reverse w-full pr-5 pt-5'>
+            <div className='flex flex-row-reverse w-full pr-5 mt-14'>
             <select
                 value={props.language}
                 onChange={(e) => props.handleChangeLanguage(e.target.value)}
