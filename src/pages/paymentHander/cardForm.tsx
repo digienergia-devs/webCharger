@@ -53,10 +53,7 @@ export default function CardForm(props: any) {
 
     });
 
-    console.log("payment request can make request --- ", pr.canMakePayment());
-
     pr.canMakePayment().then((result) => {
-      console.log("result --- ", result);
       if (result) {
         setPaymentRequest(pr);
       }
@@ -125,8 +122,6 @@ export default function CardForm(props: any) {
       try {
         let sessionId = localStorage.getItem("sessionId");
         let paymentMethodId = paymentMethod.id;
-        console.log("paymentMethodId --- ", paymentMethod);
-        console.log("sessionId --- ", sessionId);
 
         const requestBody = {
           amount: props.selectedAmount,
@@ -137,7 +132,6 @@ export default function CardForm(props: any) {
           props.connectorID,
           requestBody
         ).then((res: any) => {
-          console.log("res from card form --- ", res);
           localStorage.setItem("transactionId", res.transaction_id);
           if (res.transaction_id) {
             props.setLoading(false);
@@ -156,7 +150,6 @@ export default function CardForm(props: any) {
   };
 
   const changePaymentMethod = () => {
-    console.log("change payment method clicked ---");
     if (paymentOption === 'card') {
       setPaymentOption('applePay');
     } else {

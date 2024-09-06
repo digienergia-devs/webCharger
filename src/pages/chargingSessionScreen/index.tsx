@@ -23,6 +23,10 @@ export default function ChargingSessionScreen(props: any) {
     const [userEmail, setUserEmail] = useState<string | null>(null);
     const [invoiceEmailState, setInvoiceEmailState] = useState<string>('');
     const [meterStartTime, setMeterStartTime] = useState<string>('');
+    const [isChargingSessionStoppedByUser, setIsChargingSessionStoppedByUser] = useState<boolean>(false);
+    useEffect(() => {
+        console.log("isChargingStoppedByUser --- ", isChargingSessionStoppedByUser);
+    }, [isChargingSessionStoppedByUser])
     
     const [chargingSessionSummary, setChargingSessionSummary] = useState<{
         power_consumed: any,
@@ -42,8 +46,6 @@ export default function ChargingSessionScreen(props: any) {
         }else {
             setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
         }
-
-        console.log("chargingTime --- ", chargingTime)
     }, [chargingTime])
 
     useEffect(() => {
@@ -86,8 +88,6 @@ export default function ChargingSessionScreen(props: any) {
     }, [isChargingStopped])
 
     const formatTime = (seconds: number) => {
-        console.log("elapsed time --- ", seconds);
-
         if (seconds < 0) {
             throw new Error('Input must be a non-negative number of seconds.');
         }
@@ -101,11 +101,11 @@ export default function ChargingSessionScreen(props: any) {
     const startCharging = async () => {
         try {
             const sessionId = sessionStorage.getItem("sessionId");
-            let transactionId = localStorage.getItem("transactionId"); 
-            setTransactionId(transactionId);
+            setTransactionId(props.transactionId);
             let res: any;
             try {
-                await startChargingSession(transactionId).then((result: any) => {
+                await startChargingSession(props.transactionId).then((result: any) => {
+
                     res = result;
                     if(result.status == "charging" || result.status == "Charging"){
                         setTimeout(() => {
@@ -119,7 +119,7 @@ export default function ChargingSessionScreen(props: any) {
                     }
 
                     setTimeout(() => {
-                         getChargingSessionStatus(transactionId!);
+                         getChargingSessionStatus(props.transactionId!);
                     }, 2000);
                 })
             } catch (error) {
@@ -134,25 +134,16 @@ export default function ChargingSessionScreen(props: any) {
 
     const stopChargingSessionButtonClick = async () => {
         setIsChargingStopButtonClicked(true);
-        let transactionId = localStorage.getItem("transactionId");
         try {
-            const response = await stopChargingSession(transactionId);
-            console.log("stop charging response --- ", response);
-            // if (response.message == 'Charging session stopped successfully') {
-            //     setIsChargingStopped(true);
-            //     setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
-            // }
+            const response = await stopChargingSession(props.transactionId);
             if(response){
                 if (response.status == 'success') {
-
+                    setIsChargingSessionStoppedByUser(true);
                         setChargingCost(Number(response.final_payment));
                         setChargingPower((Number(response.power_consumed))/1000);
                         // Set the timer later ...
                         setIsChargingStopped(true);
-                        setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
-                    
-                    
-                    
+                        setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));  
                 } else {
                     setTimeout(() => {
                         stopChargingSessionButtonClick();
@@ -166,14 +157,7 @@ export default function ChargingSessionScreen(props: any) {
         }
     }
 
-    // const calculateChargingPrice = (amount: number) => {
-    //     let euros = amount / 100;
-    //     setChargingCost(Number(euros.toFixed(4)))
-    // }
-
     const runTimer = () => {
-        console.log("meter start time --- ", meterStartTime);
-
         if(meterStartTime !== ''){
             let myTimer = new Date(meterStartTime).toISOString();
 
@@ -181,7 +165,6 @@ export default function ChargingSessionScreen(props: any) {
             let startTime = new Date(myTimer).getTime();
             let currentTime = new Date(current_time).getTime();
             let elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
-            console.log("helsinki elapsed time --- ", elapsedTimeInSeconds);
             formatTime(elapsedTimeInSeconds - 10800); // reduce three hours from UTC time. Only for pilot project
         }
  
@@ -210,50 +193,39 @@ export default function ChargingSessionScreen(props: any) {
 
     const getChargingSessionStatus = async (transactionID: string) => {
         let response;
-        await chargingSessionStatus(transactionID).then(
-            (res: any) => {
-                console.log("charging session status dim --- ", res);
-                setMeterStartTime(new Date(res.meter_start_time).toLocaleString());
-                console.log("meter start time --- ", res.meter_start_time);
-                if(res.charge_point_status == "preparing"){
-                    startCharging();
-                }else{
-                    response = res;
-                    if(res.meter_values.length == 1){
-                        setInitialMeterValue(Number(res.meter_values[0].value));
-                        setChargingPower(0);
-                    } 
+        if(!isChargingSessionStoppedByUser){
+            console.log("197 ---")
+            await chargingSessionStatus(transactionID).then(
+                (res: any) => {
+                    setMeterStartTime(new Date(res.meter_start_time).toLocaleString());
+                    if(res.charge_point_status == "preparing"){
+                        startCharging();
+                    }else{
+                        response = res;
+                        if(res.meter_values.length == 1){
+                            setInitialMeterValue(Number(res.meter_values[0].value));
+                            setChargingPower(0);
+                        } 
 
-                    if(res.meter_values.length > 1){
-                        let objectLength = res.meter_values.length;
-                        setInitialMeterValue(Number(res.meter_values[0].value));
-                        setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
-                    }    
-                    
-                    // charging power is calculated inside the useEffect hook by checking 'firstMeterValue' and 'finalMeterValue'
-                    // amount captures is also need to calculate at the same useEffect hook
-                    
-                    // setChargingCost(Number(res.amount));
-                    // setTimer('0:00:00')
-                    // setChargingTime('2:11:1') // this is the one need...
-                    // if(res.time_elapsed) {
-                    //     formatTime((res.time_elapsed).toFixed(0));
-                    // }
-                    // calculateChargingPrice(((Number(res.meter_values.value.toFixed(2))) * Number(res.meter_values.unit_price.toFixed(2))));
-                    // formatTime(2000);
-                    if (res.charge_point_status == 'charging') {
-                        setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
-                        setTimeout(() => {
-                            getChargingSessionStatus(transactionID);
-                        }, 60000)
-                    } else {
-                        setIsChargingStopped(true);
-                        setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
+                        if(res.meter_values.length > 1){
+                            let objectLength = res.meter_values.length;
+                            setInitialMeterValue(Number(res.meter_values[0].value));
+                            setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
+                        }    
+                        if (res.charge_point_status == 'charging') {
+                            setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
+                            setTimeout(() => {
+                                getChargingSessionStatus(transactionID);
+                            }, 60000)
+                        } else {
+                            setIsChargingStopped(true);
+                            setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
+                        }
                     }
+                    
                 }
-                
-            }
-        )
+            )
+        }
     }
 
     const requestEmailInvoice = async () => {
@@ -263,7 +235,6 @@ export default function ChargingSessionScreen(props: any) {
             "email": userEmail
           }
         await sendEmailInvoice(requestBody).then((res: any) => {
-            console.log("email invoice response --- ", res)
             res.status == 200 ? setInvoiceEmailState('sent') : setInvoiceEmailState('failed');
         })
     }
@@ -271,14 +242,13 @@ export default function ChargingSessionScreen(props: any) {
     useEffect(() => {
         if (!isChargingStarted || transactionId) {
             startCharging();
-            // getChargingSessionStatus();
             setIsChargingStarted(true);
         }
     }, [isChargingStarted, transactionId])
 
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
-            <div className='flex flex-row-reverse w-full pr-5 mt-14'>
+            <div className='flex flex-row-reverse w-full pr-5 mt-5'>
             <select
                 value={props.language}
                 onChange={(e) => props.handleChangeLanguage(e.target.value)}

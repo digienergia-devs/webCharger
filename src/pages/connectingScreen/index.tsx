@@ -62,7 +62,6 @@ export default function ConnectingScreen(props: any) {
 
   const fetchData = async (transactionId: string) => {
       setTransactionId(transactionId);
-      console.log("transaction id found from local storage --- ", transactionId); 
       try {
         let metervalues = await chargingSessionStatus(transactionId);
         

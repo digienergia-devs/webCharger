@@ -43,7 +43,6 @@ export async function startChargerConnection(chargerID: string, connectorID: str
 export async function authorizePayment(chargerID: string, connectorID: string, requestBody: any) {
     const endpoint = `payment/authorize_payment?charge_point_id=${chargerID}&connector_id=${connectorID}`;
     const payload = requestBody;
-    console.log("authorize body --- ", payload);
 
     try {
         const response = await api.post(endpoint, payload);
@@ -104,8 +103,6 @@ export async function getChargingSummary(transactionId: string | null){
 }
 
 export async function validateOtp(transactionId: any, otp: string) {
-    console.log("OTP --- ", otp);
-    console.log("transaction id --- ", transactionId)
     const endpoint = `/authentication/validate_otp?transaction_id=${transactionId}&otp=${otp}`;
     const payload = { };
 

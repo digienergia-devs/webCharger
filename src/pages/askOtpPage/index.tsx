@@ -11,36 +11,11 @@ export default function AskOtpPage(props: any){
 
     const [t, i18n] = useTranslation('global');
 
-    useEffect(() => {
-        console.log("user provided otp --- ", userProvidedOtp);
-    }, [userProvidedOtp])
-
-
-    // useEffect(() => {
-
-    //     let temp = 1;
-    //     const test = async () => {
-    //         const response = await validateOtp(props.transactionId, temp.toString()).then((response: any) => {
-    //             console.log("response --- ", response);
-    //             if(response.status === 'Valid'){
-    //                 navigate('/ChargingSessionScreen');
-    //             }else{
-    //                temp = temp + 1;
-    //                test(); 
-    //             }
-    //         })
-    //     }
-
-    //     test();
-        
-    // }, [])
-
     const restoreSession = async () => {
         props.setOtp(userProvidedOtp);
         setIsInvalidOtp(false);
         if((props.transactionId !== null) && (userProvidedOtp !== '')){
             const response = await validateOtp(props.transactionId, userProvidedOtp).then((response: any) => {
-                console.log("response --- ", response);
                 if(response.status === 'Valid'){
                     navigate('/ChargingSessionScreen');
                 }else{
@@ -54,10 +29,6 @@ export default function AskOtpPage(props: any){
     useEffect(() => {
         window.scrollTo(0, 0);
       }, []);
-
-    useEffect(() => {
-        console.log('transactionId in ask otp page --- ', props.transactionId)
-    }, [])
 
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">

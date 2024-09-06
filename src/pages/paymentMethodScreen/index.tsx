@@ -23,13 +23,6 @@ export default function PaymentMethodScreen(props: any) {
     useEffect(() => {
         window.scrollTo(0, 0);
       }, []);
-
-    // useEffect(() => {
-    //     const sessionId = localStorage.getItem('sessionId');
-    //     console.log("session id from local storage --- ", sessionId);
-    // }, []);
-
-
     const setLangua = (e: any) => {
         props.setLanguage(e)
         setLanguage(e);
