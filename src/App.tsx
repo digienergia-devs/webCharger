@@ -69,6 +69,7 @@ function App() {
             setChargerRate={setChargerRate}
             handleChangeLanguage={handleChangeLanguage}
             idleRate={idleRate}
+            setTransactionId={setTransactionId}
           />} />
           <Route path='/ChargingSessionScreen' element={<ChargingSessionScreen
           transactionId={transactionId}

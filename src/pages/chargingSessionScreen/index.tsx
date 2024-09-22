@@ -55,7 +55,8 @@ export default function ChargingSessionScreen(props: any) {
     }, [isChargingStopped])
 
     useEffect(() => {
-        setTransactionId(localStorage.getItem("transactionId"));
+        // setTransactionId(localStorage.getItem("transactionId"));
+        setTransactionId(props.transactionId);
     }, [])
 
     useEffect(() => {

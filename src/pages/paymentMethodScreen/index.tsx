@@ -107,6 +107,7 @@ export default function PaymentMethodScreen(props: any) {
                                         chargerID={props.chargerID}
                                         connectorID={props.connectorID}
                                         setOtp={props.setOtp}
+                                        setTransactionId={props.setTransactionId}
                                     />
                                 </Elements>
                             </div>

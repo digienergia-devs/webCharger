@@ -133,6 +133,7 @@ export default function CardForm(props: any) {
           requestBody
         ).then((res: any) => {
           localStorage.setItem("transactionId", res.transaction_id);
+          props.setTransactionId(res.transaction_id)
           if (res.transaction_id) {
             props.setLoading(false);
             // navigate('/ChargingSessionScreen')
