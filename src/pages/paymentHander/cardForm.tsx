@@ -69,7 +69,7 @@ export default function CardForm(props: any) {
         }
         const responseData = await authorizePayment(
           props.chargerID,
-          props.connectorID,
+          props.connectorIDFromChargePointEndpoint,
           requestBody
         ).then((res) => {
           localStorage.setItem("transactionId", res.transaction_id);
@@ -127,6 +127,7 @@ export default function CardForm(props: any) {
           amount: props.selectedAmount,
           payment_method: paymentMethodId
         }
+        console.log("dan connector ID --- ", props.connectorID);
         const responseData = await authorizePayment(
           props.chargerID,
           props.connectorID,

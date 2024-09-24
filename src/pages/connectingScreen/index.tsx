@@ -32,7 +32,7 @@ export default function ConnectingScreen(props: any) {
     let response: any;
     try {
       response = await getChargerDetails(chargerID);
-
+      props.setConnectorIDFromChargePointEndpoint(response.connector_id);
       setChargerID(response.charge_point_id);
       setConnectorID(response.connector_id);
       props.setChargerPower(Number(response.power[0])/1000);

@@ -20,7 +20,9 @@ function App() {
   const [language, setLanguage] = useState<string>('en');
 
   const [chargerID, setChargerID] = useState<string>();
-  const [connectorID, setConnectorID] = useState<string>()
+  const [connectorIDFromUrl, setConnectorIDFromUrl] = useState<string>()
+
+  const [connectorIDFromChargePointEndpoint, setConnectorIDFromChargePointEndpoint] = useState<string>()
 
   const [transactionId, setTransactionId] = useState<string>();
   const [otp, setOtp] = useState<string>();
@@ -45,7 +47,7 @@ function App() {
           <Route path='/:number' element={<ConnectingScreen
             language={language}
             setLanguage={changeLanguage}
-            setConnectorID={setConnectorID}
+            setConnectorID={setConnectorIDFromUrl}
             setChargerID={setChargerID}
             setTransactionId={setTransactionId}
             chargerPower={chargerPower}
@@ -53,7 +55,7 @@ function App() {
             chargerRate={chargerRate}
             setChargerRate={setChargerRate}
             setIdleRate={setIdleRate}
-            
+            setConnectorIDFromChargePointEndpoint={setConnectorIDFromChargePointEndpoint}
             idleRate={idleRate}
             handleChangeLanguage={handleChangeLanguage}
           />} />
@@ -61,7 +63,7 @@ function App() {
             language={language}
             setLanguage={changeLanguage}
             chargerID={chargerID}
-            connectorID={connectorID}
+            connectorID={connectorIDFromUrl}
             setOtp={setOtp}
             chargerPower={chargerPower}
             setChargerPower={setChargerPower}
@@ -70,13 +72,14 @@ function App() {
             handleChangeLanguage={handleChangeLanguage}
             idleRate={idleRate}
             setTransactionId={setTransactionId}
+            connectorIDFromChargePointEndpoint={connectorIDFromChargePointEndpoint}
           />} />
           <Route path='/ChargingSessionScreen' element={<ChargingSessionScreen
           transactionId={transactionId}
             language={language}
             setLanguage={changeLanguage}
             chargerID={chargerID}
-            connectorID={connectorID}
+            connectorID={connectorIDFromUrl}
             chargerPower={chargerPower}
             setChargerPower={setChargerPower}
             chargerRate={chargerRate}

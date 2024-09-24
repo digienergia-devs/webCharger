@@ -31,10 +31,11 @@ export default function PaymentMethodScreen(props: any) {
     const SelectAmountComponent = () => {
         return (
             <div className="flex flex-row justify-around w-full pb-4">
-                <div className={selectedAmount == 1000 ? 'flex bg-iparkOrange800 rounded-md border border-iparkOrange800 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-iparkOrange800 p-2'} onClick={() => selectAmountHandler(102)}>€10</div>
+                <button onClick={() => selectAmountHandler(3000)} className="flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md">Procced with €30</button>
+                {/* <div className={selectedAmount == 1000 ? 'flex bg-iparkOrange800 rounded-md border border-iparkOrange800 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-iparkOrange800 p-2'} onClick={() => selectAmountHandler(102)}>€10</div>
                 <div className={selectedAmount == 2000 ? 'flex bg-iparkOrange800 rounded-md border border-iparkOrange800 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-iparkOrange800 p-2'} onClick={() => selectAmountHandler(2000)}>€20</div>
                 <div className={selectedAmount == 4000 ? 'flex bg-iparkOrange800 rounded-md border border-iparkOrange800 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-iparkOrange800 p-2'} onClick={() => selectAmountHandler(4000)}>€40</div>
-                <div className={selectedAmount == 6000 ? 'flex bg-iparkOrange800 rounded-md border border-iparkOrange800 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-iparkOrange800 p-2'} onClick={() => selectAmountHandler(6000)}>€60</div>
+                <div className={selectedAmount == 6000 ? 'flex bg-iparkOrange800 rounded-md border border-iparkOrange800 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-iparkOrange800 p-2'} onClick={() => selectAmountHandler(6000)}>€60</div> */}
             </div>
         )
     }
@@ -108,6 +109,7 @@ export default function PaymentMethodScreen(props: any) {
                                         connectorID={props.connectorID}
                                         setOtp={props.setOtp}
                                         setTransactionId={props.setTransactionId}
+                                        connectorIDFromChargePointEndpoint={props.connectorIDFromChargePointEndpoint}
                                     />
                                 </Elements>
                             </div>

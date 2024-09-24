@@ -195,7 +195,6 @@ export default function ChargingSessionScreen(props: any) {
     const getChargingSessionStatus = async (transactionID: string) => {
         let response;
         if(!isChargingSessionStoppedByUser){
-            console.log("197 ---")
             await chargingSessionStatus(transactionID).then(
                 (res: any) => {
                     setMeterStartTime(new Date(res.meter_start_time).toLocaleString());
@@ -204,11 +203,13 @@ export default function ChargingSessionScreen(props: any) {
                     }else{
                         response = res;
                         if(res.meter_values.length == 1){
+                            setChargingCost(Number(res.amount))
                             setInitialMeterValue(Number(res.meter_values[0].value));
                             setChargingPower(0);
                         } 
 
                         if(res.meter_values.length > 1){
+                            setChargingCost(Number(res.amount))
                             let objectLength = res.meter_values.length;
                             setInitialMeterValue(Number(res.meter_values[0].value));
                             setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
