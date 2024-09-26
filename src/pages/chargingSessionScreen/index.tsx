@@ -24,9 +24,20 @@ export default function ChargingSessionScreen(props: any) {
     const [invoiceEmailState, setInvoiceEmailState] = useState<string>('');
     const [meterStartTime, setMeterStartTime] = useState<string>('');
     const [isChargingSessionStoppedByUser, setIsChargingSessionStoppedByUser] = useState<boolean>(false);
+    const [showSpinner, setShowSpinner] = useState<boolean>(false);
     useEffect(() => {
         console.log("isChargingStoppedByUser --- ", isChargingSessionStoppedByUser);
     }, [isChargingSessionStoppedByUser])
+
+    useEffect(() => {
+        if(isChargingStarted == false && isChargingStopped == false){
+            setShowSpinner(true);
+        } else if (isChargingStarted == true && isChargingStopped == false){
+            setShowSpinner(false);
+        } else if(isChargingStopped == true){
+            setShowSpinner(false);
+        }
+    }, [isChargingStopped, isChargingStarted])
     
     const [chargingSessionSummary, setChargingSessionSummary] = useState<{
         power_consumed: any,
@@ -45,6 +56,7 @@ export default function ChargingSessionScreen(props: any) {
             setStopChargingButtonText(t("chargingSessionScreen.preparing")); 
         }else {
             setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
+            setIsChargingStarted(true); // when charging session starts, timer start to run.
         }
     }, [chargingTime])
 
@@ -67,7 +79,6 @@ export default function ChargingSessionScreen(props: any) {
         setTimeout(() => {
 
             if(isChargingStopped){
-
                 const fetchData = async () => {
                     let chargingSummary = await getChargingSummary(transactionId);
                     setChargingSessionSummary(chargingSummary);
@@ -86,6 +97,7 @@ export default function ChargingSessionScreen(props: any) {
                 fetchData();
             }
         }, 2000)
+        
     }, [isChargingStopped])
 
     const formatTime = (seconds: number) => {
@@ -111,6 +123,7 @@ export default function ChargingSessionScreen(props: any) {
                     if(result.status == "charging" || result.status == "Charging"){
                         setTimeout(() => {
                             // runTimer();
+                            
                         }, 1000)
                         document.cookie = `myCookie=${sessionId}; expires=Wed, 31 Dec 2025 23:59:59 GMT; path=/ChargingSessionScreen`
                     } else if(result.status == "Available"){
@@ -195,38 +208,41 @@ export default function ChargingSessionScreen(props: any) {
     const getChargingSessionStatus = async (transactionID: string) => {
         let response;
         if(!isChargingSessionStoppedByUser){
-            await chargingSessionStatus(transactionID).then(
-                (res: any) => {
-                    setMeterStartTime(new Date(res.meter_start_time).toLocaleString());
-                    if(res.charge_point_status == "preparing"){
-                        startCharging();
-                    }else{
-                        response = res;
-                        if(res.meter_values.length == 1){
-                            setChargingCost(Number(res.amount))
-                            setInitialMeterValue(Number(res.meter_values[0].value));
-                            setChargingPower(0);
-                        } 
-
-                        if(res.meter_values.length > 1){
-                            setChargingCost(Number(res.amount))
-                            let objectLength = res.meter_values.length;
-                            setInitialMeterValue(Number(res.meter_values[0].value));
-                            setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
-                        }    
-                        if (res.charge_point_status == 'charging') {
-                            setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
-                            setTimeout(() => {
-                                getChargingSessionStatus(transactionID);
-                            }, 60000)
-                        } else {
-                            setIsChargingStopped(true);
-                            setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
+            if(!isChargingStopped){
+                await chargingSessionStatus(transactionID).then(
+                    (res: any) => {
+                        setMeterStartTime(new Date(res.meter_start_time).toLocaleString());
+                        if(res.charge_point_status == "preparing"){
+                            startCharging();
+                        }else{
+                            response = res;
+                            if(res.meter_values.length == 1){
+                                setChargingCost(Number(res.amount))
+                                setInitialMeterValue(Number(res.meter_values[0].value));
+                                setChargingPower(0);
+                            } 
+    
+                            if(res.meter_values.length > 1){
+                                setChargingCost(Number(res.amount))
+                                let objectLength = res.meter_values.length;
+                                setInitialMeterValue(Number(res.meter_values[0].value));
+                                setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
+                            }    
+                            if (res.charge_point_status == 'charging') {
+                                setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
+                                setTimeout(() => {
+                                    getChargingSessionStatus(transactionID);
+                                }, 60000)
+                            } else {
+                                setIsChargingStopped(true);
+                                // setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
+                            }
                         }
+                        
                     }
-                    
-                }
-            )
+                )
+            }
+            
         }
     }
 
@@ -244,7 +260,7 @@ export default function ChargingSessionScreen(props: any) {
     useEffect(() => {
         if (!isChargingStarted || transactionId) {
             startCharging();
-            setIsChargingStarted(true);
+            
         }
     }, [isChargingStarted, transactionId])
 
@@ -263,6 +279,7 @@ export default function ChargingSessionScreen(props: any) {
             </div>
             <div className="flex flex-row justify-between w-full pl-5 pr-5">
                 <div className="flex flex-col bg-white py-5 my-5 font-bold rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 w-full " style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                    
                     <div className='flex flex-row justify-between text-xs pl-10 pr-10'>
                         <div>
                             {props.chargerPower} KW
@@ -299,7 +316,7 @@ export default function ChargingSessionScreen(props: any) {
                 <div className={isChargingStopped ? "flex py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" : "flex py-5 -mb-20 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl"} >
                     
                 {/* {(chargingTime == '0:00:00' ) ?  */}
-                {(isChargingStarted == false ) ? 
+                {(showSpinner == true ) ? 
                     <FadeLoader
                     color="#FF6D00"
                     loading={true}
@@ -344,34 +361,36 @@ export default function ChargingSessionScreen(props: any) {
                         </div>
                         : null
                     }
-                <div className="flex justify-center flex-col items-center w-5/6 pb-5">
                 
-                        {isChargingStopButtonClicked ?
-                        
+                {(showSpinner == false) ? 
+                    <div className="flex justify-center flex-col items-center w-5/6 pb-5">
+                    
+                    {isChargingStopButtonClicked ?
+                    
                         <FadeLoader
                             color="#FF6D00"
                             loading={true}
                             aria-label="Loading Spinner"
                             data-testid="loader"
                         /> : 
+                        (
+                            isChargingStopped == false ?
                             <button className={(isChargingStopped ? 
                             'flex bg-iparkOrange200 w-full text-center justify-center rounded-md text-black text-md py-3' 
                             : 
-                            (chargingTime == '0:00:00' ?
-                                'flex bg-red-600 w-full text-center justify-center rounded-md text-black text-md py-3' 
-                                :
                                 'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-md py-3'
-                            )
-                            
                             )} onClick={stopChargingSessionButtonClick}>
                                 {stopChargingButtonText}
-                            </button>
-                 
-                         }
-
-                         
-
-                </div>
+                            </button> : 
+                            <></>
+                        )
+            
+                    }
+                    </div>
+                :
+                <></>
+                }
+                
                 <div className="flex justify-center flex-col items-center text-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-sxl">
                 {
                     isChargingStopped ? 
