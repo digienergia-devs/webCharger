@@ -8,11 +8,18 @@ const api = axios.create({
     baseURL: API_BASE_URL,
 });
 
+export async function getChargerDetails(chargerID: string | null ){
+    const endpoint = `chargepoint/${chargerID}`;
 
+    try {
+        const response = await api.get(endpoint);
+        return response.data;
+    } catch (error: any) {
+        throw error.response;
+    }
+}
 
 export async function startChargerConnection(chargerID: string, connectorID: string) {
-    console.log("chargerID --- ", chargerID);
-    console.log("connectorID --- ", connectorID);
     const endpoint = `chargepoint/${chargerID}/${connectorID}`;
 
     /* { this should be in the request body
@@ -36,11 +43,10 @@ export async function startChargerConnection(chargerID: string, connectorID: str
 export async function authorizePayment(chargerID: string, connectorID: string, requestBody: any) {
     const endpoint = `payment/authorize_payment?charge_point_id=${chargerID}&connector_id=${connectorID}`;
     const payload = requestBody;
-    console.log("authorize body --- ", payload);
 
     try {
         const response = await api.post(endpoint, payload);
-        return response.data;
+         return response.data;
     } catch (error: any) {
         console.error("Error:", error.response);
         throw error.response;
@@ -94,4 +100,30 @@ export async function getChargingSummary(transactionId: string | null){
             throw error.response;
         }
     }
+}
+
+export async function validateOtp(transactionId: any, otp: string) {
+    const endpoint = `/authentication/validate_otp?transaction_id=${transactionId}&otp=${otp}`;
+    const payload = { };
+
+    try {
+        const response = await api.post(endpoint, payload);
+        return response.data;
+    } catch (error: any) {
+        throw error.response;
+    }
+}
+
+export async function sendEmailInvoice(requestOption: any){
+    const endpoint = `/invoices/payment_receipt`;
+    const payload = requestOption;
+
+    try {
+        const response = await api.post(endpoint, payload);
+        return response;
+    } catch (error: any) {
+        throw error.response;
+    }
+
+
 }

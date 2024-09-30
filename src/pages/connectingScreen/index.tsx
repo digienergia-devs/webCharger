@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import { startChargerConnection, chargingSessionStatus } from "../../api/api";
+import { startChargerConnection, chargingSessionStatus, getChargerDetails } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import Language from "../language";
 import { useLocation } from "react-router-dom";
 import FadeLoader from "react-spinners/FadeLoader";
+import Lottie from "lottie-react";
+import connectCable from "../../assets/connectCable.json";
+import { useTranslation } from "react-i18next";
 
 export default function ConnectingScreen(props: any) {
   const [headerInfo, setHeaderInfo] = useState<string>("Insert Cable");
@@ -17,77 +20,83 @@ export default function ConnectingScreen(props: any) {
   const [sessionID, setSessionID] = useState<any>(null);
   const [language, setLanguage] = useState<string>(props.language);
   const [transactionId, setTransactionId] = useState<any>(null);
+  const [t, i18n] = useTranslation('global');
   
   useEffect(() => {
-    setChargerID(queryParams.get("chargerId"));
-    setConnectorID(queryParams.get("connectorId"));
-    if(localStorage.getItem("sessionId") !== null){
-      let sessionId = localStorage.getItem("sessionId");
-      // setSessionID(sessionId);
-      console.log("session id found from local storage --- ", sessionId); 
+    let url = window.location.href;
+    let alias: any = url.split("/").pop();
+    getChargePointDetails(alias);
+  }, []);
+
+  const getChargePointDetails = async (chargerID: string | null) => {
+    let response: any;
+    try {
+      response = await getChargerDetails(chargerID);
+      props.setConnectorIDFromChargePointEndpoint(response.connector_id);
+      setChargerID(response.charge_point_id);
+      setConnectorID(response.connector_id);
+      props.setChargerPower(Number(response.power[0])/1000);
+      props.setChargerRate(response.unit_price);
+      props.setIdleRate(response.idle_fee);
+
+      // get the charger power and charging rate from using the backend --- Inform to Argon
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
     props.setChargerID(chargerID);
+    if (chargerID?.length > 2) {
+      startChargingConnection();
+    }
   }, [chargerID]);
 
   useEffect(() => {
     props.setConnectorID(connectorID);
   }, [connectorID]);
 
-    const fetchData = async (transactionId: string) => {
-        setTransactionId(transactionId);
-        console.log("transaction id found from local storage --- ", transactionId); 
-        try {
-          let metervalues = await chargingSessionStatus(transactionId);
-          
-          if(metervalues.charge_point_status == 'Charging' || metervalues.charge_point_status == 'Finishing'){
-            console.log("metervalues.charge_point_status --- ", metervalues.charge_point_status);
-            navigate('/ChargingSessionScreen')
-          }
-        } catch (error) {
-          console.error(error); 
+  const fetchData = async (transactionId: string) => {
+      setTransactionId(transactionId);
+      try {
+        let metervalues = await chargingSessionStatus(transactionId);
+        
+        if(metervalues.charge_point_status == 'charging' || metervalues.charge_point_status == 'finished'){
+          navigate('/ChargingSessionScreen')
         }
-    };
-
-    
-
-
-  useEffect(() => {
-
-    let transactionId = localStorage.getItem("transactionId");
-    if(transactionId !== null){
-      fetchData(transactionId);
-    }
-
-    if (chargerID?.length > 2) {
-      startChargingConnection();
-    }
-  }, [chargerID]);
+      } catch (error) {
+        console.error(error); 
+      }
+  };
 
   const startChargingConnection = () => {
-    if (sessionID !== null) {
+    if (sessionID !== null) {  // somehow this session id is not using in this development phase... Double check it and remove this condition...
       return;
     }
-
+    setLoading(true);
     const initiateChargerConnection = async () => {
-
       try {
         const response = await startChargerConnection(chargerID, connectorID);
-        console.log("response --- ", response);
-        if(response.status == 'Charging'){
+        props.setTransactionId(response.transaction_id);
+        if(response.status == 'Charging' || response.status == 'Occupied'){ // in future this state can be 'Charging' and 'Occupied' both
           setHeaderInfo("Charger in use")
+          navigate('/AskOtpPage')
         } else {
           setHeaderInfo("Insert Cable");
-          if (response.status == 'Available' || response.status == 'Preparing') {
-            // setSessionID(response.sessionID);
-            // localStorage.setItem("sessionId", response.session_id);
+          if (response.status == 'Preparing' || response.status == 'Finishing') {
+            // set loading spinner false
+            setLoading(false);
             navigate("/PaymentMethodScreen");
           } else {
             setTimeout(() => {
+              // set loading spinner false
+              setLoading(false);
               initiateChargerConnection();
-            }, 5000);
+            }, 1000);
           }
         }
         
@@ -104,92 +113,139 @@ export default function ConnectingScreen(props: any) {
     setLanguage(e);
   };
 
-  return (
-    <div className="flex flex-col justify-center items-center h-screen w-screen bg-green-600">
+  if(loading){
+    return (
+      <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
+        <div className='flex flex-row-reverse w-full pr-5 pt-5'>
+            <select
+                value={props.language}
+                onChange={(e) => props.handleChangeLanguage(e.target.value)}
+                className="bg-white border border-gray-300 rounded-md text-xs focus:outline-none"
+            >
+                <option value="fi">FI</option>
+                <option value="en">EN</option>
+                {/* <option value="sw">SW</option> */}
+            </select>
+            </div>
+        <div className="flex flex-row justify-between w-full pl-5 pr-5">
+                <div className="flex bg-white py-5 my-5 font-bold rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 w-full justify-between text-xs pl-10 pr-10" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                    <div>
+                    {props.chargerPower} KW
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    {/* Power */}
+                    {t("generalDetails.power")}
+                    </div>
+                    </div>
+                    <div>
+                    {props.chargerRate} €/kWh
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    {/* Unit price */}
+                    {t("generalDetails.unitPrice")}
+                    </div>
+                    </div>
+                    <div>
+                    {props.idleRate} €/min
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    {/* Idle fee */}
+                    {t("generalDetails.idleFee")}
+                    </div>
+                    </div>
+                </div>
+            </div>
 
-      <div className="flex justify-center items-center h-2/´6">
-        <img src={require("../../assets/icons/Final3.png")} alt="" />
-      </div>
-      <div className="flex flex-col justify-center items-center h-1/6 w-full">
-        <div className="flex justify-center items-center h-1/2"></div>
-        <div className="flex h-1/2 justify-center items-center text-center rounded-tl-30 rounded-tr-30 bg-green-500 w-5/6 shadow-md text-white font-bold text-md md:text-xl xl:text-2xl">
-          <p className={headerInfo == 'Charger in use' ? "m-0 text-red-500" : "m-0"}>{headerInfo}</p>
+        <div className="flex justify-center items-center h-1/6">
+          <img src={require("../../assets/icons/Final3.png")} alt="" />
+        </div>
+        <div className="flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white pt-5">
+          <div className="flex w-full h-1/2 items-center justify-center flex-col">
+              <FadeLoader
+                color="#FF6D00"
+                // loading={isLoading}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+                />
+                <div className="text-center text-gray-500 mt-4 animate-pulse">
+            {t("connectingScreen.connectionEstabllishMessage")}
+          </div>
+          </div>
+          
         </div>
       </div>
-      <div className="flex flex-col justify-center rounded-tl-30 rounded-tr-30 items-center h-4/6 w-screen bg-white">
-        <FadeLoader
-          color="#38A169"
-          loading={true}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-        <div
-          className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl"
-          style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
-        >
-          <span>1.Connect cable to the car</span>
-          <span>2.Connect cable to the socket</span>
+    )
+  } else {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
+        <div className='flex flex-row-reverse w-full pr-5 pt-5'>
+            <select
+                value={props.language}
+                onChange={(e) => props.handleChangeLanguage(e.target.value)}
+                className="bg-white border border-gray-300 rounded-md text-xs focus:outline-none"
+            >
+                <option value="fi">FI</option>
+                <option value="en">EN</option>
+                {/* <option value="sw">SW</option> */}
+            </select>
+            </div>
+        <div className="flex flex-row justify-between w-full pl-5 pr-5">
+                <div className="flex bg-white py-5 my-5 font-bold rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 w-full justify-between text-xs pl-10 pr-10" style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
+                    <div>
+                    {props.chargerPower} KW
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    {/* Power */}
+                    {t("generalDetails.power")}
+                    </div>
+                    </div>
+                    <div>
+                    {props.chargerRate} €/kWh
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    {/* Unit price */}
+                    {t("generalDetails.unitPrice")}
+                    </div>
+                    </div>
+                    <div>
+                    {props.idleRate} €/min
+                    <br />
+                    <div className='flex text-gray-400 font-light'>
+                    {/* Idle fee */}
+                    {t("generalDetails.idleFee")}
+                    </div>
+                    </div>
+                </div>
+            </div>
+  
+        <div className="flex justify-center items-center h-1/6">
+          <img src={require("../../assets/icons/Final3.png")} alt="" />
         </div>
-        <div
-          className="flex p-5 m-5 justify-center flex-col items-center w-5/6"
-          style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
-        >
-          <img
-            src={require("../../assets/icons/carAtChargingPole.png")}
-            alt=""
-          />
-        </div>
-        <div
-          className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-gray-400 text-sm md:text-xl xl:text-2xl"
-          style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
-        >
-
-          <span>
-            We will process automatically once charger cable is connected
-          </span>
+        <div className="flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white pt-5">
+          <div
+            className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black text-sm md:text-ms xl:text-xl"
+            
+          >
+            <span>1.{t("connectingScreen.connectCableToTheCar")}</span>
+            <span>2.{t("connectingScreen.connectCableToTheSocket")}</span>
+          </div>
+          <div
+            className="flex p-5 m-5 justify-center flex-col items-center w-5/6 -my-10"
+            style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.2)" }}
+          >
+            <Lottie className="flex h-1/2" animationData={connectCable} />
+          </div>
+          <div
+            className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 text-center rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black text-sm md:text-md xl:text-xl">
+  
+            <span>
+              {t("connectingScreen.cableConnectionMessage")}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-    // <div className='main-container-connecting-screen'>
-    //     <Language
-    //         setLan={setLangua}
-    //         language={language} />
-    //     <div className='company-branding-connecting-screen'>
-    //         <img src={require('../../assets/icons/icon.png')} alt="" />
-    //         <p>plugKaro</p>
-    //     </div>
+    );
+  }
 
-    //     {chargerID !== undefined && chargerID !== null
-    //         ?
-    //         <div className='loading-container'>
-    //             <FadeLoader
-    //                 color="#cacfd9"
-    //                 loading={loading}
-    //                 aria-label="Loading Spinner"
-    //                 data-testid="loader"
-    //             />
-    //         </div>
-    //         :
-    //         <div id='reader'></div>
-    //     }
-
-    //     <div className='body-container-connecting-screen'>
-    //         <div className='information-header-connecting-screen'>
-    //             {language == 'EN' ? 'Insert cable' : 'Aseta kaapeli'}
-    //         </div>
-    //         <div className='information-body-connecting-screen'>
-    //             {language == 'EN' ? '01. Connect cable to the car' : ' 01. Liitä kaapeli autoon'}
-    //         </div>
-    //         <div className='information-body-connecting-screen'>
-    //             {language == 'EN' ? '02. Connect cable to the socket' : '02. Liitä kaapeli pistorasiaan'}
-    //         </div>
-    //         <div className='general-information-connecting-screen'>
-    //             {language == 'EN' ? 'We will proceed automatically once charger cable is connected' : 'Jatkamme automaattisesti, kun latauskaapeli on liitetty'}
-    //         </div>
-    //     </div>
-    //     <div className='footer-connecting-screen'>
-    //         <img src={require('../../assets/icons/charging-station.png')} alt="" />
-    //     </div>
-    // </div>
-  );
+  
 }

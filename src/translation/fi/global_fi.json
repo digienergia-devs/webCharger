@@ -1,0 +1,35 @@
+{
+    "generalDetails" : {
+        "power" : "Tehoa",
+        "unitPrice" : "Yksikköhinta",
+        "idleFee" : "Tyhjäkäyntimaksu",
+        "otp" : "OTP on istunnon palauttamista varten :- "
+    },
+    "connectingScreen" : {
+        "connectionEstabllishMessage" : "Odota, aloitamme latausistunnon...",
+        "connectCableToTheCar" : "Liitä kaapeli autoon",
+        "connectCableToTheSocket" : "liitä kaapeli pistorasiaan",
+        "cableConnectionMessage" : "Käsittelemme automaattisesti, kun latauskaapeli on kytketty"
+    },
+    "paymentMethodScreen" : {
+        "paymentAuthorization" : "Maksun valtuutus"
+    },
+    "cardFormScreen" : {
+        "pay" : "Maksaa",
+        "applePayGooglePayNotAvailable" : "Apple Pay / Google Pay ei ole saatavilla juuri nyt.",
+        "pleaseSelectAnotherPaymentOption" : "Valitse toinen maksuvaihtoehto alta.",
+        "payWithSomethingElse" : "Maksa jollain muulla",
+        "paymetnMethodSelectedBasedOnDevice" : "Maksutapa valitaan laitteesi perusteella."
+    },
+    "otpPage" : {
+        "keepOtpSafe" : "Pidä tämä OTP turvassa.",
+        "youNeedOtpAgain" : "Tarvitset sitä latausistunnon palauttamiseen.",
+        "proceedToChargingScreen" : "Siirry latausnäyttöön"
+    },
+    "chargingSessionScreen" : {
+        "preparing" : "Valmistellaan",
+        "stopCharging" : "Lopeta lataaminen",
+        "chargingStoped" : "Lataus pysäytetty",
+        "invoiceSent" : "Lasku lähetetty!"
+    }
+}

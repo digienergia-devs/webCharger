@@ -10,6 +10,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import "./cardForm.css";
 import { useNavigate } from 'react-router-dom';
 import FadeLoader from "react-spinners/FadeLoader";
+import { useTranslation } from "react-i18next";
 
 const stripePromise = loadStripe("pk_test_01QZ55AeQfGutsrsRjjkToqz");
 export default function CardForm(props: any) {
@@ -20,7 +21,11 @@ export default function CardForm(props: any) {
   const [payButtonClicked, setPayButtonClicked] = useState<boolean>(false);
   const [language, setLanguage] = useState<string | undefined>(props.language)
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
-  const [authAmount, setAuthAmount] = useState<any>(props.selectedAmount)
+  const [authAmount, setAuthAmount] = useState<any>(props.selectedAmount);
+  const [loading, setIsLoading] = useState<boolean>(true);
+  const [t, i18n] = useTranslation('global');
+
+  const [paymentOption, setPaymentOption] = useState<string>('applePay');
 
   useEffect(() => {
     setAuthAmount(props.selectedAmount)
@@ -48,10 +53,7 @@ export default function CardForm(props: any) {
 
     });
 
-    console.log("payment request can make request --- ", pr.canMakePayment());
-
     pr.canMakePayment().then((result) => {
-      console.log("result --- ", result);
       if (result) {
         setPaymentRequest(pr);
       }
@@ -67,16 +69,29 @@ export default function CardForm(props: any) {
         }
         const responseData = await authorizePayment(
           props.chargerID,
-          props.connectorID,
+          props.connectorIDFromChargePointEndpoint,
           requestBody
         ).then((res) => {
+          localStorage.setItem("transactionId", res.transaction_id);
+          if (res.transaction_id) {
+            ev.complete("success");
+            props.setLoading(false);
+            // navigate('/ChargingSessionScreen')
+            props.setOtp(res.otp)
+            navigate('/OtpScreen')
+          }
         });
-        ev.complete("success");
-        navigate('/ChargingSessionScreen')
+        // navigate('/ChargingSessionScreen')
       } catch (error) {
         console.error("Payment authorization failed:", error);
       }
     });
+    // if(!paymentRequest){
+    //   setPaymentOption('card');
+    // }
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
   }
 
   const handleSubmit = async (event: any) => {
@@ -107,23 +122,24 @@ export default function CardForm(props: any) {
       try {
         let sessionId = localStorage.getItem("sessionId");
         let paymentMethodId = paymentMethod.id;
-        console.log("paymentMethodId --- ", paymentMethod);
-        console.log("sessionId --- ", sessionId);
 
         const requestBody = {
           amount: props.selectedAmount,
           payment_method: paymentMethodId
         }
+        console.log("dan connector ID --- ", props.connectorID);
         const responseData = await authorizePayment(
           props.chargerID,
           props.connectorID,
           requestBody
         ).then((res: any) => {
-          console.log("res from card form --- ", res);
           localStorage.setItem("transactionId", res.transaction_id);
+          props.setTransactionId(res.transaction_id)
           if (res.transaction_id) {
             props.setLoading(false);
-            navigate('/ChargingSessionScreen')
+            // navigate('/ChargingSessionScreen')
+            props.setOtp(res.otp)
+            navigate('/OtpScreen')
           }
 
         })
@@ -135,39 +151,85 @@ export default function CardForm(props: any) {
 
   };
 
-  return (
-    <>
-      <div className="flex flex-col">
-        <div className="flex w-full justify-center mb-5">
+  const changePaymentMethod = () => {
+    if (paymentOption === 'card') {
+      setPaymentOption('applePay');
+    } else {
+      setPaymentOption('card');
+    }
+  }
 
-        </div>
-        <div className="applePay">
-          {paymentRequest ? <>
-            <PaymentRequestButtonElement options={{ paymentRequest }} /> </>
-            : null
-          }
-        </div>
+  if(loading){
+    return (
+      <div className="flex justify-center items-center w-full">
+        <FadeLoader
+          color="#FF6D00"
+          // loading={isLoading}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
       </div>
-
-      <br />
-
+    )
+  }else {
+    return (
       <>
-        <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
-      </>
-      {payButtonClicked ?
-        <div className="flex justify-center items-center w-full">
-          <FadeLoader
-            color="#38A169"
-            // loading={isLoading}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
+        {
+          paymentOption === 'card' ? <>
+          <>
+            <CardElement className={payButtonClicked ? 'card-element' : 'card-element'} />
+          </>
+            {payButtonClicked ?
+              <div className="flex justify-center items-center w-full">
+                <FadeLoader
+                  color="#FF6D00"
+                  // loading={isLoading}
+                  aria-label="Loading Spinner"
+                  data-testid="loader"
+                />
+              </div>
+              :
+              <button className="flex bg-iparkOrange800 w-full text-center justify-center rounded-md text-white text-lg mt-5 py-2" onClick={handleSubmit}>
+                {t("cardFormScreen.pay")}
+              </button>
+            }
+           </>
+           :
+           <>
+           <div className="flex flex-col">
+            < div className="flex w-full justify-center">
+            </div>
+          <div className="applePay">
+            {paymentRequest ? <>
+              <PaymentRequestButtonElement options={{ paymentRequest }} /> </>    
+              : 
+              <>
+                <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > {t("cardFormScreen.applePayGooglePayNotAvailable")}</span>
+                <span className="flex flex-row items-center justify-center text-center font-bold text-red-600" > {t("cardFormScreen.pleaseSelectAnotherPaymentOption")}</span>
+              </>
+            }
+          </div>
         </div>
-        :
-        <button className="flex bg-green-500 w-full text-center justify-center rounded-md text-white text-lg mt-5" onClick={handleSubmit}>
-          Pay
-        </button>
-      }</>
-  )
+           </>
+        }
+        <div className="flex flex-col pt-5">
+          {payButtonClicked ? 
+          null 
+          : 
+          <div className="flex flex-row items-center justify-center bg-gray-200 p-2 rounded-md" onClick={changePaymentMethod}>
+            <img src={require('../../assets/icons/orangeThemeDebitCardIcon.png')} alt="" />
+            <span className="flex pl-5 text-black">{t("cardFormScreen.payWithSomethingElse")}</span>
+          </div>
+          }
+        
+          <br />
+          <span className="flex flex-row items-center justify-center text-center text-black">
+            {t("cardFormScreen.paymetnMethodSelectedBasedOnDevice")}
+          </span>
+        </div>
+        </>
+    )
+  }
+
+  
 
 }

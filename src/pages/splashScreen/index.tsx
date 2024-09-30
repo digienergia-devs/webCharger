@@ -9,11 +9,6 @@ export default function SplashScreen() {
         const cookies = document.cookie.split('; ');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].split('=');
-            // if (cookie[0] === 'myCookie') {
-            //     console.log("cookie --- ", cookie[0])
-            // } else {
-            //     console.log("cookie not found")
-            // }
         }
     }
 
@@ -24,21 +19,10 @@ export default function SplashScreen() {
         }, 3000)
     }, [])
     return (
-        <div className="flex justify-center items-center bg-green-600 h-screen w-screen">
+        <div className="flex justify-center items-center h-screen w-screen bg-iparkOrange800">
             <div className="flex justify-center items-center h-screen">
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
         </div>
-
-        // <div className='main-container-splash-screen'>
-        //     <div className='logo-container-splash-screen'>
-        //         <p>plugKaro</p>
-        //     </div>
-        //     <div className='footer-splash-screen'>
-        //         <img src={require('../../assets/icons/footer_car.png')} alt="" />
-        //     </div>
-        // </div>
-
-
     )
 }
