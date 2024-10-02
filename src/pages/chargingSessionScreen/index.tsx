@@ -96,16 +96,28 @@ export default function ChargingSessionScreen(props: any) {
         }, 2000)
         
     }, [isChargingStopped])
+    const [chargerStopTimer, setChargerStopTimer] = useState<number>(0);
 
     const formatTime = (seconds: number) => {
         if (seconds < 0) {
             throw new Error('Input must be a non-negative number of seconds.');
         }
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const remainingSeconds = seconds % 60;
+        if(!isChargingStopped){
+            setChargerStopTimer(seconds);
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const remainingSeconds = seconds % 60;
 
-        setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+            setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+        }else {
+            const hours = Math.floor(chargerStopTimer / 3600);
+            const minutes = Math.floor((chargerStopTimer % 3600) / 60);
+            const remainingSeconds = chargerStopTimer % 60;
+
+            setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+        }
+        
+        
     }
 
     const startCharging = async () => {
@@ -141,6 +153,7 @@ export default function ChargingSessionScreen(props: any) {
         } catch (error: any) {
 
         }
+    
     }
 
     const stopChargingSessionButtonClick = async () => {
@@ -175,8 +188,9 @@ export default function ChargingSessionScreen(props: any) {
             let current_time = new Date().toISOString();
             let startTime = new Date(myTimer).getTime();
             let currentTime = new Date(current_time).getTime();
+            console.log("Start time --- ",(meterStartTime))
             let elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
-            formatTime(elapsedTimeInSeconds - 10800); // reduce three hours from UTC time. Only for pilot project
+            formatTime(elapsedTimeInSeconds); // reduce three hours from UTC time. Only for pilot project
         }
  
     }
