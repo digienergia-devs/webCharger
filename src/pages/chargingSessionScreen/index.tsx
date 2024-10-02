@@ -190,7 +190,7 @@ export default function ChargingSessionScreen(props: any) {
             let currentTime = new Date(current_time).getTime();
             console.log("Start time --- ",(meterStartTime))
             let elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
-            formatTime(elapsedTimeInSeconds - 10800); // reduce three hours from UTC time. Only for pilot project
+            formatTime(elapsedTimeInSeconds); // reduce three hours from UTC time. Only for pilot project
         }
  
     }
