@@ -261,7 +261,7 @@ export default function ChargingSessionScreen(props: any) {
     const requestEmailInvoice = async () => {
 
         let requestBody = {
-            "transaction_ref": transactionId,
+            "transaction_id": transactionId?.toString(),
             "email": userEmail
           }
         await sendEmailInvoice(requestBody).then((res: any) => {
@@ -412,7 +412,7 @@ export default function ChargingSessionScreen(props: any) {
        
                 {
                     invoiceEmailState == 'sent' ?
-                    <span className='flex pt-5'>{t("chargingSessionScreen.invoiceSent")}</span>
+                    <span className='flex pt-5'>{t("chargingSessionScreen.receiptRequested")}</span>
                     :
                     null
                 }

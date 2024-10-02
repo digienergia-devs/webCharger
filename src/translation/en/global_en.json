@@ -30,7 +30,7 @@
         "preparing" : "Preparing",
         "stopCharging" : "Stop Charging",
         "chargingStoped" : "Charging Stoped",
-        "receiptRequested" : "Receipt Requested!"
+        "receiptRequested" : "Once the session is completed, a receipt will be sent to your email."
     }
 
 }
