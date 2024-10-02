@@ -190,7 +190,7 @@ export default function ChargingSessionScreen(props: any) {
             let currentTime = new Date(current_time).getTime();
             console.log("Start time --- ",(meterStartTime))
             let elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
-            formatTime(elapsedTimeInSeconds); // reduce three hours from UTC time. Only for pilot project
+            formatTime(elapsedTimeInSeconds - 19800); // reduce three hours from UTC time. Only for pilot project
         }
  
     }
@@ -212,9 +212,9 @@ export default function ChargingSessionScreen(props: any) {
     const [initialMeterValue, setInitialMeterValue] = useState<number>(0);
     const [finalMeterValue, setFinalMeterValue] = useState<number>(0);
 
-    useEffect(() => {
-        setChargingPower((finalMeterValue - initialMeterValue)/1000);
-    }, [finalMeterValue])
+    // useEffect(() => {
+    //     setChargingPower((initialMeterValue)/1000);
+    // }, [finalMeterValue])
 
     const getChargingSessionStatus = async (transactionID: string) => {
         let response;
@@ -228,18 +228,23 @@ export default function ChargingSessionScreen(props: any) {
                             startCharging();
                         }else{
                             response = res;
-                            if(res.meter_values.length == 1){
-                                setChargingCost(Number(res.amount)/100)
-                                setInitialMeterValue(Number(res.meter_values[0].value));
-                                setChargingPower(0);
-                            } 
+                            // if(res.meter_values.length == 1){
+                            //     setChargingCost(Number(res.amount)/100)
+                            //     setInitialMeterValue(Number(res.meter_values[0].value));
+                            //     setChargingPower(0);
+                            // } 
     
-                            if(res.meter_values.length > 1){
-                                setChargingCost(Number(res.amount)/100)
-                                let objectLength = res.meter_values.length;
-                                setInitialMeterValue(Number(res.meter_values[0].value));
-                                setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
-                            }    
+                            // if(res.meter_values.length > 1){
+                            //     setChargingCost(Number(res.amount)/100)
+                            //     let objectLength = res.meter_values.length;
+                            //     setInitialMeterValue(Number(res.meter_values[0].value));
+                            //     setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
+                            // }  
+                            
+                            setChargingCost(Number(res.amount)/100);
+                            setInitialMeterValue(Number(res.meter_values.elapsed_time));
+                            setChargingPower(Number(res.meter_values.value)/1000)
+
                             if (res.charge_point_status == 'charging') {
                                 setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
                                 setTimeout(() => {
