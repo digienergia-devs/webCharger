@@ -25,9 +25,6 @@ export default function ChargingSessionScreen(props: any) {
     const [meterStartTime, setMeterStartTime] = useState<string>('');
     const [isChargingSessionStoppedByUser, setIsChargingSessionStoppedByUser] = useState<boolean>(false);
     const [showSpinner, setShowSpinner] = useState<boolean>(false);
-    useEffect(() => {
-        console.log("isChargingStoppedByUser --- ", isChargingSessionStoppedByUser);
-    }, [isChargingSessionStoppedByUser])
 
     useEffect(() => {
         if(isChargingStarted == false && isChargingStopped == false){
@@ -209,6 +206,7 @@ export default function ChargingSessionScreen(props: any) {
         let response;
         if(!isChargingSessionStoppedByUser){
             if(!isChargingStopped){
+
                 await chargingSessionStatus(transactionID).then(
                     (res: any) => {
                         setMeterStartTime(new Date(res.meter_start_time).toLocaleString());
@@ -217,13 +215,13 @@ export default function ChargingSessionScreen(props: any) {
                         }else{
                             response = res;
                             if(res.meter_values.length == 1){
-                                setChargingCost(Number(res.amount))
+                                setChargingCost(Number(res.amount)/100)
                                 setInitialMeterValue(Number(res.meter_values[0].value));
                                 setChargingPower(0);
                             } 
     
                             if(res.meter_values.length > 1){
-                                setChargingCost(Number(res.amount))
+                                setChargingCost(Number(res.amount)/100)
                                 let objectLength = res.meter_values.length;
                                 setInitialMeterValue(Number(res.meter_values[0].value));
                                 setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
