@@ -30,7 +30,7 @@
         "preparing" : "Preparing",
         "stopCharging" : "Stop Charging",
         "chargingStoped" : "Charging Stoped",
-        "invoiceSent" : "Invoice Sent!"
+        "receiptRequested" : "Receipt Requested!"
     }
 
 }

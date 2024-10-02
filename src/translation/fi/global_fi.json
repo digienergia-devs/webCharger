@@ -30,6 +30,6 @@
         "preparing" : "Valmistellaan",
         "stopCharging" : "Lopeta lataaminen",
         "chargingStoped" : "Lataus pysäytetty",
-        "invoiceSent" : "Lasku lähetetty!"
+        "receiptRequested" : "Kuitti Pyydetty!"
     }
 }

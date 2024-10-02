@@ -261,7 +261,7 @@ export default function ChargingSessionScreen(props: any) {
     const requestEmailInvoice = async () => {
 
         let requestBody = {
-            "transaction_ref": transactionRef!,
+            "transaction_ref": transactionId,
             "email": userEmail
           }
         await sendEmailInvoice(requestBody).then((res: any) => {
@@ -404,14 +404,12 @@ export default function ChargingSessionScreen(props: any) {
                 }
                 
                 <div className="flex justify-center flex-col items-center text-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-sxl">
-                {
-                    isChargingStopped ? 
+              
                     <>
                         <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center text-black' placeholder='Enter your email' onBlur={(e: any) => setUserEmail(e.target.value)}/>
-                        <button className={transactionRef ? 'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md' : 'flex bg-iparkOrange200 w-full text-center justify-center py-3 mt-5 rounded-md text-gray-400 text-md'} disabled={transactionRef ? false : true} onClick={requestEmailInvoice}>{transactionRef ? 'Email Receipt': 'Generating Invoice'}</button>
+                        <button className={'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md'} onClick={requestEmailInvoice}>{'Request e-mail receipt'}</button>
                     </>
-                    : null
-                }
+       
                 {
                     invoiceEmailState == 'sent' ?
                     <span className='flex pt-5'>{t("chargingSessionScreen.invoiceSent")}</span>
