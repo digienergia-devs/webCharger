@@ -83,7 +83,7 @@ export default function ChargingSessionScreen(props: any) {
                         let transactionRef = chargingSummary.transaction_ref;   // check this again with argon
                         setTransactionRef(transactionRef);
                         let consumed_power = (Number(chargingSummary.power_consumed))/1000;
-                        let finalAmount = Number(chargingSummary.final_amount);
+                        let finalAmount = Number((chargingSummary.final_amount)/100);
     
                         setChargingPower(Number(consumed_power.toFixed(2))); // Convert the string value to a number
                         setChargingCost(Number(((Number(finalAmount))).toFixed(2)));
@@ -99,10 +99,12 @@ export default function ChargingSessionScreen(props: any) {
     const [chargerStopTimer, setChargerStopTimer] = useState<number>(0);
 
     const formatTime = (seconds: number) => {
-        if (seconds < 0) {
-            throw new Error('Input must be a non-negative number of seconds.');
+        if (seconds < 0 || seconds == 0) {
+            setChargingTime(`0:0:0`)
+            // throw new Error('Input must be a non-negative number of seconds.');
         }
         if(!isChargingStopped){
+            console.log("nit --- ", seconds)
             setChargerStopTimer(seconds);
             const hours = Math.floor(seconds / 3600);
             const minutes = Math.floor((seconds % 3600) / 60);
@@ -110,6 +112,8 @@ export default function ChargingSessionScreen(props: any) {
 
             setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
         }else {
+            console.log("true --- ", seconds)
+
             const hours = Math.floor(chargerStopTimer / 3600);
             const minutes = Math.floor((chargerStopTimer % 3600) / 60);
             const remainingSeconds = chargerStopTimer % 60;
@@ -190,7 +194,7 @@ export default function ChargingSessionScreen(props: any) {
             let currentTime = new Date(current_time).getTime();
             console.log("Start time --- ",(meterStartTime))
             let elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
-            formatTime(elapsedTimeInSeconds); // reduce three hours from UTC time. Only for pilot project
+            formatTime(Math.floor(initialMeterValue)); // reduce three hours from UTC time. Only for pilot project
         }
  
     }
@@ -242,6 +246,7 @@ export default function ChargingSessionScreen(props: any) {
                             // }  
                             
                             setChargingCost(Number(res.amount)/100);
+                            console.log("res --- ", res.amount)
                             setInitialMeterValue(Number(res.meter_values.elapsed_time));
                             setChargingPower(Number(res.meter_values.value)/1000)
 
@@ -347,7 +352,7 @@ export default function ChargingSessionScreen(props: any) {
                             <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
                         </div>
                         <div className='flex w-2/3 ml-10'>
-                            <span>{(chargingPower)?.toFixed(2)} kWh</span>
+                            <span>{(chargingPower)?.toFixed(3)} kWh</span>
                         </div>
                     </div>
                     <div className='flex justify-center items-center w-full'>
