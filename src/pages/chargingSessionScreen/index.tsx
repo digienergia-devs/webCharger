@@ -69,7 +69,7 @@ export default function ChargingSessionScreen(props: any) {
         }
 
         setIsChargingStarted(true); // when charging session starts, timer start to run.
-        
+
         }, [chargingTime])
         
     useEffect(() => {
@@ -223,8 +223,12 @@ export default function ChargingSessionScreen(props: any) {
     const [finalMeterValue, setFinalMeterValue] = useState<number>(0);
 
     useEffect(() => {
-        startTimer();
-    }, [meterStartTime, initialMeterValue]);
+        // startTimer();
+    }, [meterStartTime]);
+
+    useEffect(() => {
+        runTimer();
+    }, [initialMeterValue])
 
     // useEffect(() => {
     //     setChargingPower((initialMeterValue)/1000);
