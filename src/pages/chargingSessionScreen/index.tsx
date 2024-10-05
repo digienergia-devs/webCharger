@@ -9,9 +9,9 @@ import { format } from 'path';
 
 export default function ChargingSessionScreen(props: any) {
     const [t, i18n] = useTranslation('global');
-    const [chargingPower, setChargingPower] = useState<number | undefined>(0.00);
+    const [chargingPower, setChargingPower] = useState<number>(0.00);
     const [chargingTime, setChargingTime] = useState<string>('0:00:00');
-    const [chargingCost, setChargingCost] = useState<number | undefined>(0.0000);
+    const [chargingCost, setChargingCost] = useState<number>(0.0000);
     const timeDisplay = document.getElementById('time') as HTMLDivElement;
     const [stopChargingButtonText, setStopChargingButtonText] = useState<string>(t("chargingSessionScreen.stopCharging"));
     const [isChargingStopped, setIsChargingStopped] = useState<boolean>(false);
@@ -25,6 +25,18 @@ export default function ChargingSessionScreen(props: any) {
     const [meterStartTime, setMeterStartTime] = useState<string>('');
     const [isChargingSessionStoppedByUser, setIsChargingSessionStoppedByUser] = useState<boolean>(false);
     const [showSpinner, setShowSpinner] = useState<boolean>(false);
+
+    useEffect(() => {
+        if(isNaN(chargingPower)){
+            setChargingPower((0.00));
+        }
+    }, [chargingPower])
+
+    useEffect(() => {
+        if(isNaN(chargingCost)){
+            setChargingCost(Number(0.00));
+        }
+    }, [chargingCost])
 
     useEffect(() => {
         if(isChargingStarted == false && isChargingStopped == false){
@@ -49,12 +61,13 @@ export default function ChargingSessionScreen(props: any) {
     const [timer, setTimer] = useState<number>(0);
 
     useEffect(() => {
+
         if(chargingTime == '0:00:00'){
             setStopChargingButtonText(t("chargingSessionScreen.preparing")); 
         }else {
             setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
-            setIsChargingStarted(true); // when charging session starts, timer start to run.
         }
+        setIsChargingStarted(true); // when charging session starts, timer start to run.
     }, [chargingTime])
 
     useEffect(() => {
@@ -64,12 +77,10 @@ export default function ChargingSessionScreen(props: any) {
     }, [isChargingStopped])
 
     useEffect(() => {
-        // setTransactionId(localStorage.getItem("transactionId"));
         setTransactionId(props.transactionId);
-    }, [])
-
-    useEffect(() => {
         window.scrollTo(0, 0);
+        const newUrl = props.connectorID;
+        window.history.replaceState(null, '', newUrl);
       }, []);
 
     useEffect(() => {
@@ -84,9 +95,9 @@ export default function ChargingSessionScreen(props: any) {
                         setTransactionRef(transactionRef);
                         let consumed_power = (Number(chargingSummary.power_consumed))/1000;
                         let finalAmount = Number((chargingSummary.final_amount)/100);
-    
-                        setChargingPower(Number(consumed_power.toFixed(2))); // Convert the string value to a number
+                        setChargingPower(Number(consumed_power.toFixed(2)));
                         setChargingCost(Number(((Number(finalAmount))).toFixed(2)));
+
                     }, 1000);
                     localStorage.removeItem("transactionId");
                     localStorage.removeItem("sessionId");
@@ -99,26 +110,22 @@ export default function ChargingSessionScreen(props: any) {
     const [chargerStopTimer, setChargerStopTimer] = useState<number>(0);
 
     const formatTime = (seconds: number) => {
-        if (seconds < 0 || seconds == 0) {
-            setChargingTime(`0:0:0`)
+        if (seconds < 0 || seconds == 0 || isNaN(seconds)) {
+            setChargingTime(`0:00:00`)
             // throw new Error('Input must be a non-negative number of seconds.');
-        }
-        if(!isChargingStopped){
-            console.log("nit --- ", seconds)
-            setChargerStopTimer(seconds);
-            const hours = Math.floor(seconds / 3600);
-            const minutes = Math.floor((seconds % 3600) / 60);
-            const remainingSeconds = seconds % 60;
-
-            setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
         }else {
-            console.log("true --- ", seconds)
-
-            const hours = Math.floor(chargerStopTimer / 3600);
-            const minutes = Math.floor((chargerStopTimer % 3600) / 60);
-            const remainingSeconds = chargerStopTimer % 60;
-
-            setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+            if(!isChargingStopped){
+                setChargerStopTimer(seconds);
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const remainingSeconds = seconds % 60;
+                setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+            }else {
+                const hours = Math.floor(chargerStopTimer / 3600);
+                const minutes = Math.floor((chargerStopTimer % 3600) / 60);
+                const remainingSeconds = chargerStopTimer % 60;
+                setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+            }
         }
         
         
@@ -192,7 +199,6 @@ export default function ChargingSessionScreen(props: any) {
             let current_time = new Date().toISOString();
             let startTime = new Date(myTimer).getTime();
             let currentTime = new Date(current_time).getTime();
-            console.log("Start time --- ",(meterStartTime))
             let elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
             formatTime(Math.floor(initialMeterValue)); // reduce three hours from UTC time. Only for pilot project
         }
@@ -246,7 +252,6 @@ export default function ChargingSessionScreen(props: any) {
                             // }  
                             
                             setChargingCost(Number(res.amount)/100);
-                            console.log("res --- ", res.amount)
                             setInitialMeterValue(Number(res.meter_values.elapsed_time));
                             setChargingPower(Number(res.meter_values.value)/1000)
 
@@ -360,7 +365,7 @@ export default function ChargingSessionScreen(props: any) {
                             <img src={require('../../assets/icons/orangeThemeElapsedTime.png')} alt="" />
                         </div>
                         <div className='flex w-2/3 ml-10'>
-                            {chargingTime}s
+                            {(chargingTime)}s
                         </div>
                     </div>
                     <div className='flex justify-center items-center w-full'>
