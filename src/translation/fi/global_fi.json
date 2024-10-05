@@ -30,6 +30,8 @@
         "preparing" : "Valmistellaan",
         "stopCharging" : "Lopeta lataaminen",
         "chargingStoped" : "Lataus pysäytetty",
+        "enterYourEmail" : "Anna sähköpostiosoitteesi",
+        "requestEmailReceipt" : "Pyydä sähköpostikuittaus",
         "receiptRequested" : "Kuitti Pyydetty!"
     }
 }
