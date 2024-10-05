@@ -330,11 +330,11 @@ export default function ChargingSessionScreen(props: any) {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center items-center h-1/6">
+            <div className="flex justify-center items-center h-2/6">
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
             
-            <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-5/6 w-screen bg-white'>
+            <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-4/6 w-screen bg-white'>
                 <div className={isChargingStopped ? "flex py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" : "flex py-5 -mb-20 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl"} >
                     
                 {/* {(chargingTime == '0:00:00' ) ?  */}
@@ -397,13 +397,28 @@ export default function ChargingSessionScreen(props: any) {
                         /> : 
                         (
                             isChargingStopped == false ?
+                            <>
                             <button className={(isChargingStopped ? 
                             'flex bg-iparkOrange200 w-full text-center justify-center rounded-md text-black text-md py-3' 
                             : 
                                 'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-md py-3'
                             )} onClick={stopChargingSessionButtonClick}>
                                 {stopChargingButtonText}
-                            </button> : 
+                            </button> 
+                            <br/>
+                            <>
+                                <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center text-black' placeholder='Enter your email' onBlur={(e: any) => setUserEmail(e.target.value)}/>
+                                <button className={'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md'} onClick={requestEmailInvoice}>{'Request e-mail receipt'}</button>
+                            </>
+            
+                            {
+                                invoiceEmailState == 'sent' ?
+                                <span className='flex pt-5'>{t("chargingSessionScreen.receiptRequested")}</span>
+                                :
+                                null
+                            }
+                            </>
+                            : 
                             <></>
                         )
             
@@ -411,24 +426,7 @@ export default function ChargingSessionScreen(props: any) {
                     </div>
                 :
                 <></>
-                }
-                
-                <div className="flex justify-center flex-col items-center text-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-sxl">
-              
-                    <>
-                        <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center text-black' placeholder='Enter your email' onBlur={(e: any) => setUserEmail(e.target.value)}/>
-                        <button className={'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md'} onClick={requestEmailInvoice}>{'Request e-mail receipt'}</button>
-                    </>
-       
-                {
-                    invoiceEmailState == 'sent' ?
-                    <span className='flex pt-5'>{t("chargingSessionScreen.receiptRequested")}</span>
-                    :
-                    null
-                }
-                </div>
-
-                
+                }            
             </div>
         </div>
     )
