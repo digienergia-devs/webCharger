@@ -27,6 +27,9 @@ export default function ChargingSessionScreen(props: any) {
     const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
     useEffect(() => {
+    }, [isChargingSessionStoppedByUser, isChargingStopped])
+
+    useEffect(() => {
         if(isNaN(chargingPower)){
             setChargingPower((0.00));
         }
@@ -155,7 +158,11 @@ export default function ChargingSessionScreen(props: any) {
                     }
 
                     setTimeout(() => {
-                         getChargingSessionStatus(props.transactionId!);
+                        if(!isChargingSessionStoppedByUser){
+                            if(!isChargingStopped){
+                                getChargingSessionStatus(props.transactionId!);
+                            }
+                        }   
                     }, 2000);
                 })
             } catch (error) {
@@ -263,7 +270,7 @@ export default function ChargingSessionScreen(props: any) {
                             setInitialMeterValue(Number(res.meter_values.elapsed_time));
                             setChargingPower(Number(res.meter_values.value)/1000)
 
-                            if (res.charge_point_status == 'charging') {
+                            if (res.charge_point_status == 'charging') { // to Argon, once charging session is stoped, this state need to be change to 'finished' in API response. But it is not happening now. Argon need to fix this.
                                 setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
                                 setTimeout(() => {
                                     getChargingSessionStatus(transactionID);
