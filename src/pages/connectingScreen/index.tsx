@@ -36,8 +36,8 @@ export default function ConnectingScreen(props: any) {
       setChargerID(response.charge_point_id);
       setConnectorID(response.connector_id);
       props.setChargerPower(Number(response.power[0])/1000);
-      props.setChargerRate(response.unit_price);
-      props.setIdleRate(response.idle_fee);
+      props.setChargerRate(Number(response.unit_price)/100);
+      props.setIdleRate(Number(response.idle_fee)/100);
 
       // get the charger power and charging rate from using the backend --- Inform to Argon
     } catch (error) {

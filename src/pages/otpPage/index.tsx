@@ -12,6 +12,8 @@ export default function OtpScreen(props: any){
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        const newUrl = props.connectorID;
+        window.history.replaceState(null, '', newUrl);
       }, []);
 
     return (

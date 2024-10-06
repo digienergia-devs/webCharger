@@ -9,9 +9,9 @@ import { format } from 'path';
 
 export default function ChargingSessionScreen(props: any) {
     const [t, i18n] = useTranslation('global');
-    const [chargingPower, setChargingPower] = useState<number | undefined>(0.00);
+    const [chargingPower, setChargingPower] = useState<number>(0.00);
     const [chargingTime, setChargingTime] = useState<string>('0:00:00');
-    const [chargingCost, setChargingCost] = useState<number | undefined>(0.0000);
+    const [chargingCost, setChargingCost] = useState<number>(0.0000);
     const timeDisplay = document.getElementById('time') as HTMLDivElement;
     const [stopChargingButtonText, setStopChargingButtonText] = useState<string>(t("chargingSessionScreen.stopCharging"));
     const [isChargingStopped, setIsChargingStopped] = useState<boolean>(false);
@@ -25,9 +25,21 @@ export default function ChargingSessionScreen(props: any) {
     const [meterStartTime, setMeterStartTime] = useState<string>('');
     const [isChargingSessionStoppedByUser, setIsChargingSessionStoppedByUser] = useState<boolean>(false);
     const [showSpinner, setShowSpinner] = useState<boolean>(false);
+
     useEffect(() => {
-        console.log("isChargingStoppedByUser --- ", isChargingSessionStoppedByUser);
-    }, [isChargingSessionStoppedByUser])
+    }, [isChargingSessionStoppedByUser, isChargingStopped])
+
+    useEffect(() => {
+        if(isNaN(chargingPower)){
+            setChargingPower((0.00));
+        }
+    }, [chargingPower])
+
+    useEffect(() => {
+        if(isNaN(chargingCost)){
+            setChargingCost(Number(0.00));
+        }
+    }, [chargingCost])
 
     useEffect(() => {
         if(isChargingStarted == false && isChargingStopped == false){
@@ -52,14 +64,17 @@ export default function ChargingSessionScreen(props: any) {
     const [timer, setTimer] = useState<number>(0);
 
     useEffect(() => {
+
         if(chargingTime == '0:00:00'){
             setStopChargingButtonText(t("chargingSessionScreen.preparing")); 
         }else {
             setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
-            setIsChargingStarted(true); // when charging session starts, timer start to run.
         }
-    }, [chargingTime])
 
+        setIsChargingStarted(true); // when charging session starts, timer start to run.
+
+        }, [chargingTime])
+        
     useEffect(() => {
         if(isChargingStopped){
             setIsChargingStopButtonClicked(false);
@@ -67,12 +82,10 @@ export default function ChargingSessionScreen(props: any) {
     }, [isChargingStopped])
 
     useEffect(() => {
-        // setTransactionId(localStorage.getItem("transactionId"));
         setTransactionId(props.transactionId);
-    }, [])
-
-    useEffect(() => {
         window.scrollTo(0, 0);
+        const newUrl = props.connectorID;
+        window.history.replaceState(null, '', newUrl);
       }, []);
 
     useEffect(() => {
@@ -86,10 +99,10 @@ export default function ChargingSessionScreen(props: any) {
                         let transactionRef = chargingSummary.transaction_ref;   // check this again with argon
                         setTransactionRef(transactionRef);
                         let consumed_power = (Number(chargingSummary.power_consumed))/1000;
-                        let finalAmount = Number(chargingSummary.final_amount);
-    
-                        setChargingPower(Number(consumed_power.toFixed(2))); // Convert the string value to a number
+                        let finalAmount = Number((chargingSummary.final_amount)/100);
+                        setChargingPower(Number(consumed_power.toFixed(2)));
                         setChargingCost(Number(((Number(finalAmount))).toFixed(2)));
+
                     }, 1000);
                     localStorage.removeItem("transactionId");
                     localStorage.removeItem("sessionId");
@@ -99,16 +112,28 @@ export default function ChargingSessionScreen(props: any) {
         }, 2000)
         
     }, [isChargingStopped])
+    const [chargerStopTimer, setChargerStopTimer] = useState<number>(0);
 
     const formatTime = (seconds: number) => {
-        if (seconds < 0) {
-            throw new Error('Input must be a non-negative number of seconds.');
+        if (seconds < 0 || seconds == 0 || isNaN(seconds)) {
+            setChargingTime(`0:00:00`)
+            // throw new Error('Input must be a non-negative number of seconds.');
+        }else {
+            if(!isChargingStopped){
+                setChargerStopTimer(seconds);
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const remainingSeconds = seconds % 60;
+                setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+            }else {
+                const hours = Math.floor(chargerStopTimer / 3600);
+                const minutes = Math.floor((chargerStopTimer % 3600) / 60);
+                const remainingSeconds = chargerStopTimer % 60;
+                setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+            }
         }
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const remainingSeconds = seconds % 60;
-
-        setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+        
+        
     }
 
     const startCharging = async () => {
@@ -133,7 +158,11 @@ export default function ChargingSessionScreen(props: any) {
                     }
 
                     setTimeout(() => {
-                         getChargingSessionStatus(props.transactionId!);
+                        if(!isChargingSessionStoppedByUser){
+                            if(!isChargingStopped){
+                                getChargingSessionStatus(props.transactionId!);
+                            }
+                        }   
                     }, 2000);
                 })
             } catch (error) {
@@ -144,6 +173,7 @@ export default function ChargingSessionScreen(props: any) {
         } catch (error: any) {
 
         }
+    
     }
 
     const stopChargingSessionButtonClick = async () => {
@@ -179,7 +209,7 @@ export default function ChargingSessionScreen(props: any) {
             let startTime = new Date(myTimer).getTime();
             let currentTime = new Date(current_time).getTime();
             let elapsedTimeInSeconds = Math.floor((currentTime - startTime) / 1000);
-            formatTime(elapsedTimeInSeconds - 10800); // reduce three hours from UTC time. Only for pilot project
+            formatTime(Math.floor(initialMeterValue)); // reduce three hours from UTC time. Only for pilot project
         }
  
     }
@@ -194,21 +224,28 @@ export default function ChargingSessionScreen(props: any) {
         return () => clearInterval(interval);
     }
 
-    useEffect(() => {
-        startTimer();
-    }, [meterStartTime]);
+
 
     const [initialMeterValue, setInitialMeterValue] = useState<number>(0);
     const [finalMeterValue, setFinalMeterValue] = useState<number>(0);
 
     useEffect(() => {
-        setChargingPower((finalMeterValue - initialMeterValue)/1000);
-    }, [finalMeterValue])
+        // startTimer();
+    }, [meterStartTime]);
+
+    useEffect(() => {
+        runTimer();
+    }, [initialMeterValue])
+
+    // useEffect(() => {
+    //     setChargingPower((initialMeterValue)/1000);
+    // }, [finalMeterValue])
 
     const getChargingSessionStatus = async (transactionID: string) => {
         let response;
         if(!isChargingSessionStoppedByUser){
             if(!isChargingStopped){
+
                 await chargingSessionStatus(transactionID).then(
                     (res: any) => {
                         setMeterStartTime(new Date(res.meter_start_time).toLocaleString());
@@ -216,19 +253,24 @@ export default function ChargingSessionScreen(props: any) {
                             startCharging();
                         }else{
                             response = res;
-                            if(res.meter_values.length == 1){
-                                setChargingCost(Number(res.amount))
-                                setInitialMeterValue(Number(res.meter_values[0].value));
-                                setChargingPower(0);
-                            } 
+                            // if(res.meter_values.length == 1){
+                            //     setChargingCost(Number(res.amount)/100)
+                            //     setInitialMeterValue(Number(res.meter_values[0].value));
+                            //     setChargingPower(0);
+                            // } 
     
-                            if(res.meter_values.length > 1){
-                                setChargingCost(Number(res.amount))
-                                let objectLength = res.meter_values.length;
-                                setInitialMeterValue(Number(res.meter_values[0].value));
-                                setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
-                            }    
-                            if (res.charge_point_status == 'charging') {
+                            // if(res.meter_values.length > 1){
+                            //     setChargingCost(Number(res.amount)/100)
+                            //     let objectLength = res.meter_values.length;
+                            //     setInitialMeterValue(Number(res.meter_values[0].value));
+                            //     setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
+                            // }  
+                            
+                            setChargingCost(Number(res.amount)/100);
+                            setInitialMeterValue(Number(res.meter_values.elapsed_time));
+                            setChargingPower(Number(res.meter_values.value)/1000)
+
+                            if (res.charge_point_status == 'charging') { // to Argon, once charging session is stoped, this state need to be change to 'finished' in API response. But it is not happening now. Argon need to fix this.
                                 setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
                                 setTimeout(() => {
                                     getChargingSessionStatus(transactionID);
@@ -249,7 +291,7 @@ export default function ChargingSessionScreen(props: any) {
     const requestEmailInvoice = async () => {
 
         let requestBody = {
-            "transaction_ref": transactionRef!,
+            "transaction_id": transactionId?.toString(),
             "email": userEmail
           }
         await sendEmailInvoice(requestBody).then((res: any) => {
@@ -308,11 +350,11 @@ export default function ChargingSessionScreen(props: any) {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-center items-center h-1/6">
+            <div className="flex justify-center items-center h-2/6">
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
             
-            <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-5/6 w-screen bg-white'>
+            <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-4/6 w-screen bg-white'>
                 <div className={isChargingStopped ? "flex py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" : "flex py-5 -mb-20 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl"} >
                     
                 {/* {(chargingTime == '0:00:00' ) ?  */}
@@ -330,7 +372,7 @@ export default function ChargingSessionScreen(props: any) {
                             <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
                         </div>
                         <div className='flex w-2/3 ml-10'>
-                            <span>{(chargingPower)?.toFixed(2)} kWh</span>
+                            <span>{(chargingPower)?.toFixed(3)} kWh</span>
                         </div>
                     </div>
                     <div className='flex justify-center items-center w-full'>
@@ -338,7 +380,7 @@ export default function ChargingSessionScreen(props: any) {
                             <img src={require('../../assets/icons/orangeThemeElapsedTime.png')} alt="" />
                         </div>
                         <div className='flex w-2/3 ml-10'>
-                            {chargingTime}s
+                            {(chargingTime)}s
                         </div>
                     </div>
                     <div className='flex justify-center items-center w-full'>
@@ -375,13 +417,28 @@ export default function ChargingSessionScreen(props: any) {
                         /> : 
                         (
                             isChargingStopped == false ?
+                            <>
                             <button className={(isChargingStopped ? 
                             'flex bg-iparkOrange200 w-full text-center justify-center rounded-md text-black text-md py-3' 
                             : 
                                 'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-md py-3'
                             )} onClick={stopChargingSessionButtonClick}>
                                 {stopChargingButtonText}
-                            </button> : 
+                            </button> 
+                            <br/>
+                            <>
+                                <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center text-black' placeholder={t("chargingSessionScreen.enterYourEmail")} onBlur={(e: any) => setUserEmail(e.target.value)}/>
+                                <button className={'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md'} onClick={requestEmailInvoice}>{t("chargingSessionScreen.requestEmailReceipt")}</button>
+                            </>
+            
+                            {
+                                invoiceEmailState == 'sent' ?
+                                <span className='flex pt-5'>{t("chargingSessionScreen.receiptRequested")}</span>
+                                :
+                                null
+                            }
+                            </>
+                            : 
                             <></>
                         )
             
@@ -389,26 +446,7 @@ export default function ChargingSessionScreen(props: any) {
                     </div>
                 :
                 <></>
-                }
-                
-                <div className="flex justify-center flex-col items-center text-center w-5/6 text-gray-400 text-sm md:text-xl xl:text-sxl">
-                {
-                    isChargingStopped ? 
-                    <>
-                        <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center text-black' placeholder='Enter your email' onBlur={(e: any) => setUserEmail(e.target.value)}/>
-                        <button className={transactionRef ? 'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md' : 'flex bg-iparkOrange200 w-full text-center justify-center py-3 mt-5 rounded-md text-gray-400 text-md'} disabled={transactionRef ? false : true} onClick={requestEmailInvoice}>{transactionRef ? 'Email Receipt': 'Generating Invoice'}</button>
-                    </>
-                    : null
-                }
-                {
-                    invoiceEmailState == 'sent' ?
-                    <span className='flex pt-5'>{t("chargingSessionScreen.invoiceSent")}</span>
-                    :
-                    null
-                }
-                </div>
-
-                
+                }            
             </div>
         </div>
     )

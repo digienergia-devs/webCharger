@@ -127,7 +127,6 @@ export default function CardForm(props: any) {
           amount: props.selectedAmount,
           payment_method: paymentMethodId
         }
-        console.log("dan connector ID --- ", props.connectorID);
         const responseData = await authorizePayment(
           props.chargerID,
           props.connectorID,
