@@ -98,6 +98,7 @@ function App() {
             setOtp={setOtp}
             idleRate={idleRate}
             handleChangeLanguage={handleChangeLanguage}
+            connectorID={connectorIDFromUrl}
            />}/>
            <Route path='/AskOtpPage' element={<AskOtpPage
            language={language}
@@ -109,6 +110,7 @@ function App() {
             idleRate={idleRate}
             setOtp={setOtp}
             handleChangeLanguage={handleChangeLanguage}
+            connectorID={connectorIDFromUrl}
             />}/>
         </Routes>
       </Router>
