@@ -84,7 +84,7 @@ export default function ChargingSessionScreen(props: any) {
     useEffect(() => {
         setTransactionId(props.transactionId);
         window.scrollTo(0, 0);
-        const newUrl = props.connectorID;
+        const newUrl = props.connectorIDFromChargePointEndpoint;
         window.history.replaceState(null, '', newUrl);
       }, []);
 
