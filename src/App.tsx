@@ -111,6 +111,7 @@ function App() {
             setOtp={setOtp}
             handleChangeLanguage={handleChangeLanguage}
             connectorID={connectorIDFromUrl}
+            chargerID={chargerID}
             />}/>
         </Routes>
       </Router>
