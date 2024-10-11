@@ -27,9 +27,6 @@ export default function ChargingSessionScreen(props: any) {
     const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
     useEffect(() => {
-    }, [isChargingSessionStoppedByUser, isChargingStopped])
-
-    useEffect(() => {
         if(isNaN(chargingPower)){
             setChargingPower((0.00));
         }
@@ -71,7 +68,7 @@ export default function ChargingSessionScreen(props: any) {
             setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
         }
 
-        setIsChargingStarted(true); // when charging session starts, timer start to run.
+        //setIsChargingStarted(true); // when charging session starts, timer start to run.
 
         }, [chargingTime])
         
@@ -99,10 +96,9 @@ export default function ChargingSessionScreen(props: any) {
                         let transactionRef = chargingSummary.transaction_ref;   // check this again with argon
                         setTransactionRef(transactionRef);
                         let consumed_power = (Number(chargingSummary.power_consumed))/1000;
-                        let finalAmount = Number((chargingSummary.final_amount)/100);
+                        let finalAmount = (Number((chargingSummary.final_amount)/100)).toFixed(2);
                         setChargingPower(Number(consumed_power.toFixed(2)));
-                        setChargingCost(Number(((Number(finalAmount))).toFixed(2)));
-
+                        setChargingCost(Number(finalAmount));
                     }, 1000);
                     localStorage.removeItem("transactionId");
                     localStorage.removeItem("sessionId");
@@ -124,12 +120,32 @@ export default function ChargingSessionScreen(props: any) {
                 const hours = Math.floor(seconds / 3600);
                 const minutes = Math.floor((seconds % 3600) / 60);
                 const remainingSeconds = seconds % 60;
-                setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+                if(minutes < 10){
+                    setChargingTime(`${hours}:0${minutes}:${remainingSeconds}`);
+                    if(remainingSeconds < 10){
+                        setChargingTime(`${hours}:0${minutes}:0${remainingSeconds}`);
+                    }
+                }else if(remainingSeconds < 10){
+                setChargingTime(`${hours}:${minutes}:0${remainingSeconds}`);
+
+                }else{
+                    setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+                }
             }else {
                 const hours = Math.floor(chargerStopTimer / 3600);
                 const minutes = Math.floor((chargerStopTimer % 3600) / 60);
                 const remainingSeconds = chargerStopTimer % 60;
-                setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+                if(minutes < 10){
+                    setChargingTime(`${hours}:0${minutes}:${remainingSeconds}`);
+                    if(remainingSeconds < 10){
+                        setChargingTime(`${hours}:0${minutes}:0${remainingSeconds}`);
+                    }
+                }else if(remainingSeconds < 10){
+                setChargingTime(`${hours}:${minutes}:0${remainingSeconds}`);
+
+                }else{
+                    setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+                }
             }
         }
         
@@ -141,11 +157,13 @@ export default function ChargingSessionScreen(props: any) {
             const sessionId = sessionStorage.getItem("sessionId");
             setTransactionId(props.transactionId);
             let res: any;
+            let startTime =  Date.now();
             try {
-                await startChargingSession(props.transactionId).then((result: any) => {
+                await startChargingSession(props.transactionId, startTime.toString()).then((result: any) => {
 
                     res = result;
                     if(result.status == "charging" || result.status == "Charging"){
+                        setIsChargingStarted(true);
                         setTimeout(() => {
                             // runTimer();
                             
@@ -183,7 +201,7 @@ export default function ChargingSessionScreen(props: any) {
             if(response){
                 if (response.status == 'success') {
                     setIsChargingSessionStoppedByUser(true);
-                        setChargingCost(Number(response.final_payment));
+                        setChargingCost(Number(response.final_payment)/100);
                         setChargingPower((Number(response.power_consumed))/1000);
                         // Set the timer later ...
                         setIsChargingStopped(true);
@@ -265,10 +283,13 @@ export default function ChargingSessionScreen(props: any) {
                             //     setInitialMeterValue(Number(res.meter_values[0].value));
                             //     setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
                             // }  
-                            
-                            setChargingCost(Number(res.amount)/100);
-                            setInitialMeterValue(Number(res.meter_values.elapsed_time));
-                            setChargingPower(Number(res.meter_values.value)/1000)
+                            if(!isChargingStopButtonClicked){
+                                if(res.charge_point_status == 'charging'){
+                                    setChargingCost(Number(res.amount)/100);
+                                    setInitialMeterValue(Number(res.meter_values.elapsed_time));
+                                    setChargingPower(Number(res.meter_values.value)/1000)
+                                }
+                            }
 
                             if (res.charge_point_status == 'charging') { // to Argon, once charging session is stoped, this state need to be change to 'finished' in API response. But it is not happening now. Argon need to fix this.
                                 setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
@@ -306,159 +327,161 @@ export default function ChargingSessionScreen(props: any) {
         }
     }, [isChargingStarted, transactionId])
 
-    return (
-        <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
-            <div className='flex flex-row-reverse w-full pr-5 mt-5'>
-            <select
-                value={props.language}
-                onChange={(e) => props.handleChangeLanguage(e.target.value)}
-                className="bg-white border border-gray-300 rounded-md text-xs focus:outline-none"
-            >
-                <option value="fi">FI</option>
-                <option value="en">EN</option>
-                {/* <option value="sw">SW</option> */}
-            </select>
-            </div>
-            <div className="flex flex-row justify-between w-full pl-5 pr-5">
-                <div className="flex flex-col bg-white py-5 my-5 font-bold rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 w-full " style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
-                    
-                    <div className='flex flex-row justify-between text-xs pl-10 pr-10'>
-                        <div>
-                            {props.chargerPower} KW
-                            <br />
-                            <div className='flex text-gray-400 font-light'>
-                            {t("generalDetails.power")}
-                            </div>
-                        </div>
-                        <div>
-                            {props.chargerRate} €/kWh
-                            <br />
-                            <div className='flex text-gray-400 font-light'>
-                            {t("generalDetails.unitPrice")}
-                            </div>
-                        </div>
-                        <div>
-                            {props.idleRate} €/min
-                            <br />
-                            <div className='flex text-gray-400 font-light'>
-                            {t("generalDetails.idleFee")}
-                            </div>
-                        </div>
-                    </div>
-                    <div className='flex text-xs pl-10 pr-10 text-gray-400 font-light pt-5'>
-                        {t("generalDetails.otp")} {props.otp}
-                    </div>
+        return (
+            <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
+                <div className='flex flex-row-reverse w-full pr-5 mt-5'>
+                <select
+                    value={props.language}
+                    onChange={(e) => props.handleChangeLanguage(e.target.value)}
+                    className="bg-white border border-gray-300 rounded-md text-xs focus:outline-none"
+                >
+                    <option value="fi">FI</option>
+                    <option value="en">EN</option>
+                    {/* <option value="sw">SW</option> */}
+                </select>
                 </div>
-            </div>
-            <div className="flex justify-center items-center h-2/6">
-                <img src={require('../../assets/icons/Final3.png')} alt="" />
-            </div>
-            
-            <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-4/6 w-screen bg-white'>
-                <div className={isChargingStopped ? "flex py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" : "flex py-5 -mb-20 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl"} >
-                    
-                {/* {(chargingTime == '0:00:00' ) ?  */}
-                {(showSpinner == true ) ? 
-                    <FadeLoader
-                    color="#FF6D00"
-                    loading={true}
-                    aria-label="Loading Spinner"
-                    data-testid="loader"
-                    />
-                    : 
-                    <>
-                    {
-                        isChargingStarted && 
+                <div className="flex flex-row justify-between w-full pl-5 pr-5">
+                    <div className="flex flex-col bg-white py-5 my-5 font-bold rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 w-full " style={{boxShadow: '0px 2px 4px rgba(0, 0, 0, 1)' }}>
                         
-                        <div className='flex justify-center items-center w-full text-xs text-gray-400 text-center p-3'>
-                        Charging session has been started!
-                        Timer will update in every three minutes.
+                        <div className='flex flex-row justify-between text-xs pl-10 pr-10'>
+                            <div>
+                                {props.chargerPower} KW
+                                <br />
+                                <div className='flex text-gray-400 font-light'>
+                                {t("generalDetails.power")}
+                                </div>
+                            </div>
+                            <div>
+                                {props.chargerRate} €/kWh
+                                <br />
+                                <div className='flex text-gray-400 font-light'>
+                                {t("generalDetails.unitPrice")}
+                                </div>
+                            </div>
+                            <div>
+                                {props.idleRate} €/min
+                                <br />
+                                <div className='flex text-gray-400 font-light'>
+                                {t("generalDetails.idleFee")}
+                                </div>
+                            </div>
+                        </div>
+                        <div className='flex text-xs pl-10 pr-10 text-gray-400 font-light pt-5'>
+                            {t("generalDetails.otp")} {props.otp}
+                        </div>
                     </div>
-                    }
-                    
-                    
-                    <div className='flex justify-center items-center w-full'>
-                        <div className='flex w-1/3 items-center justify-center text-center'>
-                            <img src={require('../../assets/icons/orangeThemeElapsedTime.png')} alt="" />
-                        </div>
-                        <div className='flex w-2/3 ml-10'>
-                            {(chargingTime)}s
-                        </div>
-                    </div>
-                    <div className='flex justify-center items-center w-full'>
-                        <div className='flex w-1/3 items-center justify-center text-center'>
-                            <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
-                        </div>
-                        <div className='flex w-2/3 ml-10'>
-                            <span>{(chargingPower)?.toFixed(3)} kWh</span>
-                        </div>
-                    </div>
-                    
-                    <div className='flex justify-center items-center w-full'>
-                        <div className='flex w-1/3 items-center justify-center text-center'>
-                            <img src={require('../../assets/icons/orangeThemeAmountSpent.png')} alt="" />
-                        </div>
-                        <div className='flex w-2/3 ml-10'>
-                            {(chargingCost)?.toFixed(2)}€
-                        </div>
-                    </div></>
-                    }
-                    
-                    
-
                 </div>
-                    {
-                        isChargingStopped == false ?
-                        <div className='flex h-1/3 w-full justify-center'>
-                                <Lottie animationData={batteryCharging} />
-                        </div>
-                        : null
-                    }
+                <div className="flex justify-center items-center h-2/6">
+                    <img src={require('../../assets/icons/Final3.png')} alt="" />
+                </div>
                 
-                {(showSpinner == false) ? 
-                    <div className="flex justify-center flex-col items-center w-5/6 pb-5">
-                    
-                    {isChargingStopButtonClicked ?
-                    
+                <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center pt-3 h-4/6 w-screen bg-white'>
+                    <div className={isChargingStopped ? "flex py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" : "flex py-5 -mb-20 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl"} >
+                        
+                    {/* {(chargingTime == '0:00:00' ) ?  */}
+                    {(showSpinner == true ) ? 
                         <FadeLoader
-                            color="#FF6D00"
-                            loading={true}
-                            aria-label="Loading Spinner"
-                            data-testid="loader"
-                        /> : 
-                        (
-                            isChargingStopped == false ?
-                            <>
-                            <button className={(isChargingStopped ? 
-                            'flex bg-iparkOrange200 w-full text-center justify-center rounded-md text-black text-md py-3' 
-                            : 
-                                'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-md py-3'
-                            )} onClick={stopChargingSessionButtonClick}>
-                                {stopChargingButtonText}
-                            </button> 
-                            <br/>
-                            <>
-                                <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center text-black' placeholder={t("chargingSessionScreen.enterYourEmail")} onBlur={(e: any) => setUserEmail(e.target.value)}/>
-                                <button className={'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md'} onClick={requestEmailInvoice}>{t("chargingSessionScreen.requestEmailReceipt")}</button>
-                            </>
-            
-                            {
-                                invoiceEmailState == 'sent' ?
-                                <span className='flex pt-5 text-justify'>{t("chargingSessionScreen.receiptRequested")}</span>
-                                :
-                                null
-                            }
-                            </>
-                            : 
-                            <></>
-                        )
-            
-                    }
+                        color="#FF6D00"
+                        loading={true}
+                        aria-label="Loading Spinner"
+                        data-testid="loader"
+                        />
+                        : 
+                        <>
+                        {
+                            !isChargingStopped && 
+                            
+                            <div className='flex justify-center items-center w-full text-xs text-gray-400 text-center p-3'>
+                            Charging session has been started!
+                            Timer will update in every three minutes.
+                        </div>
+                        }
+                        
+                        
+                        <div className='flex justify-center items-center w-full'>
+                            <div className='flex w-1/3 items-center justify-center text-center'>
+                                <img src={require('../../assets/icons/orangeThemeElapsedTime.png')} alt="" />
+                            </div>
+                            <div className='flex w-2/3 ml-10'>
+                                {(chargingTime)}
+                            </div>
+                        </div>
+                        <div className='flex justify-center items-center w-full'>
+                            <div className='flex w-1/3 items-center justify-center text-center'>
+                                <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
+                            </div>
+                            <div className='flex w-2/3 ml-10'>
+                                <span>{(chargingPower)?.toFixed(2)} kWh</span>
+                            </div>
+                        </div>
+                        
+                        <div className='flex justify-center items-center w-full'>
+                            <div className='flex w-1/3 items-center justify-center text-center'>
+                                <img src={require('../../assets/icons/orangeThemeAmountSpent.png')} alt="" />
+                            </div>
+                            <div className='flex w-2/3 ml-10'>
+                                {(chargingCost)?.toFixed(2)}€
+                            </div>
+                        </div></>
+                        }
+                        
+                        
+
                     </div>
-                :
-                <></>
-                }            
+                        {
+                            isChargingStopped == false ?
+                            <div className='flex h-1/3 w-full justify-center'>
+                                    <Lottie animationData={batteryCharging} />
+                            </div>
+                            : null
+                        }
+                    
+                    {(showSpinner == false) ? 
+                        <div className="flex justify-center flex-col items-center w-5/6 pb-5">
+                        
+                        {isChargingStopButtonClicked ?
+                        
+                            <FadeLoader
+                                color="#FF6D00"
+                                loading={true}
+                                aria-label="Loading Spinner"
+                                data-testid="loader"
+                            /> : 
+                            (
+                                isChargingStopped == false ?
+                                <>
+                                <button className={(isChargingStopped ? 
+                                'flex bg-iparkOrange200 w-full text-center justify-center rounded-md text-black text-md py-3' 
+                                : 
+                                    'flex bg-red-600 w-full text-center justify-center rounded-md text-white text-md py-3'
+                                )} onClick={stopChargingSessionButtonClick}>
+                                    {stopChargingButtonText}
+                                </button> 
+                                <br/>
+
+                                {
+                                    invoiceEmailState == 'sent' ?
+                                    <span className='flex pt-5 text-justify'>{t("chargingSessionScreen.receiptRequested")}</span>
+                                    :
+                                    null
+                                }
+
+                                    <>
+                                        <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center text-black' placeholder={t("chargingSessionScreen.enterYourEmail")} onBlur={(e: any) => setUserEmail(e.target.value)}/>
+                                        <button className={'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md'} onClick={requestEmailInvoice}>{t("chargingSessionScreen.requestEmailReceipt")}</button>
+                                    </>
+                                </>
+                                : 
+                                <>
+                                </>
+                            )
+                
+                        }
+                        </div>
+                    :
+                    <></>
+                    }            
+                </div>
             </div>
-        </div>
-    )
-}
+        )
+    }
