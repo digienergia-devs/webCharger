@@ -27,9 +27,6 @@ export default function ChargingSessionScreen(props: any) {
     const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
     useEffect(() => {
-    }, [isChargingSessionStoppedByUser, isChargingStopped])
-
-    useEffect(() => {
         if(isNaN(chargingPower)){
             setChargingPower((0.00));
         }
@@ -99,10 +96,9 @@ export default function ChargingSessionScreen(props: any) {
                         let transactionRef = chargingSummary.transaction_ref;   // check this again with argon
                         setTransactionRef(transactionRef);
                         let consumed_power = (Number(chargingSummary.power_consumed))/1000;
-                        let finalAmount = Number((chargingSummary.final_amount)/100);
+                        let finalAmount = (Number((chargingSummary.final_amount)/100)).toFixed(2);
                         setChargingPower(Number(consumed_power.toFixed(2)));
-                        setChargingCost(Number(((Number(finalAmount))).toFixed(2)));
-
+                        setChargingCost(Number(finalAmount));
                     }, 1000);
                     localStorage.removeItem("transactionId");
                     localStorage.removeItem("sessionId");
@@ -124,12 +120,32 @@ export default function ChargingSessionScreen(props: any) {
                 const hours = Math.floor(seconds / 3600);
                 const minutes = Math.floor((seconds % 3600) / 60);
                 const remainingSeconds = seconds % 60;
-                setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+                if(minutes < 10){
+                    setChargingTime(`${hours}:0${minutes}:${remainingSeconds}`);
+                    if(remainingSeconds < 10){
+                        setChargingTime(`${hours}:0${minutes}:0${remainingSeconds}`);
+                    }
+                }else if(remainingSeconds < 10){
+                setChargingTime(`${hours}:${minutes}:0${remainingSeconds}`);
+
+                }else{
+                    setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+                }
             }else {
                 const hours = Math.floor(chargerStopTimer / 3600);
                 const minutes = Math.floor((chargerStopTimer % 3600) / 60);
                 const remainingSeconds = chargerStopTimer % 60;
-                setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+                if(minutes < 10){
+                    setChargingTime(`${hours}:0${minutes}:${remainingSeconds}`);
+                    if(remainingSeconds < 10){
+                        setChargingTime(`${hours}:0${minutes}:0${remainingSeconds}`);
+                    }
+                }else if(remainingSeconds < 10){
+                setChargingTime(`${hours}:${minutes}:0${remainingSeconds}`);
+
+                }else{
+                    setChargingTime(`${hours}:${minutes}:${remainingSeconds}`);
+                }
             }
         }
         
@@ -183,7 +199,7 @@ export default function ChargingSessionScreen(props: any) {
             if(response){
                 if (response.status == 'success') {
                     setIsChargingSessionStoppedByUser(true);
-                        setChargingCost(Number(response.final_payment));
+                        setChargingCost(Number(response.final_payment)/100);
                         setChargingPower((Number(response.power_consumed))/1000);
                         // Set the timer later ...
                         setIsChargingStopped(true);
@@ -265,10 +281,13 @@ export default function ChargingSessionScreen(props: any) {
                             //     setInitialMeterValue(Number(res.meter_values[0].value));
                             //     setFinalMeterValue(Number(res.meter_values[objectLength - 1].value));
                             // }  
-                            
-                            setChargingCost(Number(res.amount)/100);
-                            setInitialMeterValue(Number(res.meter_values.elapsed_time));
-                            setChargingPower(Number(res.meter_values.value)/1000)
+                            if(!isChargingStopButtonClicked){
+                                if(res.charge_point_status == 'charging'){
+                                    setChargingCost(Number(res.amount)/100);
+                                    setInitialMeterValue(Number(res.meter_values.elapsed_time));
+                                    setChargingPower(Number(res.meter_values.value)/1000)
+                                }
+                            }
 
                             if (res.charge_point_status == 'charging') { // to Argon, once charging session is stoped, this state need to be change to 'finished' in API response. But it is not happening now. Argon need to fix this.
                                 setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
@@ -382,7 +401,7 @@ export default function ChargingSessionScreen(props: any) {
                             <img src={require('../../assets/icons/orangeThemeElapsedTime.png')} alt="" />
                         </div>
                         <div className='flex w-2/3 ml-10'>
-                            {(chargingTime)}s
+                            {(chargingTime)}
                         </div>
                     </div>
                     <div className='flex justify-center items-center w-full'>
@@ -390,7 +409,7 @@ export default function ChargingSessionScreen(props: any) {
                             <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
                         </div>
                         <div className='flex w-2/3 ml-10'>
-                            <span>{(chargingPower)?.toFixed(3)} kWh</span>
+                            <span>{(chargingPower)?.toFixed(2)} kWh</span>
                         </div>
                     </div>
                     
@@ -437,20 +456,22 @@ export default function ChargingSessionScreen(props: any) {
                                 {stopChargingButtonText}
                             </button> 
                             <br/>
-                            <>
-                                <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center text-black' placeholder={t("chargingSessionScreen.enterYourEmail")} onBlur={(e: any) => setUserEmail(e.target.value)}/>
-                                <button className={'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md'} onClick={requestEmailInvoice}>{t("chargingSessionScreen.requestEmailReceipt")}</button>
-                            </>
-            
+
                             {
                                 invoiceEmailState == 'sent' ?
                                 <span className='flex pt-5 text-justify'>{t("chargingSessionScreen.receiptRequested")}</span>
                                 :
                                 null
                             }
+
+                                <>
+                                    <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center text-black' placeholder={t("chargingSessionScreen.enterYourEmail")} onBlur={(e: any) => setUserEmail(e.target.value)}/>
+                                    <button className={'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md'} onClick={requestEmailInvoice}>{t("chargingSessionScreen.requestEmailReceipt")}</button>
+                                </>
                             </>
                             : 
-                            <></>
+                            <>
+                            </>
                         )
             
                     }
