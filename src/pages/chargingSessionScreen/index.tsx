@@ -6,6 +6,7 @@ import Lottie from 'lottie-react';
 import batteryCharging from '../../assets/batteryCharging.json';
 import { useTranslation } from 'react-i18next';
 import { format } from 'path';
+import Timer from './Timer';
 
 export default function ChargingSessionScreen(props: any) {
     const [t, i18n] = useTranslation('global');
@@ -25,6 +26,8 @@ export default function ChargingSessionScreen(props: any) {
     const [meterStartTime, setMeterStartTime] = useState<string>('');
     const [isChargingSessionStoppedByUser, setIsChargingSessionStoppedByUser] = useState<boolean>(false);
     const [showSpinner, setShowSpinner] = useState<boolean>(false);
+    const [initialMeterValue, setInitialMeterValue] = useState<number>(0);
+
 
     useEffect(() => {
         if(isNaN(chargingPower)){
@@ -41,12 +44,12 @@ export default function ChargingSessionScreen(props: any) {
     useEffect(() => {
         if(isChargingStarted == false && isChargingStopped == false){
             setShowSpinner(true);
-        } else if (isChargingStarted == true && isChargingStopped == false){
+        } else if (isChargingStarted == true && isChargingStopped == false && initialMeterValue > 0){
             setShowSpinner(false);
-        } else if(isChargingStopped == true){
+        } else if(isChargingStopped == true && initialMeterValue > 0){
             setShowSpinner(false);
         }
-    }, [isChargingStopped, isChargingStarted])
+    }, [isChargingStopped, isChargingStarted, initialMeterValue])
     
     const [chargingSessionSummary, setChargingSessionSummary] = useState<{
         power_consumed: any,
@@ -220,6 +223,7 @@ export default function ChargingSessionScreen(props: any) {
     }
 
     const runTimer = () => {
+
         if(meterStartTime !== ''){
             let myTimer = new Date(meterStartTime).toISOString();
 
@@ -244,16 +248,15 @@ export default function ChargingSessionScreen(props: any) {
 
 
 
-    const [initialMeterValue, setInitialMeterValue] = useState<number>(0);
     const [finalMeterValue, setFinalMeterValue] = useState<number>(0);
 
     useEffect(() => {
         // startTimer();
     }, [meterStartTime]);
 
-    useEffect(() => {
-        runTimer();
-    }, [initialMeterValue])
+    // useEffect(() => {
+    //     runTimer();
+    // }, [initialMeterValue])
 
     // useEffect(() => {
     //     setChargingPower((initialMeterValue)/1000);
@@ -286,7 +289,9 @@ export default function ChargingSessionScreen(props: any) {
                             if(!isChargingStopButtonClicked){
                                 if(res.charge_point_status == 'charging'){
                                     setChargingCost(Number(res.amount)/100);
-                                    setInitialMeterValue(Number(res.meter_values.elapsed_time));
+                                    let currentTime = Date.now();
+                                    let startTime = res.meter_start_time
+                                    setInitialMeterValue(Number(currentTime - startTime));
                                     setChargingPower(Number(res.meter_values.value)/1000)
                                 }
                             }
@@ -403,7 +408,9 @@ export default function ChargingSessionScreen(props: any) {
                                 <img src={require('../../assets/icons/orangeThemeElapsedTime.png')} alt="" />
                             </div>
                             <div className='flex w-2/3 ml-10'>
-                                {(chargingTime)}
+                                {initialMeterValue > 0 ? <Timer startTime={initialMeterValue}
+                                isChargingStopped={isChargingStopped}
+                            /> : <></>}
                             </div>
                         </div>
                         <div className='flex justify-center items-center w-full'>
