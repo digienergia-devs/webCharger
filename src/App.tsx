@@ -87,6 +87,7 @@ function App() {
             idleRate={idleRate}
             otp={otp}
             handleChangeLanguage={handleChangeLanguage}
+            connectorIDFromChargePointEndpoint={connectorIDFromChargePointEndpoint}
           />} />
           <Route path='/OtpScreen' element={<OtpScreen
           language={language}
@@ -99,6 +100,7 @@ function App() {
             idleRate={idleRate}
             handleChangeLanguage={handleChangeLanguage}
             connectorID={connectorIDFromUrl}
+            connectorIDFromChargePointEndpoint={connectorIDFromChargePointEndpoint}
            />}/>
            <Route path='/AskOtpPage' element={<AskOtpPage
            language={language}
@@ -111,6 +113,8 @@ function App() {
             setOtp={setOtp}
             handleChangeLanguage={handleChangeLanguage}
             connectorID={connectorIDFromUrl}
+            chargerID={chargerID}
+            connectorIDFromChargePointEndpoint={connectorIDFromChargePointEndpoint}
             />}/>
         </Routes>
       </Router>

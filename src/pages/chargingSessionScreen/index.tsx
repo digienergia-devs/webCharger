@@ -84,7 +84,7 @@ export default function ChargingSessionScreen(props: any) {
     useEffect(() => {
         setTransactionId(props.transactionId);
         window.scrollTo(0, 0);
-        const newUrl = props.connectorID;
+        const newUrl = props.connectorIDFromChargePointEndpoint;
         window.history.replaceState(null, '', newUrl);
       }, []);
 
@@ -367,14 +367,16 @@ export default function ChargingSessionScreen(props: any) {
                     />
                     : 
                     <>
-                    <div className='flex justify-center items-center w-full'>
-                        <div className='flex w-1/3 items-center justify-center text-center'>
-                            <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
-                        </div>
-                        <div className='flex w-2/3 ml-10'>
-                            <span>{(chargingPower)?.toFixed(3)} kWh</span>
-                        </div>
+                    {
+                        isChargingStarted && 
+                        
+                        <div className='flex justify-center items-center w-full text-xs text-gray-400 text-center p-3'>
+                        Charging session has been started!
+                        Timer will update in every three minutes.
                     </div>
+                    }
+                    
+                    
                     <div className='flex justify-center items-center w-full'>
                         <div className='flex w-1/3 items-center justify-center text-center'>
                             <img src={require('../../assets/icons/orangeThemeElapsedTime.png')} alt="" />
@@ -383,6 +385,15 @@ export default function ChargingSessionScreen(props: any) {
                             {(chargingTime)}s
                         </div>
                     </div>
+                    <div className='flex justify-center items-center w-full'>
+                        <div className='flex w-1/3 items-center justify-center text-center'>
+                            <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
+                        </div>
+                        <div className='flex w-2/3 ml-10'>
+                            <span>{(chargingPower)?.toFixed(3)} kWh</span>
+                        </div>
+                    </div>
+                    
                     <div className='flex justify-center items-center w-full'>
                         <div className='flex w-1/3 items-center justify-center text-center'>
                             <img src={require('../../assets/icons/orangeThemeAmountSpent.png')} alt="" />
@@ -433,7 +444,7 @@ export default function ChargingSessionScreen(props: any) {
             
                             {
                                 invoiceEmailState == 'sent' ?
-                                <span className='flex pt-5'>{t("chargingSessionScreen.receiptRequested")}</span>
+                                <span className='flex pt-5 text-justify'>{t("chargingSessionScreen.receiptRequested")}</span>
                                 :
                                 null
                             }
