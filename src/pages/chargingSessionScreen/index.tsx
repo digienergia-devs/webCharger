@@ -368,7 +368,7 @@ export default function ChargingSessionScreen(props: any) {
                     : 
                     <>
                     {
-                        isChargingStarted && 
+                        !isChargingStopped && 
                         
                         <div className='flex justify-center items-center w-full text-xs text-gray-400 text-center p-3'>
                         Charging session has been started!
