@@ -27,6 +27,23 @@ export default function AskOtpPage(props: any){
     }
 
     useEffect(() => {
+        // fetch otp from the session storage
+        const otp = sessionStorage.getItem('otp');
+        // check otp is not null or undefined
+        if(otp !== null){
+            setUserProvidedOtp(otp);
+        }
+    }, [])
+
+    useEffect(() => {
+        // check if user provided otp is not null or undefined
+        if(userProvidedOtp !== ''){
+            restoreSession();
+        }
+        
+    }, [userProvidedOtp])
+
+    useEffect(() => {
         window.scrollTo(0, 0);
         const newUrl = props.connectorIDFromChargePointEndpoint;
         window.history.replaceState(null, '', newUrl);

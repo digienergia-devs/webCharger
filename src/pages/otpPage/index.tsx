@@ -13,6 +13,11 @@ export default function OtpScreen(props: any){
     const [t, i18n] = useTranslation('global');
 
     useEffect(() => {
+        // write otp in to session storage
+        sessionStorage.setItem('otp', props.otp)
+    }, [props.otp])
+
+    useEffect(() => {
         window.scrollTo(0, 0);
         const newUrl = props.connectorIDFromChargePointEndpoint;
         window.history.replaceState(null, '', newUrl);
