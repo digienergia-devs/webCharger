@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router-dom';
 export default function OtpScreen(props: any){
     let navigate = useNavigate();
 
-    const proceedToChargingSessionScreen = () => {
-        navigate('/ChargingSessionScreen')
+    const proceedToChargingSessionScreen = (e: any) => {
+        if(e.target.value == props.otp){
+            navigate('/ChargingSessionScreen')
+        }
     }
     const [t, i18n] = useTranslation('global');
 
@@ -76,7 +78,8 @@ export default function OtpScreen(props: any){
                 </div>
 
                 <div className="flex justify-center flex-col items-centertext-center w-5/6 text-gray-400 text-md md:text-xl xl:text-2xl">
-                    <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={proceedToChargingSessionScreen}>{t("otpPage.proceedToChargingScreen")}</button>
+                    <input type="number" className='flex bg-gray-100 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md' placeholder='enter the otp above to proceed' onChange={(e => {proceedToChargingSessionScreen(e)})}/>
+                    {/* <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={proceedToChargingSessionScreen}>{t("otpPage.proceedToChargingScreen")}</button> */}
                 </div>
             </div>
         </div>
