@@ -22,7 +22,7 @@ export default function PaymentMethodScreen(props: any) {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        const newUrl = props.connectorID;
+        const newUrl = props.connectorIDFromChargePointEndpoint;
         window.history.replaceState(null, '', newUrl);
       }, []);
     const setLangua = (e: any) => {

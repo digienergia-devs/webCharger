@@ -12,7 +12,7 @@ export default function OtpScreen(props: any){
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        const newUrl = props.connectorID;
+        const newUrl = props.connectorIDFromChargePointEndpoint;
         window.history.replaceState(null, '', newUrl);
       }, []);
 
