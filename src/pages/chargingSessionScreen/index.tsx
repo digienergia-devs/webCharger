@@ -300,7 +300,7 @@ export default function ChargingSessionScreen(props: any) {
                                 setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
                                 setTimeout(() => {
                                     getChargingSessionStatus(transactionID);
-                                }, 60000)
+                                }, 3000)
                             } else {
                                 setIsChargingStopped(true);
                                 // setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
