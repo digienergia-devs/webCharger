@@ -44,12 +44,12 @@ export default function ChargingSessionScreen(props: any) {
     useEffect(() => {
         if(isChargingStarted == false && isChargingStopped == false){
             setShowSpinner(true);
-        } else if (isChargingStarted == true && isChargingStopped == false && initialMeterValue > 0){
+        } else if (isChargingStarted == true && isChargingStopped == false){
             setShowSpinner(false);
-        } else if(isChargingStopped == true && initialMeterValue > 0){
+        } else if(isChargingStopped == true){
             setShowSpinner(false);
         }
-    }, [isChargingStopped, isChargingStarted, initialMeterValue])
+    }, [isChargingStopped, isChargingStarted])
     
     const [chargingSessionSummary, setChargingSessionSummary] = useState<{
         power_consumed: any,
@@ -292,7 +292,8 @@ export default function ChargingSessionScreen(props: any) {
                                     let currentTime = Date.now();
                                     let startTime = res.meter_start_time
                                     setInitialMeterValue(Number(currentTime - startTime));
-                                    setChargingPower(Number(res.meter_values.value)/1000)
+                                    setChargingPower(Number(res.meter_values.value)/1000);
+                                    setShowSpinner(false);
                                 }
                             }
 
@@ -300,6 +301,7 @@ export default function ChargingSessionScreen(props: any) {
                                 setStopChargingButtonText(t("chargingSessionScreen.stopCharging"));
                                 setTimeout(() => {
                                     getChargingSessionStatus(transactionID);
+                                    setShowSpinner(false);
                                 }, 3000)
                             } else {
                                 setIsChargingStopped(true);
