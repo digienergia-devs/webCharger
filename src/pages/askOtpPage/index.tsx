@@ -106,14 +106,14 @@ export default function AskOtpPage(props: any){
                 <div className="flex flex-col pt-5">
                     
                     <span className="flex flex-row items-center justify-center">
-                        Please provide OTP to restore session.
+                        {t("otpPage.provideOtp")}
                     </span>
                     
                 </div>
             
 
                 <div className="flex justify-center flex-col items-centertext-center w-5/6 text-gray-400 text-md md:text-xl xl:text-2xl">
-                    <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={restoreSession}>Proceed to charging screen</button>
+                    <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={restoreSession}>{t("otpPage.proceedToChargingScreen")}</button>
                 </div>
             </div>
         </div>

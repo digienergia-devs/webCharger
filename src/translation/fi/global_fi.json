@@ -26,7 +26,8 @@
         "keepOtpSafe" : "Pidä tämä OTP turvassa.",
         "youNeedOtpAgain" : "Tarvitset sitä latausistunnon palauttamiseen.",
         "proceedToChargingScreen" : "Siirry latausnäyttöön",
-        "enterOtpToProceed" : "Syötä yllä oleva kertakäyttöinen salasana jatkaaksesi."
+        "enterOtpToProceed" : "Syötä yllä oleva kertakäyttöinen salasana jatkaaksesi.",
+        "provideOtp" : "Anna OTP istunnon palauttamiseksi."
     },
     "chargingSessionScreen" : {
         "preparing" : "Valmistellaan",
