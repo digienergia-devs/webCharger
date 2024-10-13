@@ -25,7 +25,8 @@
     "otpPage" : {
         "keepOtpSafe" : "Please keep this OTP safe.",
         "youNeedOtpAgain" : "You will need it to restore your charging session.",
-        "proceedToChargingScreen" : "Proceed to charging screen"
+        "proceedToChargingScreen" : "Proceed to charging screen",
+        "enterOtpToProceed" : "Enter OTP above to proceed"
     },
     "chargingSessionScreen" : {
         "preparing" : "Preparing",

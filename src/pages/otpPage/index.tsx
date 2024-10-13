@@ -83,7 +83,7 @@ export default function OtpScreen(props: any){
                 </div>
 
                 <div className="flex justify-center flex-col items-centertext-center w-5/6 text-gray-400 text-md md:text-xl xl:text-2xl">
-                    <input type="number" className='flex bg-gray-100 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md' placeholder='enter the otp above to proceed' onChange={(e => {proceedToChargingSessionScreen(e)})}/>
+                    <input type="number" className='flex bg-gray-100 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md' placeholder={t("enterOtpToProceed.enterOtpToProceed")} onChange={(e => {proceedToChargingSessionScreen(e)})}/>
                     {/* <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={proceedToChargingSessionScreen}>{t("otpPage.proceedToChargingScreen")}</button> */}
                 </div>
             </div>
