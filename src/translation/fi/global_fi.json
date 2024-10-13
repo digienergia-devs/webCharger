@@ -12,7 +12,8 @@
         "cableConnectionMessage" : "Käsittelemme automaattisesti, kun latauskaapeli on kytketty"
     },
     "paymentMethodScreen" : {
-        "paymentAuthorization" : "Maksun valtuutus"
+        "paymentAuthorization" : "Maksun valtuutus",
+        "proceedWithMoney" : "Jatka €30"
     },
     "cardFormScreen" : {
         "pay" : "Maksaa",
@@ -32,6 +33,7 @@
         "chargingStoped" : "Lataus pysäytetty",
         "enterYourEmail" : "Anna sähköpostiosoitteesi",
         "requestEmailReceipt" : "Pyydä sähköpostikuittaus",
-        "receiptRequested" : "Kuitti Pyydetty!"
+        "receiptRequested" : "Kuitti Pyydetty!",
+        "consumedPowerUpdateText" : "Kulutettu teho päivittyy viiden minuutin välein."
     }
 }

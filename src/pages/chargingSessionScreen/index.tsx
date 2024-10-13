@@ -184,7 +184,7 @@ export default function ChargingSessionScreen(props: any) {
                                 getChargingSessionStatus(props.transactionId!);
                             }
                         }   
-                    }, 2000);
+                    }, 1000);
                 })
             } catch (error) {
                 console.error(error);
@@ -302,7 +302,7 @@ export default function ChargingSessionScreen(props: any) {
                                 setTimeout(() => {
                                     getChargingSessionStatus(transactionID);
                                     setShowSpinner(false);
-                                }, 3000)
+                                }, 1000)
                             } else {
                                 setIsChargingStopped(true);
                                 // setStopChargingButtonText(t("chargingSessionScreen.chargingStoped"));
@@ -399,8 +399,7 @@ export default function ChargingSessionScreen(props: any) {
                             !isChargingStopped && 
                             
                             <div className='flex justify-center items-center w-full text-xs text-gray-400 text-center p-3'>
-                            Charging session has been started!
-                            Timer will update in every three minutes.
+                            {t("chargingSessionScreen.consumedPowerUpdateText")}
                         </div>
                         }
                         
@@ -468,7 +467,16 @@ export default function ChargingSessionScreen(props: any) {
                                 </button> 
                                 <br/>
 
-                                {
+                                
+                                </>
+                                : 
+                                <>
+                                </>
+                            )
+                
+                        }
+                        <>
+                        {
                                     invoiceEmailState == 'sent' ?
                                     <span className='flex pt-5 text-justify'>{t("chargingSessionScreen.receiptRequested")}</span>
                                     :
@@ -477,15 +485,13 @@ export default function ChargingSessionScreen(props: any) {
 
                                     <>
                                         <input type="text" className='border border-gray-300 bg-gray-100 w-full rounded-md px-4 py-2 focus:outline-none focus:border-green-500 text-center text-black' placeholder={t("chargingSessionScreen.enterYourEmail")} onBlur={(e: any) => setUserEmail(e.target.value)}/>
-                                        <button className={'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md'} onClick={requestEmailInvoice}>{t("chargingSessionScreen.requestEmailReceipt")}</button>
-                                    </>
-                                </>
-                                : 
-                                <>
-                                </>
-                            )
-                
-                        }
+                                        {
+                                            invoiceEmailState == 'sent' ? 
+                                            <></>
+                                            :
+                                            <button className={'flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md'} onClick={requestEmailInvoice}>{t("chargingSessionScreen.requestEmailReceipt")}</button>
+                                        }
+                                    </></>
                         </div>
                     :
                     <></>

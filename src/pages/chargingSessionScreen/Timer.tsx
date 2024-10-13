@@ -74,7 +74,7 @@ const Timer= (props : any) => {
     const hours = date.getUTCHours();
     const minutes = date.getUTCMinutes();
     const seconds = date.getUTCSeconds();
-    return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds}`;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
   return (

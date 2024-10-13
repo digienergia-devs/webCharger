@@ -17,7 +17,7 @@ function App() {
   const [idleRate, setIdleRate] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [language, setLanguage] = useState<string>('en');
+  const [language, setLanguage] = useState<string>('fi');
 
   const [chargerID, setChargerID] = useState<string>();
   const [connectorIDFromUrl, setConnectorIDFromUrl] = useState<string>()
