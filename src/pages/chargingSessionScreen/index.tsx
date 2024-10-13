@@ -85,7 +85,18 @@ export default function ChargingSessionScreen(props: any) {
         setTransactionId(props.transactionId);
         window.scrollTo(0, 0);
         const newUrl = props.connectorIDFromChargePointEndpoint;
-        window.history.replaceState(null, '', newUrl);
+        
+        const checkUrl = () => {
+            const url = window.location.href;
+            window.history.replaceState(null, '', newUrl);
+            const lastPartOfUrl = url.substring(url.lastIndexOf('/') + 1);
+            if (lastPartOfUrl !== newUrl) {
+                setTimeout(checkUrl, 1000); // Check again after 1 second
+            }
+        };
+
+        checkUrl();
+
       }, []);
 
     useEffect(() => {
