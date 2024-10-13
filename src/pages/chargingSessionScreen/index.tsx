@@ -92,6 +92,8 @@ export default function ChargingSessionScreen(props: any) {
             const lastPartOfUrl = url.substring(url.lastIndexOf('/') + 1);
             if (lastPartOfUrl !== newUrl) {
                 setTimeout(checkUrl, 1000); // Check again after 1 second
+            }else {
+                sessionStorage.setItem('otp', props.otp);
             }
         };
 
