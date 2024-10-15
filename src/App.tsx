@@ -7,6 +7,7 @@ import ChargingSessionScreen from './pages/chargingSessionScreen';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import OtpScreen from './pages/otpPage';
 import AskOtpPage from './pages/askOtpPage';
+import OccupiedPage from './pages/occupiedPage';
 import { useTranslation } from 'react-i18next';
 
 
@@ -116,6 +117,20 @@ function App() {
             chargerID={chargerID}
             connectorIDFromChargePointEndpoint={connectorIDFromChargePointEndpoint}
             />}/>
+            <Route path='/OccupiedPage' element={<OccupiedPage
+            language={language}
+            transactionId={transactionId}
+            chargerPower={chargerPower}
+            setChargerPower={setChargerPower}
+            chargerRate={chargerRate}
+            setChargerRate={setChargerRate}
+            idleRate={idleRate}
+            setOtp={setOtp}
+            handleChangeLanguage={handleChangeLanguage}
+            connectorID={connectorIDFromUrl}
+            chargerID={chargerID}
+            connectorIDFromChargePointEndpoint={connectorIDFromChargePointEndpoint}
+            />} />
         </Routes>
       </Router>
     </div>
