@@ -37,5 +37,9 @@
         "requestEmailReceipt" : "Pyydä sähköpostikuittaus",
         "receiptRequested" : "Kuitti Pyydetty!",
         "consumedPowerUpdateText" : "Kulutettu teho päivittyy viiden minuutin välein."
+    },
+    "occupiedScreen" : {
+        "occupied" : "Laturi on käytössä.",
+        "occupiedMessage" : "Aiempi latausistunto on päättynyt, mutta kaapelia ei ole irrotettu. Uutta latausistuntoa ei voida aloittaa ennen kuin kaapeli on irrotettu. Irrota kaapeli ja yritä liittää se uudelleen."
     }
 }

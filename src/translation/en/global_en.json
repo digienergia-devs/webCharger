@@ -37,6 +37,10 @@
         "requestEmailReceipt" : "Request Email Receipt",
         "receiptRequested" : "Once the session is completed, a receipt will be sent to your email.",
         "consumedPowerUpdateText" : "Consumed power will update in every five minutes."
+    },
+    "occupiedScreen" : {
+        "occupied" : "Charger is in use",
+        "occupiedMessage" : "Previous chargign session is completed but cable is not unplogged. New chargign session cannot be started until cable is unplugged. Unplug the cable and try to plug it again."
     }
 
 }

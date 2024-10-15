@@ -25,6 +25,10 @@ export default function OccupiedPage(props: any){
 
       }, []);
 
+      const refreshPage = () => {
+        window.location.reload();
+      }
+
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
             <div className='flex flex-row-reverse w-full pr-5 pt-5'>
@@ -72,12 +76,16 @@ export default function OccupiedPage(props: any){
             <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white py-5'>
                 
                 <div className="flex flex-col pt-5">
-                    <span className="flex flex-row items-center justify-center">
-                        Charger in use
+                    <span className="flex flex-row items-center justify-center mb-10 font-bold">
+                        {t("occupiedScreen.occupied")}
                     </span>
-                    <span className="flex flex-row items-center justify-center">
-                        {t("otpPage.youNeedOtpAgain")}
+                    <span className="flex flex-row items-center justify-center px-10 text-sm text-center">
+                    {t("occupiedScreen.occupiedMessage")}
                     </span>
+                </div>
+
+                <div className="flex flex-col pt-5">
+                    <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md px-5' onClick={refreshPage}>Refresh page</button>
                 </div>
 
                 
