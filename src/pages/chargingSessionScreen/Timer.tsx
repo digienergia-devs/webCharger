@@ -46,6 +46,12 @@ interface TimerProps {
 const Timer= (props : any) => {
   const [time, setTime] = useState<Date>(new Date(props.startTime));
   const [isRunning, setIsRunning] = useState<boolean>(true); // State to track if the timer is running
+  const [isFrozen, setIsFrozen] = useState(false);
+  const threshold = 1000;
+
+  useEffect(() => {
+    setIsFrozen(false);
+  }, [isFrozen])
 
   useEffect(() => {
     setIsRunning(!(props.isChargingStopped))
@@ -76,6 +82,30 @@ const Timer= (props : any) => {
     const seconds = date.getUTCSeconds();
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
+
+ 
+
+  useEffect(() => {
+    let lastTime = Date.now();
+    let timeoutId: NodeJS.Timeout;
+
+    const detectFreeze = () => {
+      const currentTime = Date.now();
+      if (currentTime - lastTime > threshold) {
+        setIsFrozen(true); // Browser may be frozen if time difference is greater than the threshold
+      } else {
+        setIsFrozen(false);
+      }
+      lastTime = currentTime;
+      timeoutId = setTimeout(detectFreeze, 100);
+    };
+
+    timeoutId = setTimeout(detectFreeze, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [threshold]);
 
   return (
     <div>
