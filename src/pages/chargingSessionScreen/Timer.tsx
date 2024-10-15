@@ -55,6 +55,7 @@ const Timer= (props : any) => {
   };
 
   useEffect(() => {
+    props.setIsTimerRendered(true);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);

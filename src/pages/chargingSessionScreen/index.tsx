@@ -27,6 +27,7 @@ export default function ChargingSessionScreen(props: any) {
     const [isChargingSessionStoppedByUser, setIsChargingSessionStoppedByUser] = useState<boolean>(false);
     const [showSpinner, setShowSpinner] = useState<boolean>(false);
     const [initialMeterValue, setInitialMeterValue] = useState<number>(0);
+    const [isTimerRendered, setIsTimerRendered] = useState<boolean>(false);
 
 
     useEffect(() => {
@@ -42,14 +43,14 @@ export default function ChargingSessionScreen(props: any) {
     }, [chargingCost])
 
     useEffect(() => {
-        if(isChargingStarted == false && isChargingStopped == false){
+        if(isChargingStarted == false && isChargingStopped == false && isTimerRendered == false){
             setShowSpinner(true);
-        } else if (isChargingStarted == true && isChargingStopped == false){
+        } else if (isChargingStarted == true && isChargingStopped == false && isTimerRendered == true){
             setShowSpinner(false);
-        } else if(isChargingStopped == true){
+        } else if(isChargingStopped == true && isTimerRendered == true){
             setShowSpinner(false);
         }
-    }, [isChargingStopped, isChargingStarted])
+    }, [isChargingStopped, isChargingStarted, isTimerRendered])
     
     const [chargingSessionSummary, setChargingSessionSummary] = useState<{
         power_consumed: any,
@@ -399,52 +400,56 @@ export default function ChargingSessionScreen(props: any) {
                     <div className={isChargingStopped ? "flex py-5 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl" : "flex py-5 -mb-20 pt-5 my-5 mt-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-md md:text-md xl:text-xl"} >
                         
                     {/* {(chargingTime == '0:00:00' ) ?  */}
-                    {(showSpinner == true ) ? 
-                        <FadeLoader
-                        color="#FF6D00"
-                        loading={true}
-                        aria-label="Loading Spinner"
-                        data-testid="loader"
-                        />
-                        : 
-                        <>
-                        {
-                            !isChargingStopped && 
+                    {/* {(showSpinner == true ) ?  */}
+                        <div hidden={!showSpinner}>
+                            <FadeLoader
+                            color="#FF6D00"
+                            loading={true}
+                            aria-label="Loading Spinner"
+                            data-testid="loader"
+                            />
+                        </ div>
+                        
+                        <div hidden={showSpinner}>
+                            {
+                                !isChargingStopped && 
+                                
+                                <div className='flex justify-center items-center w-full text-xs text-gray-400 text-center p-3'>
+                                {t("chargingSessionScreen.consumedPowerUpdateText")}
+                            </div>
+                            }
                             
-                            <div className='flex justify-center items-center w-full text-xs text-gray-400 text-center p-3'>
-                            {t("chargingSessionScreen.consumedPowerUpdateText")}
-                        </div>
-                        }
+                            <div className='flex justify-center items-center w-full'>
+                                <div className='flex w-1/3 items-center justify-center text-center'>
+                                    <img src={require('../../assets/icons/orangeThemeElapsedTime.png')} alt="" />
+                                </div>
+                                <div className='flex w-2/3 ml-10'>
+                                    {initialMeterValue > 0 ? <Timer startTime={initialMeterValue}
+                                    setIsTimerRendered={setIsTimerRendered}
+                                    isChargingStopped={isChargingStopped}
+                                /> : <></>}
+                                </div>
+                            </div>
+                            <div className='flex justify-center items-center w-full'>
+                                <div className='flex w-1/3 items-center justify-center text-center'>
+                                    <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
+                                </div>
+                                <div className='flex w-2/3 ml-10'>
+                                    <span>{(chargingPower)?.toFixed(2)} kWh</span>
+                                </div>
+                            </div>
+                            
+                            <div className='flex justify-center items-center w-full'>
+                                <div className='flex w-1/3 items-center justify-center text-center'>
+                                    <img src={require('../../assets/icons/orangeThemeAmountSpent.png')} alt="" />
+                                </div>
+                                <div className='flex w-2/3 ml-10'>
+                                    {(chargingCost)?.toFixed(2)}€
+                                </div>
+                            </div>
                         
-                        
-                        <div className='flex justify-center items-center w-full'>
-                            <div className='flex w-1/3 items-center justify-center text-center'>
-                                <img src={require('../../assets/icons/orangeThemeElapsedTime.png')} alt="" />
-                            </div>
-                            <div className='flex w-2/3 ml-10'>
-                                {initialMeterValue > 0 ? <Timer startTime={initialMeterValue}
-                                isChargingStopped={isChargingStopped}
-                            /> : <></>}
-                            </div>
-                        </div>
-                        <div className='flex justify-center items-center w-full'>
-                            <div className='flex w-1/3 items-center justify-center text-center'>
-                                <img src={require('../../assets/icons/orangeThemeConsumedPower.png')} alt="" />
-                            </div>
-                            <div className='flex w-2/3 ml-10'>
-                                <span>{(chargingPower)?.toFixed(2)} kWh</span>
-                            </div>
                         </div>
                         
-                        <div className='flex justify-center items-center w-full'>
-                            <div className='flex w-1/3 items-center justify-center text-center'>
-                                <img src={require('../../assets/icons/orangeThemeAmountSpent.png')} alt="" />
-                            </div>
-                            <div className='flex w-2/3 ml-10'>
-                                {(chargingCost)?.toFixed(2)}€
-                            </div>
-                        </div></>
-                        }
                         
                         
 
