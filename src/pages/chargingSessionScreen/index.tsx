@@ -17,7 +17,7 @@ export default function ChargingSessionScreen(props: any) {
     const [stopChargingButtonText, setStopChargingButtonText] = useState<string>(t("chargingSessionScreen.stopCharging"));
     const [isChargingStopped, setIsChargingStopped] = useState<boolean>(false);
     const [isChargingStarted, setIsChargingStarted] = useState<boolean>(false);
-    const [language, setLanguage] = useState<string | undefined>(props.language);
+    const [language, setLanguage] = useState<string>(props.language);
     const [isChargingStopButtonClicked, setIsChargingStopButtonClicked] = useState<boolean>(false);
     const [transactionId, setTransactionId] = useState<string | null>(null);
     const [transactionRef, setTransactionRef] = useState<string>('');
@@ -29,6 +29,13 @@ export default function ChargingSessionScreen(props: any) {
     const [initialMeterValue, setInitialMeterValue] = useState<number>(0);
     const [isTimerRendered, setIsTimerRendered] = useState<boolean>(false);
 
+    useEffect(() => {
+        sessionStorage.getItem('language') && props.handleChangeLanguage(sessionStorage.getItem('language') as string);
+      }, []);
+
+      useEffect(() => {
+        sessionStorage.setItem('language', language);
+      }, [language]);
 
     useEffect(() => {
         if(isNaN(chargingPower)){

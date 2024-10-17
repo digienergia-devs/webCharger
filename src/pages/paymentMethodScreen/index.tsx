@@ -13,8 +13,16 @@ const clientSecret = 'pi_3PNzgVKRzm9Te7g8087PFtUW_secret_sNOPS4hHZqH9TPCFfQi5fS1
 export default function PaymentMethodScreen(props: any) {
     const [loading, setLoading] = useState<boolean>(false);
     const [language, setLanguage] = useState<string>(props.language)
-    const [selectedAmount, setSelectedAmount] = useState<number>(0);
+    const [selectedAmount, setSelectedAmount] = useState<number>(3000);
     const [t, i18n] = useTranslation('global');
+
+    useEffect(() => {
+        sessionStorage.getItem('language') && props.handleChangeLanguage(sessionStorage.getItem('language') as string);
+      }, [])
+
+      useEffect(() => {
+        sessionStorage.setItem('language', language);
+      }, [language]);
 
     const selectAmountHandler = (amount: number) => {
         setSelectedAmount(amount);
@@ -30,17 +38,13 @@ export default function PaymentMethodScreen(props: any) {
         setLanguage(e);
     }
 
-    const SelectAmountComponent = () => {
-        return (
-            <div className="flex flex-row justify-around w-full pb-4">
-                <button onClick={() => selectAmountHandler(3000)} className="flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md">{t("paymentMethodScreen.proceedWithMoney")}</button>
-                {/* <div className={selectedAmount == 1000 ? 'flex bg-iparkOrange800 rounded-md border border-iparkOrange800 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-iparkOrange800 p-2'} onClick={() => selectAmountHandler(102)}>€10</div>
-                <div className={selectedAmount == 2000 ? 'flex bg-iparkOrange800 rounded-md border border-iparkOrange800 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-iparkOrange800 p-2'} onClick={() => selectAmountHandler(2000)}>€20</div>
-                <div className={selectedAmount == 4000 ? 'flex bg-iparkOrange800 rounded-md border border-iparkOrange800 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-iparkOrange800 p-2'} onClick={() => selectAmountHandler(4000)}>€40</div>
-                <div className={selectedAmount == 6000 ? 'flex bg-iparkOrange800 rounded-md border border-iparkOrange800 p-2 text-white' : 'flex bg-gray-100 rounded-md border border-iparkOrange800 p-2'} onClick={() => selectAmountHandler(6000)}>€60</div> */}
-            </div>
-        )
-    }
+    // const SelectAmountComponent = () => {
+    //     return (
+    //         <div className="flex flex-row justify-around w-full pb-4">
+    //             <button onClick={() => selectAmountHandler(3000)} className="flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md">{t("paymentMethodScreen.proceedWithMoney")}</button>
+    //         </div>
+    //     )
+    // }
 
 
     return (
@@ -98,7 +102,7 @@ export default function PaymentMethodScreen(props: any) {
                 </div>
                 <div className="flex justify-center items-center w-5/6 text-gray-400 text-xs md:text-md xl:text-xl">
                     <>
-                        {(selectedAmount > 0) ?
+                        {/* {(selectedAmount > 0) ? */}
                             <div>
                                 <Elements stripe={stripePromise} options={{ clientSecret }}>
                                     <CardForm
@@ -115,9 +119,9 @@ export default function PaymentMethodScreen(props: any) {
                                     />
                                 </Elements>
                             </div>
-                            :
+                            {/* :
                             <SelectAmountComponent />
-                        }
+                        } */}
                     </>
 
                 </div>

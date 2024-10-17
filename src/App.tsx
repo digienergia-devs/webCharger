@@ -18,7 +18,10 @@ function App() {
   const [idleRate, setIdleRate] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [language, setLanguage] = useState<string>('fi');
+  const [language, setLanguage] = useState<string>(() => {
+    const storedLanguage = sessionStorage.getItem('language');
+    return storedLanguage ? storedLanguage : 'fi';
+  });
 
   const [chargerID, setChargerID] = useState<string>();
   const [connectorIDFromUrl, setConnectorIDFromUrl] = useState<string>()
@@ -32,8 +35,16 @@ function App() {
 
   const handleChangeLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
-    setLanguage(lang)
+    setLanguage(lang);
   }
+
+  useEffect(() => {
+    sessionStorage.setItem('language', language);
+  }, [language]);
+
+  useEffect(() => {
+    sessionStorage.getItem('language') && setLanguage(sessionStorage.getItem('language') as string);
+  }, [])
 
   const changeLanguage = (e: any) => {
     setLanguage(e);

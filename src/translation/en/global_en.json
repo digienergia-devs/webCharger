@@ -16,7 +16,7 @@
         "proceedWithMoney" : "Proceed with €30"
     },
     "cardFormScreen" : {
-        "pay" : "Pay",
+        "pay" : "Authorize to capture amount",
         "applePayGooglePayNotAvailable" : "Apple Pay / Google Pay not available right now.",
         "pleaseSelectAnotherPaymentOption" : "Please select another payment option below.",
         "payWithSomethingElse" : "Pay with something else",
@@ -40,7 +40,8 @@
     },
     "occupiedScreen" : {
         "occupied" : "Charger is in use",
-        "occupiedMessage" : "Previous chargign session is completed but cable is not unplogged. New chargign session cannot be started until cable is unplugged. Unplug the cable and try to plug it again."
+        "occupiedMessage" : "Previous chargign session is completed but cable is not unplogged. New chargign session cannot be started until cable is unplugged. Unplug the cable and try to plug it again.",
+        "refreshPage" : "Refresh Page"
     }
 
 }

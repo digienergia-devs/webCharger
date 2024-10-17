@@ -21,6 +21,14 @@ export default function ConnectingScreen(props: any) {
   const [language, setLanguage] = useState<string>(props.language);
   const [transactionId, setTransactionId] = useState<any>(null);
   const [t, i18n] = useTranslation('global');
+
+  useEffect(() => {
+    sessionStorage.getItem('language') && props.handleChangeLanguage(sessionStorage.getItem('language') as string);
+  }, [])
+
+  useEffect(() => {
+    sessionStorage.setItem('language', language);
+  }, [language]);
   
   useEffect(() => {
     let url = window.location.href;

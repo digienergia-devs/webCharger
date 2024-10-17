@@ -8,8 +8,17 @@ export default function AskOtpPage(props: any){
     const [userProvidedOtp, setUserProvidedOtp] = useState<string>(''); 
 
     const [isInvalidOtp, setIsInvalidOtp] = useState<boolean>(false);
+    const [language, setLanguage] = useState<string>(props.language);
 
     const [t, i18n] = useTranslation('global');
+    
+      useEffect(() => {
+        sessionStorage.getItem('language') && props.handleChangeLanguage(sessionStorage.getItem('language') as string);
+      }, [])
+
+      useEffect(() => {
+        sessionStorage.setItem('language', language);
+      }, [language]);
 
     const restoreSession = async () => {
         props.setOtp(userProvidedOtp);

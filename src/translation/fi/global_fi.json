@@ -16,7 +16,7 @@
         "proceedWithMoney" : "Jatka €30"
     },
     "cardFormScreen" : {
-        "pay" : "Maksaa",
+        "pay" : "Valtuuta keräämään summa",
         "applePayGooglePayNotAvailable" : "Apple Pay / Google Pay ei ole saatavilla juuri nyt.",
         "pleaseSelectAnotherPaymentOption" : "Valitse toinen maksuvaihtoehto alta.",
         "payWithSomethingElse" : "Maksa jollain muulla",
@@ -40,6 +40,7 @@
     },
     "occupiedScreen" : {
         "occupied" : "Laturi on käytössä.",
-        "occupiedMessage" : "Aiempi latausistunto on päättynyt, mutta kaapelia ei ole irrotettu. Uutta latausistuntoa ei voida aloittaa ennen kuin kaapeli on irrotettu. Irrota kaapeli ja yritä liittää se uudelleen."
+        "occupiedMessage" : "Aiempi latausistunto on päättynyt, mutta kaapelia ei ole irrotettu. Uutta latausistuntoa ei voida aloittaa ennen kuin kaapeli on irrotettu. Irrota kaapeli ja yritä liittää se uudelleen.",
+        "refreshPage" : "Päivitä sivu"
     }
 }

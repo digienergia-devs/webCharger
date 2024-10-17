@@ -5,6 +5,15 @@ import { useNavigate } from 'react-router-dom';
 export default function OccupiedPage(props: any){
 
     const [t, i18n] = useTranslation('global');
+    const [language, setLanguage] = useState<string>(props.language);
+
+    useEffect(() => {
+        sessionStorage.getItem('language') && props.handleChangeLanguage(sessionStorage.getItem('language') as string);
+      }, [])
+
+      useEffect(() => {
+        sessionStorage.setItem('language', language);
+      }, [language]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
