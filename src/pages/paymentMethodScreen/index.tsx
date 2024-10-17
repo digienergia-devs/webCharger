@@ -34,7 +34,7 @@ export default function PaymentMethodScreen(props: any) {
         window.history.replaceState(null, '', newUrl);
       }, []);
     const setLangua = (e: any) => {
-        props.setLanguage(e)
+        props.handleChangeLanguage(e)
         setLanguage(e);
     }
 
@@ -116,6 +116,7 @@ export default function PaymentMethodScreen(props: any) {
                                         setOtp={props.setOtp}
                                         setTransactionId={props.setTransactionId}
                                         connectorIDFromChargePointEndpoint={props.connectorIDFromChargePointEndpoint}
+                                        setLanguage={setLangua}
                                     />
                                 </Elements>
                             </div>

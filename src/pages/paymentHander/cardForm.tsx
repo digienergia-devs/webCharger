@@ -19,13 +19,22 @@ export default function CardForm(props: any) {
   const elements = useElements();
   const [paymentRequest, setPaymentRequest] = useState<any>();
   const [payButtonClicked, setPayButtonClicked] = useState<boolean>(false);
-  const [language, setLanguage] = useState<string | undefined>(props.language)
+  const [language, setLanguage] = useState<string>(props.language)
   const [paymentSuccess, setPaymentSuccess] = useState<boolean>(false); // use to set the state when the payment is success on stripe.
   const [authAmount, setAuthAmount] = useState<any>(props.selectedAmount);
   const [loading, setIsLoading] = useState<boolean>(true);
   const [t, i18n] = useTranslation('global');
+  
 
   const [paymentOption, setPaymentOption] = useState<string>('applePay');
+
+  useEffect(() => {
+    sessionStorage.getItem('language') && props.setLanguage(sessionStorage.getItem('language') as string);
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem('language', language);
+  }, [language]);
 
   useEffect(() => {
     setAuthAmount(props.selectedAmount)
@@ -172,7 +181,7 @@ export default function CardForm(props: any) {
     )
   }else {
     return (
-      <>
+      <div className="flex flex-col w-screen px-10">
         {
           paymentOption === 'card' ? <>
           <>
@@ -226,7 +235,7 @@ export default function CardForm(props: any) {
             {t("cardFormScreen.paymetnMethodSelectedBasedOnDevice")}
           </span>
         </div>
-        </>
+        </div>
     )
   }
 

@@ -12,11 +12,11 @@
         "cableConnectionMessage" : "We will process automatically once charger cable is connected"
     },
     "paymentMethodScreen" : {
-        "paymentAuthorization" : "Payment Authorization",
+        "paymentAuthorization" : "Payment Authorization : €30",
         "proceedWithMoney" : "Proceed with €30"
     },
     "cardFormScreen" : {
-        "pay" : "Authorize to capture amount",
+        "pay" : "Pay",
         "applePayGooglePayNotAvailable" : "Apple Pay / Google Pay not available right now.",
         "pleaseSelectAnotherPaymentOption" : "Please select another payment option below.",
         "payWithSomethingElse" : "Pay with something else",

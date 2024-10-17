@@ -12,11 +12,11 @@
         "cableConnectionMessage" : "Käsittelemme automaattisesti, kun latauskaapeli on kytketty"
     },
     "paymentMethodScreen" : {
-        "paymentAuthorization" : "Maksun valtuutus",
+        "paymentAuthorization" : "Maksun valtuutus : €30",
         "proceedWithMoney" : "Jatka €30"
     },
     "cardFormScreen" : {
-        "pay" : "Valtuuta keräämään summa",
+        "pay" : "Maksaa",
         "applePayGooglePayNotAvailable" : "Apple Pay / Google Pay ei ole saatavilla juuri nyt.",
         "pleaseSelectAnotherPaymentOption" : "Valitse toinen maksuvaihtoehto alta.",
         "payWithSomethingElse" : "Maksa jollain muulla",
