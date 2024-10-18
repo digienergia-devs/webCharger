@@ -12,7 +12,8 @@
         "cableConnectionMessage" : "Käsittelemme automaattisesti, kun latauskaapeli on kytketty"
     },
     "paymentMethodScreen" : {
-        "paymentAuthorization" : "Maksun valtuutus"
+        "paymentAuthorization" : "Maksun valtuutus : €30",
+        "proceedWithMoney" : "Jatka €30"
     },
     "cardFormScreen" : {
         "pay" : "Maksaa",
@@ -24,7 +25,9 @@
     "otpPage" : {
         "keepOtpSafe" : "Pidä tämä OTP turvassa.",
         "youNeedOtpAgain" : "Tarvitset sitä latausistunnon palauttamiseen.",
-        "proceedToChargingScreen" : "Siirry latausnäyttöön"
+        "proceedToChargingScreen" : "Siirry latausnäyttöön",
+        "enterOtpToProceed" : "Syötä yllä oleva kertakäyttöinen salasana jatkaaksesi.",
+        "provideOtp" : "Anna OTP istunnon palauttamiseksi."
     },
     "chargingSessionScreen" : {
         "preparing" : "Valmistellaan",
@@ -32,6 +35,12 @@
         "chargingStoped" : "Lataus pysäytetty",
         "enterYourEmail" : "Anna sähköpostiosoitteesi",
         "requestEmailReceipt" : "Pyydä sähköpostikuittaus",
-        "receiptRequested" : "Kuitti Pyydetty!"
+        "receiptRequested" : "Kuitti Pyydetty!",
+        "consumedPowerUpdateText" : "Kulutettu teho päivittyy viiden minuutin välein."
+    },
+    "occupiedScreen" : {
+        "occupied" : "Laturi on käytössä.",
+        "occupiedMessage" : "Aiempi latausistunto on päättynyt, mutta kaapelia ei ole irrotettu. Uutta latausistuntoa ei voida aloittaa ennen kuin kaapeli on irrotettu. Irrota kaapeli ja yritä liittää se uudelleen.",
+        "refreshPage" : "Päivitä sivu"
     }
 }

@@ -21,6 +21,14 @@ export default function ConnectingScreen(props: any) {
   const [language, setLanguage] = useState<string>(props.language);
   const [transactionId, setTransactionId] = useState<any>(null);
   const [t, i18n] = useTranslation('global');
+
+  useEffect(() => {
+    sessionStorage.getItem('language') && props.handleChangeLanguage(sessionStorage.getItem('language') as string);
+  }, [])
+
+  useEffect(() => {
+    sessionStorage.setItem('language', language);
+  }, [language]);
   
   useEffect(() => {
     let url = window.location.href;
@@ -85,13 +93,18 @@ export default function ConnectingScreen(props: any) {
         if(response.status == 'Charging' || response.status == 'Occupied'){ // in future this state can be 'Charging' and 'Occupied' both
           setHeaderInfo("Charger in use")
           navigate('/AskOtpPage')
+
         } else {
           setHeaderInfo("Insert Cable");
-          if (response.status == 'Preparing' || response.status == 'Finishing') {
+          if (response.status == 'Preparing') {  //  || response.status == 'Finishing' // if status is finishing, show message 'charger is occupied', 
             // set loading spinner false
             setLoading(false);
             navigate("/PaymentMethodScreen");
-          } else {
+          } else if(response.status == 'Finishing') {
+            setLoading(false);
+            navigate("/OccupiedPage");
+          }
+           else {
             setTimeout(() => {
               // set loading spinner false
               setLoading(false);

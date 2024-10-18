@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-export default function OtpScreen(props: any){
-    let navigate = useNavigate();
+export default function OccupiedPage(props: any){
+
+    const [t, i18n] = useTranslation('global');
     const [language, setLanguage] = useState<string>(props.language);
 
     useEffect(() => {
@@ -14,23 +15,28 @@ export default function OtpScreen(props: any){
         sessionStorage.setItem('language', language);
       }, [language]);
 
-    const proceedToChargingSessionScreen = (e: any) => {
-        if(e.target.value == props.otp){
-            navigate('/ChargingSessionScreen')
-        }
-    }
-    const [t, i18n] = useTranslation('global');
-
-    useEffect(() => {
-        // write otp in to session storage
-        sessionStorage.setItem('otp', props.otp)
-    }, [props.otp])
-
     useEffect(() => {
         window.scrollTo(0, 0);
         const newUrl = props.connectorIDFromChargePointEndpoint;
-        window.history.replaceState(null, '', newUrl);
+        
+        const checkUrl = () => {
+            const url = window.location.href;
+            window.history.replaceState(null, '', newUrl);
+            const lastPartOfUrl = url.substring(url.lastIndexOf('/') + 1);
+            if (lastPartOfUrl !== newUrl) {
+                setTimeout(checkUrl, 1000); // Check again after 1 second
+            }else {
+                sessionStorage.setItem('otp', props.otp);
+            }
+        };
+
+        checkUrl();
+
       }, []);
+
+      const refreshPage = () => {
+        window.location.reload();
+      }
 
     return (
         <div className="flex flex-col justify-center items-center h-screen w-screen bg-iparkOrange800">
@@ -70,31 +76,28 @@ export default function OtpScreen(props: any){
                             </div>
                         </div>
                     </div>
-                    <div className='flex text-xs pl-10 pr-10 text-gray-400 font-light pt-5'>
-                        {t("generalDetails.otp")} :- {props.otp}
-                    </div>
+                    
                 </div>
             </div>
             <div className="flex justify-center items-center h-1/6">
                 <img src={require('../../assets/icons/Final3.png')} alt="" />
             </div>
             <div className='flex flex-col justify-start rounded-tl-30 rounded-tr-30 items-center h-5/6 w-screen bg-white py-5'>
-                <div className="flex p-5 m-5 justify-center flex-col items-center rounded-tl-30 rounded-tr-30 rounded-bl-30 rounded-br-30 bg-gray-100 w-5/6 shadow-md text-black font-bold text-3xl md:text-xl xl:text-2xl" style={{ textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)' }}>
-                    {props.otp}
-                </div>
+                
                 <div className="flex flex-col pt-5">
-                    <span className="flex flex-row items-center justify-center">
-                        {t("otpPage.keepOtpSafe")}
+                    <span className="flex flex-row items-center justify-center mb-10 font-bold">
+                        {t("occupiedScreen.occupied")}
                     </span>
-                    <span className="flex flex-row items-center justify-center">
-                        {t("otpPage.youNeedOtpAgain")}
+                    <span className="flex flex-row items-center justify-center px-10 text-sm text-center">
+                    {t("occupiedScreen.occupiedMessage")}
                     </span>
                 </div>
 
-                <div className="flex justify-center flex-col items-centertext-center w-5/6 text-gray-400 text-md md:text-xl xl:text-2xl">
-                    <input type="number" className='flex bg-gray-100 w-full text-center justify-center py-3 mt-5 rounded-md text-black text-md' placeholder={t("otpPage.enterOtpToProceed")} onChange={(e => {proceedToChargingSessionScreen(e)})}/>
-                    {/* <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md' onClick={proceedToChargingSessionScreen}>{t("otpPage.proceedToChargingScreen")}</button> */}
+                <div className="flex flex-col pt-5">
+                    <button className='flex bg-iparkOrange800 w-full text-center justify-center py-3 mt-5 rounded-md text-white text-md px-5' onClick={refreshPage}>Refresh page</button>
                 </div>
+
+                
             </div>
         </div>
     )
