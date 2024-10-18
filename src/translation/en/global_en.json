@@ -12,7 +12,8 @@
         "cableConnectionMessage" : "We will process automatically once charger cable is connected"
     },
     "paymentMethodScreen" : {
-        "paymentAuthorization" : "Payment Authorization"
+        "paymentAuthorization" : "Payment Authorization : €30",
+        "proceedWithMoney" : "Proceed with €30"
     },
     "cardFormScreen" : {
         "pay" : "Pay",
@@ -24,7 +25,9 @@
     "otpPage" : {
         "keepOtpSafe" : "Please keep this OTP safe.",
         "youNeedOtpAgain" : "You will need it to restore your charging session.",
-        "proceedToChargingScreen" : "Proceed to charging screen"
+        "proceedToChargingScreen" : "Proceed to charging screen",
+        "enterOtpToProceed" : "Enter OTP above to proceed",
+        "provideOtp" : "Please provide OTP to restore session."
     },
     "chargingSessionScreen" : {
         "preparing" : "Preparing",
@@ -32,7 +35,13 @@
         "chargingStoped" : "Charging Stoped",
         "enterYourEmail" : "Enter your email",
         "requestEmailReceipt" : "Request Email Receipt",
-        "receiptRequested" : "Once the session is completed, a receipt will be sent to your email."
+        "receiptRequested" : "Once the session is completed, a receipt will be sent to your email.",
+        "consumedPowerUpdateText" : "Consumed power will update in every five minutes."
+    },
+    "occupiedScreen" : {
+        "occupied" : "Charger is in use",
+        "occupiedMessage" : "Previous chargign session is completed but cable is not unplogged. New chargign session cannot be started until cable is unplugged. Unplug the cable and try to plug it again.",
+        "refreshPage" : "Refresh Page"
     }
 
 }

@@ -7,6 +7,7 @@ import ChargingSessionScreen from './pages/chargingSessionScreen';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import OtpScreen from './pages/otpPage';
 import AskOtpPage from './pages/askOtpPage';
+import OccupiedPage from './pages/occupiedPage';
 import { useTranslation } from 'react-i18next';
 
 
@@ -17,7 +18,10 @@ function App() {
   const [idleRate, setIdleRate] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [language, setLanguage] = useState<string>('en');
+  const [language, setLanguage] = useState<string>(() => {
+    const storedLanguage = sessionStorage.getItem('language');
+    return storedLanguage ? storedLanguage : 'fi';
+  });
 
   const [chargerID, setChargerID] = useState<string>();
   const [connectorIDFromUrl, setConnectorIDFromUrl] = useState<string>()
@@ -31,8 +35,16 @@ function App() {
 
   const handleChangeLanguage = (lang: string) => {
     i18n.changeLanguage(lang);
-    setLanguage(lang)
+    setLanguage(lang);
   }
+
+  useEffect(() => {
+    sessionStorage.setItem('language', language);
+  }, [language]);
+
+  useEffect(() => {
+    sessionStorage.getItem('language') && setLanguage(sessionStorage.getItem('language') as string);
+  }, [])
 
   const changeLanguage = (e: any) => {
     setLanguage(e);
@@ -116,6 +128,20 @@ function App() {
             chargerID={chargerID}
             connectorIDFromChargePointEndpoint={connectorIDFromChargePointEndpoint}
             />}/>
+            <Route path='/OccupiedPage' element={<OccupiedPage
+            language={language}
+            transactionId={transactionId}
+            chargerPower={chargerPower}
+            setChargerPower={setChargerPower}
+            chargerRate={chargerRate}
+            setChargerRate={setChargerRate}
+            idleRate={idleRate}
+            setOtp={setOtp}
+            handleChangeLanguage={handleChangeLanguage}
+            connectorID={connectorIDFromUrl}
+            chargerID={chargerID}
+            connectorIDFromChargePointEndpoint={connectorIDFromChargePointEndpoint}
+            />} />
         </Routes>
       </Router>
     </div>
